@@ -70,26 +70,6 @@ Dynamically add and remove layers:
   </SceneView>
 ```
 
-Supports various selection modes (_e.g._, lasso, rectangle) and has a polygon drawing tool:
-
-```jsx
-<SceneView id="sceneview">
-  <Scene>
-    <Layer id="buildings" layerType="scene" url={SCENE_LAYER_URL} />
-    <DrawingTool onDraw={handleDrawUpdate} />
-  </Scene>
-</SceneView>
-```
-
-```jsx
-<SceneView id="sceneview">
-  <Scene>
-    <Layer id="buildings" layerType="scene" url={SCENE_LAYER_URL} />
-    <LassoSelectionTool onSelect={handleSelection} />
-  </Scene>
-</SceneView>
-```
-
 Supports client-side graphics: dynamically add and remove graphics from feature layer.
 
 ```jsx
@@ -183,18 +163,6 @@ If using client-side graphics, the following props are required:
 | Name          | Type           | Default | Description |
 | :------------ | :------------- | :------ | :---------- |
 | position            | string         |         | Position of the UI widget. One of `['top-left', 'top-right', 'bottom-right', 'bottom-left']`. Default is `'top-left'`. |
-
-### DrawingTool
-
-| Name          | Type           | Default | Description |
-| :------------ | :------------- | :------ | :---------- |
-| onDraw            | function         |         | Callback to handle an update of the polygon being drawn. Returns a `geometry` object with `points` and a `spatialReference`. |
-
-### LineSelectionTool, RectangleSelectionTool, LassoSelectionTool
-
-| Name          | Type           | Default | Description |
-| :------------ | :------------- | :------ | :---------- |
-| onSelect            | function         |         | Callback to handle selection. |
 
 ## Installing
 
