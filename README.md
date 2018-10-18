@@ -1,6 +1,17 @@
 # react-sceneview
 
-A simple Esri [SceneView](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html) react component:
+A simple Esri [SceneView](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html) react component that builds on the [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/index.html).
+
+## Table of Contents
+
+- [Examples](#examples)
+- [Props](#props)
+- [Installing](#installing)
+- [Issues](#issues)
+- [Contributing](#contributing)
+- [Licensing](#licensing)
+
+## Examples
 
 ```jsx
 import React from 'react';
@@ -57,26 +68,6 @@ Dynamically add and remove layers:
       ))}
     </Scene>
   </SceneView>
-```
-
-Supports various selection modes (_e.g._, lasso, rectangle) and has a polygon drawing tool:
-
-```jsx
-<SceneView id="sceneview">
-  <Scene>
-    <Layer id="buildings" layerType="scene" url={SCENE_LAYER_URL} />
-    <DrawingTool onDraw={handleDrawUpdate} />
-  </Scene>
-</SceneView>
-```
-
-```jsx
-<SceneView id="sceneview">
-  <Scene>
-    <Layer id="buildings" layerType="scene" url={SCENE_LAYER_URL} />
-    <LassoSelectionTool onSelect={handleSelection} />
-  </Scene>
-</SceneView>
 ```
 
 Supports client-side graphics: dynamically add and remove graphics from feature layer.
@@ -173,17 +164,27 @@ If using client-side graphics, the following props are required:
 | :------------ | :------------- | :------ | :---------- |
 | position            | string         |         | Position of the UI widget. One of `['top-left', 'top-right', 'bottom-right', 'bottom-left']`. Default is `'top-left'`. |
 
-### DrawingTool
+## Installing
 
-| Name          | Type           | Default | Description |
-| :------------ | :------------- | :------ | :---------- |
-| onDraw            | function         |         | Callback to handle an update of the polygon being drawn. Returns a `geometry` object with `points` and a `spatialReference`. |
+Download the repository and install the dependencies:
 
-### LineSelectionTool, RectangleSelectionTool, LassoSelectionTool
+```
+$ npm install
+```
 
-| Name          | Type           | Default | Description |
-| :------------ | :------------- | :------ | :---------- |
-| onSelect            | function         |         | Callback to handle selection. |
+Build the library:
+
+```
+$ npm run build
+```
+
+Run the example:
+
+```
+$ npm run example
+```
+
+
 
 ## Issues
 
