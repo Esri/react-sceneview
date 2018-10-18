@@ -4,8 +4,6 @@ A simple Esri [SceneView](https://developers.arcgis.com/javascript/latest/api-re
 
 ## Table of Contents
 
-## Table of Contents
-
 - [Examples](#examples)
 - [Props](#props)
 - [Installing](#installing)
