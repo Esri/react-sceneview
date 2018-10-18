@@ -175,13 +175,13 @@ $ npm install
 Build the library:
 
 ```
-$ npm build
+$ npm run build
 ```
 
 Run the example:
 
 ```
-$ npm example
+$ npm run example
 ```
 
 
