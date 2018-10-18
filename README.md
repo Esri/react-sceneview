@@ -213,7 +213,7 @@ $ npm build
 Run the example:
 
 ```
-$ npm build
+$ npm example
 ```
 
 
