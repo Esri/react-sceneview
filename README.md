@@ -1,6 +1,19 @@
 # react-sceneview
 
-A simple Esri [SceneView](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html) react component:
+A simple Esri [SceneView](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html) react component.
+
+## Table of Contents
+
+## Table of Contents
+
+- [Examples](#examples)
+- [Props](#props)
+- [Installing](#installing)
+- [Issues](#issues)
+- [Contributing](#contributing)
+- [Licensing](#licensing)
+
+## Examples
 
 ```jsx
 import React from 'react';
@@ -184,6 +197,28 @@ If using client-side graphics, the following props are required:
 | Name          | Type           | Default | Description |
 | :------------ | :------------- | :------ | :---------- |
 | onSelect            | function         |         | Callback to handle selection. |
+
+## Installing
+
+Download the repository and install the dependencies:
+
+```
+$ npm install
+```
+
+Build the library:
+
+```
+$ npm build
+```
+
+Run the example:
+
+```
+$ npm build
+```
+
+
 
 ## Issues
 
