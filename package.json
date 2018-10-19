@@ -1,8 +1,9 @@
 {
   "name": "react-sceneview",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
-  "main": "dojoConfig.js",
+  "main": "dist/react-sceneview.js",
+  "module": "dist/react-sceneview.js",
   "scripts": {
     "build": "webpack --config webpack.config.prod.js",
     "test": "jest",

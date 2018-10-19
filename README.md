@@ -4,12 +4,24 @@ A simple Esri [SceneView](https://developers.arcgis.com/javascript/latest/api-re
 
 ## Table of Contents
 
+- [Installing](#installing)
 - [Examples](#examples)
 - [Props](#props)
-- [Installing](#installing)
 - [Issues](#issues)
 - [Contributing](#contributing)
 - [Licensing](#licensing)
+
+## Installing
+
+```
+$ npm install --save react-sceneview
+```
+
+Then, just import to your React component:
+
+```jsx
+import { SceneView, Scene } from 'react-sceneview';
+```
 
 ## Examples
 
@@ -164,28 +176,6 @@ If using client-side graphics, the following props are required:
 | :------------ | :------------- | :------ | :---------- |
 | position            | string         |         | Position of the UI widget. One of `['top-left', 'top-right', 'bottom-right', 'bottom-left']`. Default is `'top-left'`. |
 
-## Installing
-
-Download the repository and install the dependencies:
-
-```
-$ npm install
-```
-
-Build the library:
-
-```
-$ npm run build
-```
-
-Run the example:
-
-```
-$ npm run example
-```
-
-
-
 ## Issues
 
 Find a bug or want to request a new feature?  Please let us know by submitting an issue.
@@ -210,4 +200,3 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 A copy of the license is available in the repository's [license.txt](/license.txt) file.
-
