@@ -20,12 +20,7 @@ import esriLoader from 'esri-loader';
 
 
 class CustomBasemap extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      basemap: null,
-    };
-
+  componentDidMount() {
     this.loadBasemap();
   }
 
@@ -43,12 +38,10 @@ class CustomBasemap extends Component {
   async loadBasemap() {
     if (this.props.portalItem) {
       const [Basemap] = await esriLoader.loadModules(['esri/Basemap']);
-      this.setState({ basemap: new Basemap({ portalItem: this.props.portalItem }) });
+      this.props.view.map.basemap = new Basemap({ portalItem: this.props.portalItem });
     } else {
-      this.setState({ basemap: this.props.basemap });
+      this.props.view.map.basemap = this.props.basemap;
     }
-
-    this.props.view.map.basemap = this.state.basemap;
   }
 
   render() {
