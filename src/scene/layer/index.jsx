@@ -169,7 +169,7 @@ class Layer extends Component {
 
     Object.keys(updates).forEach(key => this.state.layer[key] = updates[key]);
 
-    if (renderer) {
+    if (renderer !== undefined) {
       if (this.state.scaleEventListener) {
         this.state.scaleEventListener.remove();
       }
@@ -181,7 +181,7 @@ class Layer extends Component {
       }
     }
 
-    if (rendererJson) {
+    if (rendererJson !== undefined) {
       const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
       this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
     }
