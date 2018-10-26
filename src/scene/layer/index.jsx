@@ -174,14 +174,14 @@ class Layer extends Component {
         this.state.scaleEventListener.remove();
       }
 
-      if (renderer.type === 'scale-dependent') {
+      if (renderer && renderer.type === 'scale-dependent') {
         this.calcScaleDependentRenderers(renderer.scaleDependentRenderers);
       } else {
         this.state.layer.renderer = renderer;
       }
     }
 
-    if (rendererJson !== undefined) {
+    if (rendererJson) {
       const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
       this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
     }
