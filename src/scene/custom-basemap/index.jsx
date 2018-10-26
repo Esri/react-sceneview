@@ -30,7 +30,8 @@ class CustomBasemap extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.portalItem !== prevProps.portalItem) {
+    if (this.props.portalItem !== prevProps.portalItem ||
+      this.props.basemap !== prevProps.basemap) {
       this.loadBasemap();
     }
   }
@@ -40,8 +41,13 @@ class CustomBasemap extends Component {
   }
 
   async loadBasemap() {
-    const [Basemap] = await esriLoader.loadModules(['esri/Basemap']);
-    this.setState({ basemap: new Basemap({ portalItem: this.props.portalItem }) });
+    if (this.props.portalItem) {
+      const [Basemap] = await esriLoader.loadModules(['esri/Basemap']);
+      this.setState({ basemap: new Basemap({ portalItem: this.props.portalItem }) });
+    } else {
+      this.setState({ basemap: this.props.basemap });
+    }
+
     this.props.view.map.basemap = this.state.basemap;
   }
 
@@ -52,8 +58,14 @@ class CustomBasemap extends Component {
 
 
 CustomBasemap.propTypes = {
-  portalItem: PropTypes.object.isRequired,
+  basemap: PropTypes.string,
+  portalItem: PropTypes.object,
   view: PropTypes.object.isRequired,
+};
+
+CustomBasemap.defaultProps = {
+  basemap: 'gray-vector',
+  portalItem: null,
 };
 
 
