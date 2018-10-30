@@ -31,12 +31,19 @@ class CustomElevationLayer extends Component {
 
   async loadBasemap() {
     const [ElevationLayer] = await esriLoader.loadModules(['esri/layers/ElevationLayer']);
-    this.setState({
-      layer: new ElevationLayer({
-        url: this.props.url,
-        portalItem: this.props.portalItem,
-      }),
-    });
+
+    if (this.props.url) {
+      this.setState({
+        layer: new ElevationLayer({ url: this.props.url }),
+      });
+    } else if (this.props.portalItem) {
+      this.setState({
+        layer: new ElevationLayer({ portalItem: this.props.portalItem }),
+      });
+    } else {
+      return;
+    }
+
     this.props.view.map.ground.layers.add(this.state.layer);
   }
 
