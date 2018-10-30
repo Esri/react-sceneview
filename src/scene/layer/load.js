@@ -26,7 +26,7 @@ const layerTypes = {
 };
 
 
-export const addLayerToView = async (view, { id, layerType, url, source, selection,
+export const addLayerToView = async (view, { id, layerType, url, portalItem, source, selection,
   fields, objectIdField, geometryType, rendererJson, ...layerOptions }) => {
   // if layer already exists, might need to update the layerSettings
   if (!view) {
@@ -50,6 +50,8 @@ export const addLayerToView = async (view, { id, layerType, url, source, selecti
 
   if (url) {
     layerSettings.url = url;
+  } else if (portalItem) {
+    layerSettings.portalItem = portalItem;
   } else {
     layerSettings.source = source || [];
     layerSettings.fields = fields;

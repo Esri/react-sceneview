@@ -31,7 +31,12 @@ class CustomElevationLayer extends Component {
 
   async loadBasemap() {
     const [ElevationLayer] = await esriLoader.loadModules(['esri/layers/ElevationLayer']);
-    this.setState({ layer: new ElevationLayer({ url: this.props.url }) });
+    this.setState({
+      layer: new ElevationLayer({
+        url: this.props.url,
+        portalItem: this.props.portalItem,
+      }),
+    });
     this.props.view.map.ground.layers.add(this.state.layer);
   }
 
@@ -42,8 +47,14 @@ class CustomElevationLayer extends Component {
 
 
 CustomElevationLayer.propTypes = {
-  url: PropTypes.string.isRequired,
+  url: PropTypes.string,
+  portalItem: PropTypes.object,
   view: PropTypes.object.isRequired,
+};
+
+CustomElevationLayer.defaultProps = {
+  url: null,
+  portalItem: null,
 };
 
 

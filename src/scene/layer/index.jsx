@@ -27,6 +27,7 @@ const ChildComponents = [Graphic];
 const layerSettingsProps = {
   id: PropTypes.string.isRequired,
   url: PropTypes.string,
+  portalItem: PropTypes.object,
   layerType: PropTypes.oneOf(['feature', 'scene', 'tile']).isRequired,
   visible: PropTypes.bool,
   definitionExpression: PropTypes.string,
@@ -287,6 +288,7 @@ Layer.propTypes = {
 Layer.defaultProps = {
   children: [],
   url: null,
+  portalItem: null,
   visible: true,
   selectable: false,
   relatedLayer: null,
