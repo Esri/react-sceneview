@@ -37,12 +37,6 @@ class DrawingTool extends Component {
     measurementTool.activate();
 
     watcher = measurementTool.watch('pathLength', () => {
-      const screenPoint = measurementTool.model.path &&
-        measurementTool.model.path.vertices.items.length &&
-        this.props.view.toScreen(measurementTool.model.path.vertices.items.slice(-1)[0]);
-
-      if (!screenPoint) return;
-
       this.props.onDraw({
         geometry: {
           points:
@@ -56,11 +50,6 @@ class DrawingTool extends Component {
           spatialReference: measurementTool.model.path.vertices.items[0].spatialReference,
         },
         area: measurementTool.area,
-        validMeasurement: measurementTool.validMeasurement,
-        screenPoint: screenPoint ? {
-          x: screenPoint.x,
-          y: screenPoint.y,
-        } : null,
       });
     });
   }

@@ -37,27 +37,10 @@ class DistanceMeasurementTool extends Component {
     measurementTool.activate();
 
     watcher = measurementTool.watch('directDistance', () => {
-      const startPoint = measurementTool.model.startPoint &&
-      this.props.view.toScreen(measurementTool.model.startPoint);
-
-      const endPoint = measurementTool.model.endPoint &&
-      this.props.view.toScreen(measurementTool.model.endPoint);
-
-      if (!startPoint || !endPoint) return;
-
       this.props.onMeasure({
         directDistance: measurementTool.directDistance,
         horizontalDistance: measurementTool.horizontalDistance,
         verticalDistance: measurementTool.verticalDistance,
-        validMeasurement: measurementTool.validMeasurement,
-        startPoint: startPoint ? {
-          x: startPoint.x,
-          y: startPoint.y,
-        } : null,
-        endPoint: endPoint ? {
-          x: endPoint.x,
-          y: endPoint.y,
-        } : null,
       });
     });
   }
