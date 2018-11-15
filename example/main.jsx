@@ -39,10 +39,6 @@ render(
         selectable
         url="https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Building_Montreal/SceneServer"
       />
-      <DistanceMeasurementTool
-        onMeasure={measurement => console.log(measurement)}
-      />
-      {/* <DrawingTool onDraw={() => console.log('test')} /> */}
     </Scene>
   </SceneView>,
   document.getElementById('root'),
