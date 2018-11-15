@@ -24,42 +24,39 @@ let measurementTool;
 let watcher;
 
 
-class DrawingTool extends Component {
+class DistanceMeasurementTool extends Component {
   async componentDidMount() {
-    const [AreaMeasurement3DTool] = await esriLoader.loadModules([
-      'esri/views/3d/interactive/measurementTools/areaMeasurement3D/AreaMeasurement3DTool',
+    const [DirectLineMeasurement3D] = await esriLoader.loadModules([
+      'esri/views/3d/interactive/measurementTools/directLineMeasurement3D/DirectLineMeasurement3DTool',
     ]);
 
-    measurementTool = new AreaMeasurement3DTool({ view: this.props.view, unit: this.props.unit });
+    measurementTool = new DirectLineMeasurement3D({ view: this.props.view, unit: this.props.unit });
 
     window.measurementTool = measurementTool;
 
     measurementTool.activate();
 
-    watcher = measurementTool.watch('pathLength', () => {
-      const screenPoint = measurementTool.model.path &&
-        measurementTool.model.path.vertices.items.length &&
-        this.props.view.toScreen(measurementTool.model.path.vertices.items.slice(-1)[0]);
+    watcher = measurementTool.watch('directDistance', () => {
+      const startPoint = measurementTool.model.startPoint &&
+      this.props.view.toScreen(measurementTool.model.startPoint);
 
-      if (!screenPoint) return;
+      const endPoint = measurementTool.model.endPoint &&
+      this.props.view.toScreen(measurementTool.model.endPoint);
 
-      this.props.onDraw({
-        geometry: {
-          points:
-            measurementTool.model.path.vertices.items.map(({ latitude, longitude, x, y, z }) => ({
-              latitude,
-              longitude,
-              x,
-              y,
-              z,
-            })),
-          spatialReference: measurementTool.model.path.vertices.items[0].spatialReference,
-        },
-        area: measurementTool.area,
+      if (!startPoint || !endPoint) return;
+
+      this.props.onMeasure({
+        directDistance: measurementTool.directDistance,
+        horizontalDistance: measurementTool.horizontalDistance,
+        verticalDistance: measurementTool.verticalDistance,
         validMeasurement: measurementTool.validMeasurement,
-        screenPoint: screenPoint ? {
-          x: screenPoint.x,
-          y: screenPoint.y,
+        startPoint: startPoint ? {
+          x: startPoint.x,
+          y: startPoint.y,
+        } : null,
+        endPoint: endPoint ? {
+          x: endPoint.x,
+          y: endPoint.y,
         } : null,
       });
     });
@@ -75,18 +72,17 @@ class DrawingTool extends Component {
   }
 }
 
-
-DrawingTool.propTypes = {
-  onDraw: PropTypes.func,
+DistanceMeasurementTool.propTypes = {
+  onMeasure: PropTypes.func,
   unit: PropTypes.oneOf(unitOptions),
   view: PropTypes.object.isRequired,
 };
 
 
-DrawingTool.defaultProps = {
+DistanceMeasurementTool.defaultProps = {
   unit: 'metric',
-  onDraw: () => null,
+  onMeasure: () => null,
 };
 
 
-export default DrawingTool;
+export default DistanceMeasurementTool;

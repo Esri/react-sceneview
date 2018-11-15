@@ -18,7 +18,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import esriLoader from 'esri-loader';
 
-import { SceneView, Scene, Layer, UI, Ground } from 'react-sceneview'; // eslint-disable-line
+import { SceneView, Scene, Layer, UI, Ground, DistanceMeasurementTool, DrawingTool } from 'react-sceneview'; // eslint-disable-line
 
 esriLoader.loadCss('https://js.arcgis.com/4.7/esri/css/main.css');
 
@@ -39,6 +39,10 @@ render(
         selectable
         url="https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Building_Montreal/SceneServer"
       />
+      <DistanceMeasurementTool
+        onMeasure={measurement => console.log(measurement)}
+      />
+      {/* <DrawingTool onDraw={() => console.log('test')} /> */}
     </Scene>
   </SceneView>,
   document.getElementById('root'),
