@@ -28,13 +28,15 @@ import LineSelectionTool from './tools/line-selection-tool';
 import RectangleSelectionTool from './tools/rectangle-selection-tool';
 import LassoSelectionTool from './tools/lasso-selection-tool';
 import DistanceMeasurementTool from './tools/distance-measurement-tool';
+import AreaMeasurementTool from './tools/area-measurement-tool';
 
 
 import { loadEsriSceneView } from './load';
 
 
 const ChildComponents = [Scene, DrawingTool, LineSelectionTool, RectangleSelectionTool,
-  LassoSelectionTool, DistanceMeasurementTool, ...Object.keys(UI).map(key => UI[key])];
+  LassoSelectionTool, DistanceMeasurementTool, AreaMeasurementTool,
+  ...Object.keys(UI).map(key => UI[key])];
 
 
 const getCameraFromProp = async (current, { center, position, heading, tilt, scale, target }) => {
@@ -246,6 +248,7 @@ SceneView.LineSelectionTool = LineSelectionTool;
 SceneView.RectangleSelectionTool = RectangleSelectionTool;
 SceneView.LassoSelectionTool = LassoSelectionTool;
 SceneView.DistanceMeasurementTool = DistanceMeasurementTool;
+SceneView.AreaMeasurementTool = AreaMeasurementTool;
 
 export {
   SceneView,
@@ -259,6 +262,7 @@ export {
   RectangleSelectionTool,
   LassoSelectionTool,
   DistanceMeasurementTool,
+  AreaMeasurementTool,
 };
 
 export default SceneView;
