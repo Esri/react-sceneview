@@ -24,32 +24,23 @@ let measurementTool;
 let watcher;
 
 
-class DrawingTool extends Component {
+class DistanceMeasurementTool extends Component {
   async componentDidMount() {
-    const [AreaMeasurement3DTool] = await esriLoader.loadModules([
-      'esri/views/3d/interactive/measurementTools/areaMeasurement3D/AreaMeasurement3DTool',
+    const [DirectLineMeasurement3D] = await esriLoader.loadModules([
+      'esri/views/3d/interactive/measurementTools/directLineMeasurement3D/DirectLineMeasurement3DTool',
     ]);
 
-    measurementTool = new AreaMeasurement3DTool({ view: this.props.view, unit: this.props.unit });
+    measurementTool = new DirectLineMeasurement3D({ view: this.props.view, unit: this.props.unit });
 
     window.measurementTool = measurementTool;
 
     measurementTool.activate();
 
-    watcher = measurementTool.watch('pathLength', () => {
-      this.props.onDraw({
-        geometry: {
-          points:
-            measurementTool.model.path.vertices.items.map(({ latitude, longitude, x, y, z }) => ({
-              latitude,
-              longitude,
-              x,
-              y,
-              z,
-            })),
-          spatialReference: measurementTool.model.path.vertices.items[0].spatialReference,
-        },
-        area: measurementTool.area,
+    watcher = measurementTool.watch('directDistance', () => {
+      this.props.onMeasure({
+        directDistance: measurementTool.directDistance,
+        horizontalDistance: measurementTool.horizontalDistance,
+        verticalDistance: measurementTool.verticalDistance,
       });
     });
   }
@@ -64,18 +55,17 @@ class DrawingTool extends Component {
   }
 }
 
-
-DrawingTool.propTypes = {
-  onDraw: PropTypes.func,
+DistanceMeasurementTool.propTypes = {
+  onMeasure: PropTypes.func,
   unit: PropTypes.oneOf(unitOptions),
   view: PropTypes.object.isRequired,
 };
 
 
-DrawingTool.defaultProps = {
+DistanceMeasurementTool.defaultProps = {
   unit: 'metric',
-  onDraw: () => null,
+  onMeasure: () => null,
 };
 
 
-export default DrawingTool;
+export default DistanceMeasurementTool;

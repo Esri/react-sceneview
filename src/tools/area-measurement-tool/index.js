@@ -24,7 +24,7 @@ let measurementTool;
 let watcher;
 
 
-class DrawingTool extends Component {
+class AreaMeasurementTool extends Component {
   async componentDidMount() {
     const [AreaMeasurement3DTool] = await esriLoader.loadModules([
       'esri/views/3d/interactive/measurementTools/areaMeasurement3D/AreaMeasurement3DTool',
@@ -37,23 +37,13 @@ class DrawingTool extends Component {
     measurementTool.activate();
 
     watcher = measurementTool.watch('pathLength', () => {
-      this.props.onDraw({
-        geometry: {
-          points:
-            measurementTool.model.path.vertices.items.map(({ latitude, longitude, x, y, z }) => ({
-              latitude,
-              longitude,
-              x,
-              y,
-              z,
-            })),
-          spatialReference: measurementTool.model.path.vertices.items[0].spatialReference,
-        },
+      if (!measurementTool.area) return;
+
+      this.props.onMeasure({
         area: measurementTool.area,
       });
     });
   }
-
   componentWillUnmount() {
     if (watcher) watcher.remove();
     if (measurementTool) measurementTool.deactivate();
@@ -64,18 +54,17 @@ class DrawingTool extends Component {
   }
 }
 
-
-DrawingTool.propTypes = {
-  onDraw: PropTypes.func,
+AreaMeasurementTool.propTypes = {
+  onMeasure: PropTypes.func,
   unit: PropTypes.oneOf(unitOptions),
   view: PropTypes.object.isRequired,
 };
 
 
-DrawingTool.defaultProps = {
+AreaMeasurementTool.defaultProps = {
   unit: 'metric',
-  onDraw: () => null,
+  onMeasure: () => null,
 };
 
 
-export default DrawingTool;
+export default AreaMeasurementTool;
