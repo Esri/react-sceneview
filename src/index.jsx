@@ -135,13 +135,15 @@ class SceneView extends Component {
     }
   }
 
-  getGeometry(layerId, globalId) {
+  getGeometry(layerId, id) {
     if (!this.state.view || !this.state.view.layerViews) return null;
 
     const layerView = this.state.view.layerViews.items.find(e => e.layer.id === layerId);
     if (!layerView) return null;
+    const { objectIdField } = layerView.layer;
 
-    const graphic = layerView.controller.graphics.find(e => e.attributes.GlobalID === globalId);
+    const graphic = layerView.controller.graphics
+      .find(e => e.attributes.GlobalID === id || e.attributes[objectIdField] === id);
     if (!graphic) return null;
 
     return graphic.geometry;
