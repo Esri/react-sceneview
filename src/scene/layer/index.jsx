@@ -88,6 +88,9 @@ const getHighlightOIDs = (layerView, mysteryIds) => mysteryIds.map(mysteryId => 
 ));
 
 
+let cancelLayerLoading = false;
+
+
 class Layer extends Component {
   static getDerivedStateFromProps(props, state) {
     const newState = {
@@ -112,44 +115,9 @@ class Layer extends Component {
       scaleEventListener: null,
     };
 
-    loadLayer(this.props.view, getLayerSettings(this.props)).then(async (result) => {
-      this.setState(result);
-
-      if (!this.state.layer) return;
-
-      const {
-        renderer,
-        rendererJson,
-        labelingInfoJson,
-        source,
-        ...updates
-      } = getLayerSettings(this.props);
-
-      Object.keys(updates).forEach(key => this.state.layer[key] = updates[key]);
-
-      if (renderer) {
-        if (renderer.type === 'scale-dependent') {
-          this.calcScaleDependentRenderers(renderer.scaleDependentRenderers);
-        } else {
-          this.state.layer.renderer = renderer;
-        }
-      }
-
-      if (rendererJson) {
-        const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
-        this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
-      }
-
-      if (this.props.selection && this.props.selection.length) {
-        this.setState({ highlights: this.state.layerView.highlight(this.props.selection) });
-      }
-
-      if (this.props.zoomTo) {
-        this.state.layer.when(() => this.props.view.goTo(this.state.layer.fullExtent));
-      }
-    });
+    const layerSettings = getLayerSettings(props);
+    this.load(props.view, layerSettings);
   }
-
 
   async componentDidUpdate(prevProps) {
     if (!this.state.layer) return;
@@ -207,6 +175,7 @@ class Layer extends Component {
   }
 
   componentWillUnmount() {
+    cancelLayerLoading = true;
     if (!this.state.layer) return;
 
     if (this.state.layer.source && this.state.layer.source.removeAll) {
@@ -252,6 +221,55 @@ class Layer extends Component {
     });
 
     this.setScaleDependentRenderer();
+  }
+
+  async load(view, layerSettings) {
+    if (!view) return;
+
+    // Check if already exists (e.g., after hot reload)
+    const existingLayer = view.map.layers.items.find(l => l.id === layerSettings.id);
+    const layer = existingLayer || await loadLayer(layerSettings);
+
+    // Check if layer component might have been canceled
+    if (cancelLayerLoading || !layer) return;
+
+    // Add layer to map
+    view.map.add(layer);
+    await view.whenLayerView(layer);
+    this.setState({ layer });
+
+    // Apply layer updates if needed
+    const {
+      renderer,
+      rendererJson,
+      labelingInfoJson,
+      source,
+      ...updates
+    } = layerSettings;
+
+    Object.keys(updates).forEach(key => this.state.layer[key] = updates[key]);
+
+    if (renderer) {
+      if (renderer.type === 'scale-dependent') {
+        this.calcScaleDependentRenderers(renderer.scaleDependentRenderers);
+      } else {
+        this.state.layer.renderer = renderer;
+      }
+    }
+
+    if (rendererJson) {
+      const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
+      this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
+    }
+
+    if (this.props.selection && this.props.selection.length) {
+      this.setState({ highlights: this.state.layerView.highlight(this.props.selection) });
+    }
+
+    if (this.props.zoomTo) {
+      // TODO: check this syntax
+      this.state.layer.when(() => this.props.view.goTo(this.state.layer.fullExtent));
+    }
   }
 
   render() {
