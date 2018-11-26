@@ -189,15 +189,17 @@ class Layer extends Component {
 
     // update source graphics
     if (this.props.source !== prevProps.source) {
-      const newGraphics = this.props.source.filter(graphic => !prevProps.source.includes(graphic));
-      const oldGraphics = prevProps.source.filter(graphic => !this.props.source.includes(graphic));
+      const newFeatures = this.props.source
+        .filter(feature => !prevProps.source.includes(feature));
 
-      if (oldGraphics.length > 0) {
-        this.state.layer.source.removeAll();
-        this.state.layer.source.addMany(this.props.source);
-      } else {
-        this.state.layer.source.addMany(newGraphics);
-      }
+      const oldFeatureIds = prevProps.source
+        .filter(feature => !this.props.source.includes(feature))
+        .map(feature => feature.attributes[this.props.objectIdField]);
+
+      this.state.layer.applyEdits({
+        adds: newFeatures,
+        deletes: oldFeatureIds,
+      });
     }
 
     // update zoomTo
