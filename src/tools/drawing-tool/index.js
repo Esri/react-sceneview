@@ -34,7 +34,7 @@ class DrawingTool extends Component {
 
     window.measurementTool = measurementTool;
 
-    measurementTool.activate();
+    measurementTool.start();
 
     watcher = measurementTool.watch('pathLength', () => {
       this.props.onDraw({
@@ -56,7 +56,7 @@ class DrawingTool extends Component {
 
   componentWillUnmount() {
     if (watcher) watcher.remove();
-    if (measurementTool) measurementTool.deactivate();
+    if (measurementTool) measurementTool.stop();
   }
 
   render() {
