@@ -88,9 +88,6 @@ const getHighlightOIDs = (layerView, mysteryIds) => mysteryIds.map(mysteryId => 
 ));
 
 
-let cancelLayerLoading = false;
-
-
 class Layer extends Component {
   static getDerivedStateFromProps(props, state) {
     const newState = {
@@ -117,6 +114,10 @@ class Layer extends Component {
 
     const layerSettings = getLayerSettings(props);
     this.load(props.view, layerSettings);
+  }
+
+  componentDidMount() {
+    this.isMounted = true;
   }
 
   async componentDidUpdate(prevProps) {
@@ -152,6 +153,10 @@ class Layer extends Component {
 
     if (rendererJson) {
       const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
+
+      // After every await, need to check if component is still mounted
+      if (!this.isMounted) return;
+
       this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
     }
 
@@ -175,7 +180,7 @@ class Layer extends Component {
   }
 
   componentWillUnmount() {
-    cancelLayerLoading = true;
+    this.isMounted = false;
     if (!this.state.layer) return;
 
     if (this.state.layer.source && this.state.layer.source.removeAll) {
@@ -202,6 +207,9 @@ class Layer extends Component {
 
   async calcScaleDependentRenderers(inputScaleDependentRenderers) {
     const [Renderer] = await esriLoader.loadModules(['esri/renderers/UniqueValueRenderer']);
+
+    // After every await, need to check if component is still mounted
+    if (!this.isMounted) return;
 
     const scaleDependentEsriRenderers = inputScaleDependentRenderers
       .filter(({ renderer }) => renderer.type === 'unique-value') // should try to support all in the future
@@ -230,12 +238,18 @@ class Layer extends Component {
     const existingLayer = view.map.layers.items.find(l => l.id === layerSettings.id);
     const layer = existingLayer || await loadLayer(layerSettings);
 
-    // Check if layer component might have been canceled
-    if (cancelLayerLoading || !layer) return;
+    // After every await, need to check if component is still mounted
+    if (!this.isMounted || !layer) return;
 
     // Add layer to map
     view.map.add(layer);
     await view.whenLayerView(layer);
+
+    // After every await, need to check if component is still mounted
+    if (!this.isMounted) {
+      view.map.remove(layer);
+      return;
+    }
     this.setState({ layer });
 
     // Apply layer updates if needed
@@ -259,6 +273,10 @@ class Layer extends Component {
 
     if (rendererJson) {
       const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
+
+      // After every await, need to check if component is still mounted
+      if (!this.isMounted) return;
+
       this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
     }
 
