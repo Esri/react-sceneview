@@ -36,7 +36,6 @@ class Graphic extends Component {
   loadGraphic() {
     const { geometry, attributes, symbol } = this.props;
     this.objectId = attributes[this.props.layer.objectIdField];
-    console.log(geometry);
     this.props.layer.add({ geometry, attributes, symbol });
   }
 

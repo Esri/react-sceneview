@@ -170,11 +170,6 @@ class Layer extends Component {
 
       if (!newFeatures.length || !oldFeatureIds.length) return;
 
-      console.log({
-        addFeatures: newFeatures,
-        deleteFeatures: oldFeatureIds,
-      });
-
       this.state.layer.applyEdits({
         addFeatures: newFeatures,
         deleteFeatures: oldFeatureIds,
