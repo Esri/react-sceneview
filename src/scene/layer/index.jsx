@@ -111,45 +111,13 @@ class Layer extends Component {
       scaleDependentEsriRenderers: null,
       scaleEventListener: null,
     };
-
-    loadLayer(this.props.view, getLayerSettings(this.props)).then(async (result) => {
-      this.setState(result);
-
-      if (!this.state.layer) return;
-
-      const {
-        renderer,
-        rendererJson,
-        labelingInfoJson,
-        source,
-        ...updates
-      } = getLayerSettings(this.props);
-
-      Object.keys(updates).forEach(key => this.state.layer[key] = updates[key]);
-
-      if (renderer) {
-        if (renderer.type === 'scale-dependent') {
-          this.calcScaleDependentRenderers(renderer.scaleDependentRenderers);
-        } else {
-          this.state.layer.renderer = renderer;
-        }
-      }
-
-      if (rendererJson) {
-        const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
-        this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
-      }
-
-      if (this.props.selection && this.props.selection.length) {
-        this.setState({ highlights: this.state.layerView.highlight(this.props.selection) });
-      }
-
-      if (this.props.zoomTo) {
-        this.state.layer.when(() => this.props.view.goTo(this.state.layer.fullExtent));
-      }
-    });
   }
 
+  componentDidMount() {
+    this.isMounted = true;
+    const layerSettings = getLayerSettings(this.props);
+    this.load(this.props.view, layerSettings);
+  }
 
   async componentDidUpdate(prevProps) {
     if (!this.state.layer) return;
@@ -184,6 +152,10 @@ class Layer extends Component {
 
     if (rendererJson) {
       const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
+
+      // After every await, need to check if component is still mounted
+      if (!this.isMounted) return;
+
       this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
     }
 
@@ -209,6 +181,7 @@ class Layer extends Component {
   }
 
   componentWillUnmount() {
+    this.isMounted = false;
     if (!this.state.layer) return;
 
     if (this.state.layer.source && this.state.layer.source.removeAll) {
@@ -236,6 +209,9 @@ class Layer extends Component {
   async calcScaleDependentRenderers(inputScaleDependentRenderers) {
     const [Renderer] = await esriLoader.loadModules(['esri/renderers/UniqueValueRenderer']);
 
+    // After every await, need to check if component is still mounted
+    if (!this.isMounted) return;
+
     const scaleDependentEsriRenderers = inputScaleDependentRenderers
       .filter(({ renderer }) => renderer.type === 'unique-value') // should try to support all in the future
       .map(({ renderer: { type, ...renderer }, minScale, maxScale }) => ({
@@ -254,6 +230,69 @@ class Layer extends Component {
     });
 
     this.setScaleDependentRenderer();
+  }
+
+  async load(view, layerSettings) {
+    if (!view) return;
+
+    // Check if already exists (e.g., after hot reload)
+    const existingLayer = view.map.layers.items.find(l => l.id === layerSettings.id);
+    const layer = existingLayer || await loadLayer(layerSettings);
+
+    // After every await, need to check if component is still mounted
+    if (!this.isMounted || !layer) return;
+
+    // Add layer to map
+    view.map.add(layer);
+    const layerView = await view.whenLayerView(layer);
+
+    // After every await, need to check if component is still mounted
+    if (!this.isMounted) {
+      view.map.remove(layer);
+      return;
+    }
+
+    this.setState({
+      layer,
+      layerView,
+    });
+
+    // Apply layer updates if needed
+    const {
+      renderer,
+      rendererJson,
+      labelingInfoJson,
+      source,
+      ...updates
+    } = layerSettings;
+
+    Object.keys(updates).forEach(key => this.state.layer[key] = updates[key]);
+
+    if (renderer) {
+      if (renderer.type === 'scale-dependent') {
+        this.calcScaleDependentRenderers(renderer.scaleDependentRenderers);
+      } else {
+        this.state.layer.renderer = renderer;
+      }
+    }
+
+    if (rendererJson) {
+      const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
+
+      // After every await, need to check if component is still mounted
+      if (!this.isMounted) return;
+
+      this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
+    }
+
+    if (this.props.selection && this.props.selection.length) {
+      this.setState({ highlights: this.state.layerView.highlight(this.props.selection) });
+    }
+
+    if (this.props.zoomTo) {
+      // TODO: check this syntax
+      this.state.layer.when(() => this.props.view.goTo(this.state.layer.fullExtent));
+    }
   }
 
   render() {
