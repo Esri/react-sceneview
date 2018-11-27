@@ -26,20 +26,19 @@ const layerTypes = {
 };
 
 
-export const addLayerToView = async (view, { id, layerType, url, portalItem, source, selection,
-  fields, objectIdField, geometryType, rendererJson, ...layerOptions }) => {
-  // if layer already exists, might need to update the layerSettings
-  if (!view) {
-    console.error(`problem with layer ${id}.`);
-    return null;
-  }
-
-  const existingLayer = view.map.layers.items.find(l => l.id === id);
-  if (existingLayer) {
-    Object.keys(layerOptions).forEach(key => existingLayer[key] = layerOptions[key]);
-    return existingLayer;
-  }
-
+export const loadLayer = async ({
+  id,
+  layerType,
+  url,
+  portalItem,
+  source,
+  selection,
+  fields,
+  objectIdField,
+  geometryType,
+  rendererJson,
+  ...layerOptions
+}) => {
   const layerSettings = {
     id,
     popupEnabled: false,
@@ -65,20 +64,8 @@ export const addLayerToView = async (view, { id, layerType, url, portalItem, sou
   }
 
   const [Layer] = await esriLoader.loadModules([layerTypes[layerType]]);
-  const layer = new Layer(layerSettings);
-
-  view.map.add(layer);
-
-  return layer;
+  return new Layer(layerSettings);
 };
 
 
-export const loadLayer = async (view, settings) => {
-  const layer = await addLayerToView(view, settings);
-  const layerView = await view.whenLayerView(layer);
-
-  return { layer, layerView };
-};
-
-
-export default addLayerToView;
+export default loadLayer;
