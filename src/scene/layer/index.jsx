@@ -111,13 +111,12 @@ class Layer extends Component {
       scaleDependentEsriRenderers: null,
       scaleEventListener: null,
     };
-
-    const layerSettings = getLayerSettings(props);
-    this.load(props.view, layerSettings);
   }
 
   componentDidMount() {
     this.isMounted = true;
+    const layerSettings = getLayerSettings(this.props);
+    this.load(this.props.view, layerSettings);
   }
 
   async componentDidUpdate(prevProps) {
@@ -243,14 +242,18 @@ class Layer extends Component {
 
     // Add layer to map
     view.map.add(layer);
-    await view.whenLayerView(layer);
+    const layerView = await view.whenLayerView(layer);
 
     // After every await, need to check if component is still mounted
     if (!this.isMounted) {
       view.map.remove(layer);
       return;
     }
-    this.setState({ layer });
+
+    this.setState({
+      layer,
+      layerView,
+    });
 
     // Apply layer updates if needed
     const {
