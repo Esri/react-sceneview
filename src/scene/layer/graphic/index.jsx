@@ -36,7 +36,8 @@ class Graphic extends Component {
   loadGraphic() {
     const { geometry, attributes, symbol } = this.props;
     this.objectId = attributes[this.props.layer.objectIdField];
-    this.props.layer.graphics.add({ geometry, attributes, symbol });
+    console.log(geometry);
+    this.props.layer.add({ geometry, attributes, symbol });
   }
 
   destroyGraphic() {
@@ -44,7 +45,7 @@ class Graphic extends Component {
       const graphic = this.props.layer.graphics
         .find(i => i.attributes[this.props.layer.objectIdField] === this.objectId);
       if (graphic) {
-        this.props.layer.graphics.remove(graphic);
+        this.props.layer.remove(graphic);
       }
     }
   }

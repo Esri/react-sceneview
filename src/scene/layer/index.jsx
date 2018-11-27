@@ -168,9 +168,16 @@ class Layer extends Component {
         .filter(feature => !this.props.source.includes(feature))
         .map(feature => feature.attributes[this.props.objectIdField]);
 
+      if (!newFeatures.length || !oldFeatureIds.length) return;
+
+      console.log({
+        addFeatures: newFeatures,
+        deleteFeatures: oldFeatureIds,
+      });
+
       this.state.layer.applyEdits({
-        adds: newFeatures,
-        deletes: oldFeatureIds,
+        addFeatures: newFeatures,
+        deleteFeatures: oldFeatureIds,
       });
     }
 
@@ -184,6 +191,7 @@ class Layer extends Component {
     this.isMounted = false;
     if (!this.state.layer) return;
 
+    // TODO: this prob. needs to be changed
     if (this.state.layer.source && this.state.layer.source.removeAll) {
       this.state.layer.source.removeAll();
     }

@@ -146,7 +146,14 @@ class SceneView extends Component {
       .find(e => e.attributes.GlobalID === id || e.attributes[objectIdField] === id);
     if (!graphic) return null;
 
-    return graphic.geometry;
+    // TODO: this dirty hack needs improvement
+    // TODO: need to find a better way to parse Float64Arrays into Arrays
+    return {
+      ...graphic.geometry,
+      rings: graphic.geometry.rings.map(ring =>
+        ring.map(point => [point[0], point[1], point[3]]),
+      ),
+    };
   }
 
   parseEnvironment(inputEnvironment) {
