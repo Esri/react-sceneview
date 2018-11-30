@@ -2,8 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
+  mode: 'development',
   module: {
-    loaders: [
+    rules: [
       {
         enforce: 'pre',
         test: /\.jsx?$/,
@@ -14,9 +15,6 @@ module.exports = {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
-        query: {
-          presets: ['es2015', 'react'],
-        },
       },
     ],
   },
@@ -25,23 +23,21 @@ module.exports = {
     descriptionFiles: ['package.json'],
     extensions: ['.js', '.jsx'],
   },
+  entry: [
+    './example/main.jsx',
+  ],
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: '/dist/',
     filename: 'bundle.js',
-    chunkFilename: '[id].bundle.js',
   },
-  entry: [
-    'webpack-dev-server/client?http://localhost:8080', // WebpackDevServer host and port
-    'idempotent-babel-polyfill',
-    './example/main.jsx',
-  ],
-  devtool: '#inline-source-map',
+  devtool: 'cheap-module-eval-source-map',
   devServer: {
-    inline: true,
-    port: 8080,
+    hot: true,
+    stats: 'minimal',
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
   ],
 };
