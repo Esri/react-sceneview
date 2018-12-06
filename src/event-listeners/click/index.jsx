@@ -101,12 +101,12 @@ class ClickEventListener extends Component {
 
       this.props.onClick({
         mapPoint,
-        graphic: graphic && graphic.layer.selectable ? {
+        graphic: graphic && graphic.layer && graphic.layer.selectable ? {
           attributes: graphic.attributes,
           geometry: graphic.geometry,
           GlobalID: graphic.attributes.GlobalID,
           objectId: graphic.attributes[graphic.layer.objectIdField],
-          layerId: graphic.layer.id,
+          layerId: graphic.layer && graphic.layer.id,
         } : null,
         features: nearestFeature ? [nearestFeature] : features.slice(0, 1),
         event,

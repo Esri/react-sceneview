@@ -168,7 +168,7 @@ class Layer extends Component {
         .filter(feature => !this.props.source.includes(feature))
         .map(feature => feature.attributes[this.props.objectIdField]);
 
-      if (!newFeatures.length || !oldFeatureIds.length) return;
+      if (!newFeatures.length && !oldFeatureIds.length) return;
 
       this.state.layer.applyEdits({
         addFeatures: newFeatures,
