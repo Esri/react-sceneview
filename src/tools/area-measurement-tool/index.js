@@ -34,6 +34,7 @@ class AreaMeasurementTool extends Component {
 
     window.measurementTool = measurementTool;
 
+    measurementTool.show();
     measurementTool.activate();
 
     watcher = measurementTool.watch('pathLength', () => {
@@ -46,7 +47,10 @@ class AreaMeasurementTool extends Component {
   }
   componentWillUnmount() {
     if (watcher) watcher.remove();
-    if (measurementTool) measurementTool.deactivate();
+    if (measurementTool) {
+      measurementTool.deactivate();
+      measurementTool.hide();
+    }
   }
 
   render() {

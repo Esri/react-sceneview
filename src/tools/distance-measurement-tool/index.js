@@ -34,6 +34,7 @@ class DistanceMeasurementTool extends Component {
 
     window.measurementTool = measurementTool;
 
+    measurementTool.show();
     measurementTool.activate();
 
     watcher = measurementTool.watch('directDistance', () => {
@@ -47,7 +48,10 @@ class DistanceMeasurementTool extends Component {
 
   componentWillUnmount() {
     if (watcher) watcher.remove();
-    if (measurementTool) measurementTool.deactivate();
+    if (measurementTool) {
+      measurementTool.deactivate();
+      measurementTool.hide();
+    }
   }
 
   render() {
