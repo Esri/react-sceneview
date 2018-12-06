@@ -1,19 +1,14 @@
 const path = require('path');
-const webpack = require('webpack');
-
 const MinifyPlugin = require('babel-minify-webpack-plugin');
 
-
 module.exports = {
+  mode: 'production',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
-        query: {
-          presets: ['es2015', 'react'],
-        },
       },
     ],
   },
@@ -24,11 +19,11 @@ module.exports = {
   },
   entry: {
     'react-sceneview': [
-      'idempotent-babel-polyfill',
+      '@babel/polyfill',
       './src/index.jsx',
     ],
     'react-sceneview.min': [
-      'idempotent-babel-polyfill',
+      '@babel/polyfill',
       './src/index.jsx',
     ],
   },
@@ -38,10 +33,10 @@ module.exports = {
     library: 'react-sceneview',
     libraryTarget: 'umd',
   },
+  optimization: {
+    minimize: false,
+  },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production'),
-    }),
     new MinifyPlugin({}, {
       include: /\.min\.js$/,
     }),

@@ -38,6 +38,15 @@ class DrawingTool extends Component {
     measurementTool.activate();
 
     watcher = measurementTool.watch('pathLength', () => {
+      if (measurementTool.model.path.vertices.items <= 0) {
+        this.props.onDraw({
+          geometry: null,
+          area: 0,
+        });
+
+        return;
+      }
+
       this.props.onDraw({
         geometry: {
           points:
