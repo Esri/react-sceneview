@@ -164,15 +164,14 @@ class Layer extends Component {
       const newFeatures = this.props.source
         .filter(feature => !prevProps.source.includes(feature));
 
-      const oldFeatureIds = prevProps.source
-        .filter(feature => !this.props.source.includes(feature))
-        .map(feature => feature.attributes[this.props.objectIdField]);
+      const oldFeatures = prevProps.source
+        .filter(feature => !this.props.source.includes(feature));
 
-      if (!newFeatures.length && !oldFeatureIds.length) return;
+      if (!newFeatures.length && !oldFeatures.length) return;
 
       this.state.layer.applyEdits({
         addFeatures: newFeatures,
-        deleteFeatures: oldFeatureIds,
+        deleteFeatures: oldFeatures,
       });
     }
 
