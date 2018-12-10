@@ -183,7 +183,7 @@ class Layer extends Component {
     // fix refresh bug
     if (this.props.visible && this.props.visible !== prevProps.visible) {
       const layerView = this.state.layerView;
-      layerView.refresh();
+      if (layerView && layerView.refresh) layerView.refresh();
     }
   }
 
