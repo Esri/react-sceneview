@@ -179,6 +179,12 @@ class Layer extends Component {
     if (this.props.zoomTo && !prevProps.zoomTo) {
       this.state.layer.when(() => this.props.view.goTo(this.state.layer.fullExtent));
     }
+
+    // fix refresh bug
+    if (this.props.visible && this.props.visible !== prevProps.visible) {
+      const layerView = this.state.layerView;
+      if (layerView && layerView.refresh) layerView.refresh();
+    }
   }
 
   componentWillUnmount() {
