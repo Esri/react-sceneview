@@ -22,6 +22,7 @@ import getEsriGeometry from './helpers/get-esri-geometry';
 import Scene, { Layer, Ground, Graphic } from './scene';
 import UI from './ui';
 import EventListeners from './event-listeners';
+import Legend from './legend';
 
 import DrawingTool from './tools/drawing-tool';
 import LineSelectionTool from './tools/line-selection-tool';
@@ -266,6 +267,7 @@ export {
   Ground,
   Graphic,
   UI,
+  Legend,
   DrawingTool,
   LineSelectionTool,
   RectangleSelectionTool,

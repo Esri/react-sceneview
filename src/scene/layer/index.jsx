@@ -49,6 +49,7 @@ const layerSettingsProps = {
   maxScale: PropTypes.number,
   featureReduction: PropTypes.object,
   source: PropTypes.array,
+  legendEnabled: PropTypes.bool,
 };
 
 
@@ -361,6 +362,7 @@ Layer.defaultProps = {
   maxScale: null,
   featureReduction: null,
   source: null,
+  legendEnabled: true,
 };
 
 Layer.Graphic = Graphic;
