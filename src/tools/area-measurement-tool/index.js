@@ -25,14 +25,24 @@ let watcher;
 
 
 class AreaMeasurementTool extends Component {
+  static newMeasurement() {
+    if (measurementTool) {
+      measurementTool.newMeasurement();
+    }
+  }
+
+  static clearMeasurement() {
+    if (measurementTool) {
+      measurementTool.clearMeasurement();
+    }
+  }
+
   async componentDidMount() {
     const [AreaMeasurement3DTool] = await esriLoader.loadModules([
       'esri/views/3d/interactive/measurementTools/areaMeasurement3D/AreaMeasurement3DTool',
     ]);
 
     measurementTool = new AreaMeasurement3DTool({ view: this.props.view, unit: this.props.unit });
-
-    window.measurementTool = measurementTool;
 
     measurementTool.show();
     measurementTool.activate();

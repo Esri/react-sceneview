@@ -32,8 +32,6 @@ class DrawingTool extends Component {
 
     measurementTool = new AreaMeasurement3DTool({ view: this.props.view, unit: this.props.unit });
 
-    window.measurementTool = measurementTool;
-
     measurementTool.show();
     measurementTool.activate();
 

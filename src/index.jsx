@@ -30,13 +30,14 @@ import RectangleSelectionTool from './tools/rectangle-selection-tool';
 import LassoSelectionTool from './tools/lasso-selection-tool';
 import DistanceMeasurementTool from './tools/distance-measurement-tool';
 import AreaMeasurementTool from './tools/area-measurement-tool';
+import SliceTool from './tools/slice-tool';
 
 
 import { loadEsriSceneView } from './load';
 
 
 const ChildComponents = [Scene, DrawingTool, LineSelectionTool, RectangleSelectionTool,
-  LassoSelectionTool, DistanceMeasurementTool, AreaMeasurementTool,
+  LassoSelectionTool, DistanceMeasurementTool, AreaMeasurementTool, SliceTool,
   ...Object.keys(UI).map(key => UI[key])];
 
 
@@ -259,6 +260,7 @@ SceneView.RectangleSelectionTool = RectangleSelectionTool;
 SceneView.LassoSelectionTool = LassoSelectionTool;
 SceneView.DistanceMeasurementTool = DistanceMeasurementTool;
 SceneView.AreaMeasurementTool = AreaMeasurementTool;
+SceneView.SliceTool = SliceTool;
 
 export {
   SceneView,
@@ -274,6 +276,7 @@ export {
   LassoSelectionTool,
   DistanceMeasurementTool,
   AreaMeasurementTool,
+  SliceTool,
 };
 
 export default SceneView;

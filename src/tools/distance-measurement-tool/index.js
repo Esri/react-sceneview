@@ -25,14 +25,24 @@ let watcher;
 
 
 class DistanceMeasurementTool extends Component {
+  static newMeasurement() {
+    if (measurementTool) {
+      measurementTool.newMeasurement();
+    }
+  }
+
+  static clearMeasurement() {
+    if (measurementTool) {
+      measurementTool.clearMeasurement();
+    }
+  }
+
   async componentDidMount() {
     const [DirectLineMeasurement3D] = await esriLoader.loadModules([
       'esri/views/3d/interactive/measurementTools/directLineMeasurement3D/DirectLineMeasurement3DTool',
     ]);
 
     measurementTool = new DirectLineMeasurement3D({ view: this.props.view, unit: this.props.unit });
-
-    window.measurementTool = measurementTool;
 
     measurementTool.show();
     measurementTool.activate();

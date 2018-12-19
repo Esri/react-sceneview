@@ -24,7 +24,7 @@ esriLoader.loadCss('https://js.arcgis.com/4.7/esri/css/main.css');
 
 
 render(
-  <SceneView id="sceneview" onClick={e => console.log(e)}>
+  <SceneView id="sceneview">
     <UI.Zoom />
     <UI.Compass />
     <Scene basemap="gray-vector">
