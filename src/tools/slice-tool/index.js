@@ -38,7 +38,11 @@ class SliceTool extends Component {
       'esri/widgets/Slice',
     ]);
 
-    sliceTool = new Slice({ view: this.props.view });
+    sliceTool = new Slice({
+      view: this.props.view,
+    });
+
+    sliceTool.viewModel.excludeGroundSurface = this.props.excludeGround;
   }
 
   componentWillUnmount() {
@@ -54,6 +58,11 @@ class SliceTool extends Component {
 
 SliceTool.propTypes = {
   view: PropTypes.object.isRequired,
+  excludeGround: PropTypes.bool,
+};
+
+SliceTool.defaultProps = {
+  excludeGround: false,
 };
 
 export default SliceTool;

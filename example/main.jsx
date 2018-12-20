@@ -18,7 +18,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import esriLoader from 'esri-loader';
 
-import { SceneView, Scene, Layer, UI, Ground, DistanceMeasurementTool, DrawingTool } from 'react-sceneview'; // eslint-disable-line
+import { SceneView, Scene, Layer, UI, Ground, SliceTool, DistanceMeasurementTool, DrawingTool } from 'react-sceneview'; // eslint-disable-line
 
 esriLoader.loadCss('https://js.arcgis.com/4.7/esri/css/main.css');
 
@@ -27,7 +27,7 @@ render(
   <SceneView id="sceneview">
     <UI.Zoom />
     <UI.Compass />
-    <Scene basemap="gray-vector">
+    <Scene basemap="streets">
       <Ground
         opacity={0.5}
         navigationConstraint={{ type: 'none' }}
