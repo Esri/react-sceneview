@@ -45,8 +45,7 @@ const queryFeaturesByGeometry = async (layerView, geometry, spatialRelationship)
     geometryEngine.intersects : geometryEngine.contains;
 
   const selectionFeatures = features
-    .filter(feature => feature.geometry)
-    .filter(feature => spatialFn(geometry, feature.geometry));
+    .filter(feature => (feature.geometry ? spatialFn(geometry, feature.geometry) : true));
 
   return selectionFeatures;
 };
