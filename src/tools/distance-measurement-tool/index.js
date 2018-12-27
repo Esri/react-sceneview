@@ -20,48 +20,29 @@ import esriLoader from 'esri-loader';
 import unitOptions from '../../helpers/unit-options';
 
 
-let measurementTool;
-let watcher;
-
-
 class DistanceMeasurementTool extends Component {
-  static newMeasurement() {
-    if (measurementTool) {
-      measurementTool.newMeasurement();
-    }
-  }
-
-  static clearMeasurement() {
-    if (measurementTool) {
-      measurementTool.clearMeasurement();
-    }
-  }
-
   async componentDidMount() {
     const [DirectLineMeasurement3D] = await esriLoader.loadModules([
-      'esri/views/3d/interactive/measurementTools/directLineMeasurement3D/DirectLineMeasurement3DTool',
+      'esri/widgets/DirectLineMeasurement3D',
     ]);
 
-    measurementTool = new DirectLineMeasurement3D({ view: this.props.view, unit: this.props.unit });
+    this.measurementTool = new DirectLineMeasurement3D({
+      view: this.props.view,
+      unit: this.props.unit,
+    });
 
-    measurementTool.show();
-    measurementTool.activate();
+    this.measurementTool.viewModel.newMeasurement();
 
-    watcher = measurementTool.watch('directDistance', () => {
-      this.props.onMeasure({
-        directDistance: measurementTool.directDistance,
-        horizontalDistance: measurementTool.horizontalDistance,
-        verticalDistance: measurementTool.verticalDistance,
-      });
+    this.watcher = this.measurementTool.view.on('pointer-move', () => {
+      if (this.measurementTool.viewModel.measurement.directDistance.state === 'available') {
+        this.props.onChange(this.measurementTool.viewModel.measurement);
+      }
     });
   }
 
   componentWillUnmount() {
-    if (watcher) watcher.remove();
-    if (measurementTool) {
-      measurementTool.deactivate();
-      measurementTool.hide();
-    }
+    this.watcher.remove();
+    this.measurementTool.destroy();
   }
 
   render() {
@@ -70,15 +51,14 @@ class DistanceMeasurementTool extends Component {
 }
 
 DistanceMeasurementTool.propTypes = {
-  onMeasure: PropTypes.func,
+  onChange: PropTypes.func,
   unit: PropTypes.oneOf(unitOptions),
   view: PropTypes.object.isRequired,
 };
 
-
 DistanceMeasurementTool.defaultProps = {
+  onChange: () => null,
   unit: 'metric',
-  onMeasure: () => null,
 };
 
 

@@ -18,37 +18,24 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
-let sliceTool;
 
 class SliceTool extends Component {
-  static newSlice() {
-    if (sliceTool) {
-      sliceTool.viewModel.newSlice();
-    }
-  }
-
-  static clearSlice() {
-    if (sliceTool) {
-      sliceTool.viewModel.clearSlice();
-    }
-  }
-
   async componentDidMount() {
     const [Slice] = await esriLoader.loadModules([
       'esri/widgets/Slice',
     ]);
 
-    sliceTool = new Slice({
+    this.sliceTool = new Slice({
       view: this.props.view,
     });
 
-    sliceTool.viewModel.excludeGroundSurface = this.props.excludeGround;
+    this.sliceTool.viewModel.newSlice();
+
+    this.sliceTool.viewModel.excludeGroundSurface = this.props.excludeGround;
   }
 
   componentWillUnmount() {
-    if (sliceTool) {
-      sliceTool.destroy();
-    }
+    this.sliceTool.destroy();
   }
 
   render() {
@@ -57,8 +44,8 @@ class SliceTool extends Component {
 }
 
 SliceTool.propTypes = {
-  view: PropTypes.object.isRequired,
   excludeGround: PropTypes.bool,
+  view: PropTypes.object.isRequired,
 };
 
 SliceTool.defaultProps = {

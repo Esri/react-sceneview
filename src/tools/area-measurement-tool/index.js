@@ -20,47 +20,29 @@ import esriLoader from 'esri-loader';
 import unitOptions from '../../helpers/unit-options';
 
 
-let measurementTool;
-let watcher;
-
-
 class AreaMeasurementTool extends Component {
-  static newMeasurement() {
-    if (measurementTool) {
-      measurementTool.newMeasurement();
-    }
-  }
-
-  static clearMeasurement() {
-    if (measurementTool) {
-      measurementTool.clearMeasurement();
-    }
-  }
-
   async componentDidMount() {
     const [AreaMeasurement3DTool] = await esriLoader.loadModules([
-      'esri/views/3d/interactive/measurementTools/areaMeasurement3D/AreaMeasurement3DTool',
+      'esri/widgets/AreaMeasurement3D',
     ]);
 
-    measurementTool = new AreaMeasurement3DTool({ view: this.props.view, unit: this.props.unit });
+    this.measurementTool = new AreaMeasurement3DTool({
+      view: this.props.view,
+      unit: this.props.unit,
+    });
 
-    measurementTool.show();
-    measurementTool.activate();
+    this.measurementTool.viewModel.newMeasurement();
 
-    watcher = measurementTool.watch('pathLength', () => {
-      if (!measurementTool.area) return;
-
-      this.props.onMeasure({
-        area: measurementTool.area,
-      });
+    this.watcher = this.measurementTool.view.on('click', () => {
+      if (this.measurementTool.viewModel.measurement.area.state === 'available') {
+        this.props.onChange(this.measurementTool.viewModel.measurement);
+      }
     });
   }
+
   componentWillUnmount() {
-    if (watcher) watcher.remove();
-    if (measurementTool) {
-      measurementTool.deactivate();
-      measurementTool.hide();
-    }
+    this.watcher.remove();
+    this.measurementTool.destroy();
   }
 
   render() {
@@ -69,15 +51,14 @@ class AreaMeasurementTool extends Component {
 }
 
 AreaMeasurementTool.propTypes = {
-  onMeasure: PropTypes.func,
+  onChange: PropTypes.func,
   unit: PropTypes.oneOf(unitOptions),
   view: PropTypes.object.isRequired,
 };
 
-
 AreaMeasurementTool.defaultProps = {
+  onChange: () => null,
   unit: 'metric',
-  onMeasure: () => null,
 };
 
 
