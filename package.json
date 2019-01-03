@@ -1,6 +1,6 @@
 {
   "name": "react-sceneview",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "react-sceneview",
   "main": "dist/react-sceneview.js",
   "module": "dist/react-sceneview.js",
@@ -14,7 +14,7 @@
   "author": "Michael Van den Bergh",
   "license": "Apache License - 2.0",
   "dependencies": {
-    "esri-loader": "^2.4.0",
+    "esri-loader": "^2.6.0",
     "prop-types": "^15.5.10",
     "react": "^16.4.0",
     "react-dom": "^16.4.0"

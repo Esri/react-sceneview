@@ -17,32 +17,25 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
-import unitOptions from '../../helpers/unit-options';
 
 
-class AreaMeasurementTool extends Component {
+class SliceTool extends Component {
   async componentDidMount() {
-    const [AreaMeasurement3DTool] = await esriLoader.loadModules([
-      'esri/widgets/AreaMeasurement3D',
+    const [Slice] = await esriLoader.loadModules([
+      'esri/widgets/Slice',
     ]);
 
-    this.measurementTool = new AreaMeasurement3DTool({
+    this.sliceTool = new Slice({
       view: this.props.view,
-      unit: this.props.unit,
     });
 
-    this.measurementTool.viewModel.newMeasurement();
+    this.sliceTool.viewModel.newSlice();
 
-    this.watcher = this.measurementTool.view.on('click', () => {
-      if (this.measurementTool.viewModel.measurement.area.state === 'available') {
-        this.props.onChange(this.measurementTool.viewModel.measurement);
-      }
-    });
+    this.sliceTool.viewModel.excludeGroundSurface = this.props.excludeGround;
   }
 
   componentWillUnmount() {
-    this.watcher.remove();
-    this.measurementTool.destroy();
+    this.sliceTool.destroy();
   }
 
   render() {
@@ -50,16 +43,13 @@ class AreaMeasurementTool extends Component {
   }
 }
 
-AreaMeasurementTool.propTypes = {
-  onChange: PropTypes.func,
-  unit: PropTypes.oneOf(unitOptions),
+SliceTool.propTypes = {
+  excludeGround: PropTypes.bool,
   view: PropTypes.object.isRequired,
 };
 
-AreaMeasurementTool.defaultProps = {
-  onChange: () => null,
-  unit: 'metric',
+SliceTool.defaultProps = {
+  excludeGround: false,
 };
 
-
-export default AreaMeasurementTool;
+export default SliceTool;
