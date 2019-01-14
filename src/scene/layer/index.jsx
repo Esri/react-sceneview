@@ -51,6 +51,7 @@ const layerSettingsProps = {
   featureReduction: PropTypes.object,
   source: PropTypes.array,
   legendEnabled: PropTypes.bool,
+  title: PropTypes.string,
 };
 
 
@@ -365,6 +366,7 @@ Layer.defaultProps = {
   featureReduction: null,
   source: null,
   legendEnabled: true,
+  title: null,
 };
 
 Layer.Graphic = Graphic;
