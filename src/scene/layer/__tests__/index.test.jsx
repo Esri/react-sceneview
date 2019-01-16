@@ -28,23 +28,22 @@ const viewPromise = Promise.resolve();
 const viewMock = {
   whenLayerView: jest.fn(() => viewPromise),
   map: {
+    add: jest.fn(),
     layers: {
       remove: jest.fn(),
+      items: [],
     },
   },
 };
 
 jest.mock('../load', () => ({
-  loadLayer: jest.fn((view, layerSettings) => Promise.resolve({
-    layer: { ...layerSettings },
-    layerView: {},
-  })),
+  loadLayer: jest.fn(layerSettings => Promise.resolve(layerSettings)),
 }));
 
 
 describe('components', () => {
-  describe('<Layer />', async () => {
-    const layerSettings = {
+  describe('<Layer />', () => {
+    const layer = {
       id: 'layer-1',
       layerType: 'feature',
       url: 'http://test',
@@ -52,32 +51,26 @@ describe('components', () => {
       labelsVisible: false,
       selectable: false,
       outFields: ['*'],
+      hasZ: false,
+      legendEnabled: true,
     };
 
-    const props = {
-      view: viewMock,
-      ...layerSettings,
-    };
+    const wrapper = mount(<Layer view={viewMock} {...layer} />);
 
-    const wrapper = mount(<Layer {...props} />);
-
-    it('mount: should call addLayerToView(...), view.whenLayerView(...), add both to component state', async () => {
-      expect(loadLayer).toHaveBeenCalledWith(viewMock, { ...layerSettings });
+    it('mount: should call loadLayer with correct layer settings', async () => {
+      expect(loadLayer).toHaveBeenCalledWith(layer);
       await Promise.resolve();
+      expect(viewMock.map.add).toHaveBeenCalledWith(layer);
+      await Promise.resolve();
+      expect(viewMock.whenLayerView).toHaveBeenCalledWith(layer);
     });
 
-    it('should update layer visiblity when changing visibility prop', async () => {
+    it('should update layer visiblity when changing visibility prop', () => {
       wrapper.setProps({ visible: false });
       expect(wrapper.state('layer')).toEqual({
-        ...layerSettings,
+        ...layer,
         visible: false,
       });
     });
-
-    // it('unmount: should remove layer', async () => {
-    //   wrapper.unmount();
-    //   expect(viewMock.map.layers.remove)
-    //     .toHaveBeenCalledWith(expect.objectContaining({ id: layerSettings.id }));
-    // });
   });
 });

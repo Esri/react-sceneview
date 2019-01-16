@@ -19,8 +19,6 @@ import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import SceneView from '../index';
-import Scene from '../scene';
-import EventListeners from '../event-listeners';
 
 import { loadEsriSceneView } from '../load';
 
@@ -64,33 +62,6 @@ describe('components', () => {
 
       expect(wrapper.find('#sceneview').exists()).toBe(true);
       expect(loadEsriSceneView).toHaveBeenCalled();
-      // With(
-      //   wrapper.find('div').getElement(),
-      //   props.id,
-      //   { camera: props.goTo },
-      // );
     });
-
-    // it('should render Children', (done) => {
-    //   const props = {
-    //     id: 'a1b2c3',
-    //   };
-    //
-    //   const wrapper = mount(<SceneView {...props}>
-    //     <Scene />
-    //   </SceneView>);
-    //
-    //   setTimeout(() => {
-    //     console.log(wrapper.find('#sceneview'));
-    //     try {
-    //       expect(wrapper.find('#sceneview').children().find(Scene).exists()).toBe(true);
-    //       expect(wrapper.find('#sceneview').children().find(EventListeners.Selection).exists()).toBe(true);
-    //       expect(wrapper.find('#sceneview').children().find(EventListeners.Camera).exists()).toBe(true);
-    //       done();
-    //     } catch (e) {
-    //       done.fail(e);
-    //     }
-    //   }, 1000);
-    // });
   });
 });
