@@ -227,6 +227,9 @@ class Layer extends Component {
     const rendererType = inputScaleDependentRenderers[0].renderer.type;
     const [Renderer] = await esriLoader.loadModules([rendererTypes[rendererType]]);
 
+    // After every await, need to check if component is still mounted
+    if (!this.componentIsMounted) return;
+
     const scaleDependentEsriRenderers = inputScaleDependentRenderers
       .map(({ renderer: { type, ...renderer }, minScale, maxScale }) => ({
         renderer: new Renderer(renderer),
