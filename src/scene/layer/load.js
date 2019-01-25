@@ -23,6 +23,9 @@ const layerTypes = {
   graphics: 'esri/layers/GraphicsLayer',
   tile: 'esri/layers/TileLayer',
   'vector-tile': 'esri/layers/VectorTileLayer',
+  'integrated-mesh': 'esri/layers/IntegratedMeshLayer',
+  'point-cloud': 'esri/layers/PointCloudLayer',
+  'building-scene': 'esri/layers/BuildingSceneLayer',
 };
 
 
