@@ -218,13 +218,12 @@ class Layer extends Component {
   }
 
   async calcScaleDependentRenderers(inputScaleDependentRenderers) {
-    const [Renderer] = await esriLoader.loadModules(['esri/renderers/UniqueValueRenderer']);
+    const [Renderer] = await esriLoader.loadModules(['esri/renderers/Renderer']);
 
     // After every await, need to check if component is still mounted
     if (!this.componentIsMounted) return;
 
     const scaleDependentEsriRenderers = inputScaleDependentRenderers
-      .filter(({ renderer }) => renderer.type === 'unique-value') // should try to support all in the future
       .map(({ renderer: { type, ...renderer }, minScale, maxScale }) => ({
         renderer: new Renderer(renderer),
         minScale,
