@@ -87,7 +87,7 @@ const getOIDfromGlobalId = (layerView, GlobalID) => {
 
 const getHighlightOIDs = (layerView, mysteryIds) => mysteryIds.map(mysteryId => (
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(mysteryId) ?
-  getOIDfromGlobalId(layerView, mysteryId) : mysteryId
+    getOIDfromGlobalId(layerView, mysteryId) : mysteryId
 ));
 
 
@@ -218,17 +218,22 @@ class Layer extends Component {
   }
 
   async calcScaleDependentRenderers(inputScaleDependentRenderers) {
-    const [Renderer] = await esriLoader.loadModules(['esri/renderers/Renderer']);
+    const rendererTypes = {
+      'unique-value': 'esri/renderers/UniqueValueRenderer',
+      simple: 'esri/renderers/SimpleRenderer',
+      'class-breaks': 'esri/renderers/ClassBreakRenderer',
+    };
 
-    // After every await, need to check if component is still mounted
-    if (!this.componentIsMounted) return;
+    const rendererType = inputScaleDependentRenderers[0].renderer.type;
+    const [Renderer] = await esriLoader.loadModules([rendererTypes[rendererType]]);
 
     const scaleDependentEsriRenderers = inputScaleDependentRenderers
       .map(({ renderer: { type, ...renderer }, minScale, maxScale }) => ({
         renderer: new Renderer(renderer),
         minScale,
         maxScale,
-      }));
+      }),
+      );
 
     const scaleEventListener = this.props.view.watch('scale', () => {
       this.setScaleDependentRenderer();
