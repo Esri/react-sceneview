@@ -132,14 +132,14 @@ class Layer extends Component {
   async componentDidUpdate(prevProps) {
     if (!this.state.layer) return;
 
-    const updatesDiff = getLayerUpdates(prevProps, this.props);
-    if (!updatesDiff) return;
-
     // refresh layer
     if (this.props.refresh !== prevProps.refresh) {
       const layerView = this.state.layerView;
       layerView.refresh();
     }
+
+    const updatesDiff = getLayerUpdates(prevProps, this.props);
+    if (!updatesDiff) return;
 
     // update layer settings
     const { rendererJson, source, ...updates } = updatesDiff;
