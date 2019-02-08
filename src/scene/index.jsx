@@ -24,14 +24,6 @@ import CustomBasemap from './custom-basemap';
 import CustomElevationLayer from './custom-elevation-layer';
 import SelectionLayer from './selection-layer';
 
-// const ChildComponents = [
-//   Layer,
-//   Ground,
-//   CustomBasemap,
-//   CustomElevationLayer,
-//   SelectionLayer,
-// ];
-
 
 class Scene extends Component {
   constructor(props) {
