@@ -75,11 +75,13 @@ const getLayerSettings = (props) => {
 
 
 const getLayerUpdates = (props, nextProps) => {
-  const updates = {};
+  const changes = Object.keys(layerSettingsProps)
+    .filter(key => props[key] !== nextProps[key]);
 
-  Object.keys(layerSettingsProps)
-    .filter(key => props[key] !== nextProps[key])
-    .forEach(key => updates[key] = nextProps[key]);
+  if (changes.length === 0) return null;
+
+  const updates = {};
+  changes.forEach(key => updates[key] = nextProps[key]);
 
   return updates;
 };
@@ -128,8 +130,10 @@ class Layer extends Component {
   }
 
   async componentDidUpdate(prevProps) {
-    console.log('updating something');
     if (!this.state.layer) return;
+
+    const updatesDiff = getLayerUpdates(prevProps, this.props);
+    if (!updatesDiff) return;
 
     // refresh layer
     if (this.props.refresh !== prevProps.refresh) {
@@ -138,19 +142,11 @@ class Layer extends Component {
     }
 
     // update layer settings
-    const {
-      rendererJson,
-      source,
-      ...updates
-    } = getLayerUpdates(prevProps, this.props);
-
-    console.log(this.state.layer.id);
-    console.log(updates);
+    const { rendererJson, source, ...updates } = updatesDiff;
 
     Object.keys(updates).forEach(key => this.state.layer[key] = updates[key]);
 
     if (rendererJson) {
-      console.log('updating renderer');
       const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
 
       // After every await, need to check if component is still mounted
@@ -161,7 +157,6 @@ class Layer extends Component {
 
     // update source graphics
     if (this.props.source !== prevProps.source) {
-      console.log('updating source');
       const newFeatures = this.props.source
         .filter(feature => !prevProps.source.includes(feature));
 
@@ -178,7 +173,6 @@ class Layer extends Component {
 
     // update zoomTo
     if (this.props.zoomTo && !prevProps.zoomTo) {
-      console.log('zoom to');
       this.state.layer.when(() => this.props.view.goTo(this.state.layer.fullExtent));
     }
 
@@ -212,6 +206,10 @@ class Layer extends Component {
     // After every await, need to check if component is still mounted
     if (!this.componentIsMounted || !layer) return;
 
+    this.setState({
+      layer,
+    });
+
     // Add layer to map
     view.map.add(layer);
     const layerView = await view.whenLayerView(layer);
@@ -223,7 +221,6 @@ class Layer extends Component {
     }
 
     this.setState({
-      layer,
       layerView,
     });
 

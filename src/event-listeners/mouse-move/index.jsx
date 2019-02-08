@@ -22,6 +22,9 @@ let listener;
 class MouseMoveEventListener extends Component {
   async componentDidMount() {
     listener = this.props.view.on('pointer-move', async (event) => {
+      // don't trigger while navigating the scene
+      if (this.props.view.interacting) return;
+
       const { results } = await this.props.view.hitTest({ x: event.x, y: event.y });
       if (!results || !results[0]) return;
 
