@@ -90,6 +90,20 @@ class SceneView extends Component {
       }
     }
 
+    if (this.props.goToLayers !== nextProps.goToLayers &&
+      nextProps.goToLayers && nextProps.goToLayers.length > 0) {
+      const layers = nextProps.goToLayers
+        .map(id => this.state.view.map.layers.items.find(i => i.id === id))
+        .filter(layer => layer);
+
+      const extentResults = await Promise.all(layers.map(layer => layer.queryExtent()));
+      const extents = extentResults
+        .filter(({ count }) => count > 0)
+        .map(({ extent }) => extent);
+
+      this.state.view.goTo(extents);
+    }
+
     /* TODO: add this to initialization */
     if (this.props.turntable !== nextProps.turntable) {
       if (animation) animation.remove();
@@ -233,6 +247,7 @@ SceneView.propTypes = {
   environment: PropTypes.object,
   highlightOptions: PropTypes.object,
   goTo: PropTypes.object,
+  goToLayers: PropTypes.object,
   turntable: PropTypes.object,
   onCameraChange: PropTypes.func,
   onClick: PropTypes.func,
@@ -245,6 +260,7 @@ SceneView.defaultProps = {
   environment: null,
   highlightOptions: null,
   goTo: null,
+  goToLayers: null,
   turntable: null,
   onCameraChange: () => null,
   onClick: null,
