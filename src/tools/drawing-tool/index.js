@@ -20,54 +20,49 @@ import esriLoader from 'esri-loader';
 import unitOptions from '../../helpers/unit-options';
 
 
-let measurementTool;
-let watcher;
-
-
 class DrawingTool extends Component {
   async componentDidMount() {
     const [AreaMeasurement3DTool] = await esriLoader.loadModules([
-      'esri/views/3d/interactive/measurementTools/areaMeasurement3D/AreaMeasurement3DTool',
+      'esri/widgets/AreaMeasurement3D',
     ]);
 
-    measurementTool = new AreaMeasurement3DTool({ view: this.props.view, unit: this.props.unit });
+    this.measurementTool = new AreaMeasurement3DTool({
+      view: this.props.view,
+      unit: this.props.unit,
+    });
 
-    measurementTool.show();
-    measurementTool.activate();
+    this.measurementTool.viewModel.newMeasurement();
 
-    watcher = measurementTool.watch('pathLength', () => {
-      if (measurementTool.model.path.vertices.items <= 0) {
+    this.watcher = this.measurementTool.view.on('click', () => {
+      if (this.measurementTool.viewModel.measurement.area.state === 'available') {
+        this.props.onDraw({
+          geometry: {
+            points:
+              this.measurementTool.viewModel.tool.model.path.vertices.items
+                .map(({ latitude, longitude, x, y, z }) => ({
+                  latitude,
+                  longitude,
+                  x,
+                  y,
+                  z,
+                })),
+            spatialReference:
+              this.measurementTool.viewModel.tool.model.path.vertices.items[0].spatialReference,
+          },
+          area: this.measurementTool.viewModel.tool.area.value,
+        });
+      } else {
         this.props.onDraw({
           geometry: null,
           area: 0,
         });
-
-        return;
       }
-
-      this.props.onDraw({
-        geometry: {
-          points:
-            measurementTool.model.path.vertices.items.map(({ latitude, longitude, x, y, z }) => ({
-              latitude,
-              longitude,
-              x,
-              y,
-              z,
-            })),
-          spatialReference: measurementTool.model.path.vertices.items[0].spatialReference,
-        },
-        area: measurementTool.area,
-      });
     });
   }
 
   componentWillUnmount() {
-    if (watcher) watcher.remove();
-    if (measurementTool) {
-      measurementTool.deactivate();
-      measurementTool.hide();
-    }
+    this.watcher.remove();
+    this.measurementTool.destroy();
   }
 
   render() {
