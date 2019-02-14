@@ -191,7 +191,7 @@ class Layer extends Component {
 
       this.state.layerView.filter = this.props.maskingGeometry ? new FeatureFilter({
         geometry: new Polygon(this.props.maskingGeometry),
-        spatialRelationship: 'intersect',
+        spatialRelationship: 'disjoint',
       }) : null;
     }
   }
