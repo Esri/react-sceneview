@@ -64,23 +64,13 @@ const calcNearestFeature = (features, targetFeature) => {
 class ClickEventListener extends Component {
   async componentDidMount() {
     listener = this.props.view.on('click', async (event) => {
-      const { results } = await this.props.view.hitTest({ x: event.x, y: event.y });
-      if (!results || !results[0]) return;
+      const { results, screenPoint } = await this.props.view.hitTest({ x: event.x, y: event.y });
 
-      const graphic = results[0].graphic;
-      const mapPoint = results[0].mapPoint;
+      const graphic = results && results[0] && results[0].graphic;
+      const mapPoint = this.props.view.toMap(screenPoint);
 
-      if (graphic && !graphic.geometry) {
-        try {
-          const resultFeature = await getFeatureByGraphic(this.props.view, graphic);
-          graphic.geometry = resultFeature.geometry;
-        } catch (err) {
-          // do nothing
-        }
-      }
 
       let features = [];
-      let nearestFeature;
       if (mapPoint) {
         try {
           const circle = await getSelectionGeometry(mapPoint);
@@ -90,10 +80,6 @@ class ClickEventListener extends Component {
             circle,
             'esriSpatialRelIntersects',
           );
-
-          if (features.length > 1 && graphic && graphic.geometry) {
-            nearestFeature = calcNearestFeature(features, graphic);
-          }
         } catch (err) {
           // do nothing
         }
@@ -108,7 +94,7 @@ class ClickEventListener extends Component {
           objectId: graphic.attributes[graphic.layer.objectIdField],
           layerId: graphic.layer && graphic.layer.id,
         } : null,
-        features: nearestFeature ? [nearestFeature] : features.slice(0, 1),
+        features: features.slice(0, 1),
         event,
       });
     });

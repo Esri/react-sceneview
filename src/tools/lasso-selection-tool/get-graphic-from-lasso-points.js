@@ -25,6 +25,9 @@ export const getGraphicFromLassoPoints = async (polyPoints) => {
 
   return (distance2 > 50 ?
   {
+    attributes: {
+      ObjectID: 0,
+    },
     geometry: await getEsriGeometry({
       hasZ: false,
       paths: [points.map(point => [point.x, point.y])],
@@ -38,6 +41,9 @@ export const getGraphicFromLassoPoints = async (polyPoints) => {
     },
   } :
   {
+    attributes: {
+      ObjectID: 0,
+    },
     geometry: await getEsriGeometry({
       hasZ: false,
       rings: [
