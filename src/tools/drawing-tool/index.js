@@ -17,52 +17,49 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
-import unitOptions from '../../helpers/unit-options';
+// import unitOptions from '../../helpers/unit-options';
 
 
 class DrawingTool extends Component {
   async componentDidMount() {
-    const [AreaMeasurement3DTool] = await esriLoader.loadModules([
-      'esri/widgets/AreaMeasurement3D',
+    const { view } = this.props;
+
+    const [SketchViewModel, GraphicsLayer] = await esriLoader.loadModules([
+      'esri/widgets/Sketch/SketchViewModel',
+      'esri/layers/GraphicsLayer',
     ]);
 
-    this.measurementTool = new AreaMeasurement3DTool({
-      view: this.props.view,
-      unit: this.props.unit,
+    this.layer = new GraphicsLayer();
+    view.map.add(this.layer);
+
+    this.model = new SketchViewModel({
+      layer: this.layer,
+      view,
     });
 
-    this.measurementTool.viewModel.newMeasurement();
+    this.model.create('polygon', { mode: 'click' });
 
-    this.watcher = this.measurementTool.view.on('click', () => {
-      if (this.measurementTool.viewModel.measurement.area.state === 'available') {
+    this.model.on('create', (event) => {
+      if (event.state === 'complete') {
         this.props.onDraw({
-          geometry: {
-            points:
-              this.measurementTool.viewModel.tool.model.path.vertices.items
-                .map(({ latitude, longitude, x, y, z }) => ({
-                  latitude,
-                  longitude,
-                  x,
-                  y,
-                  z,
-                })),
-            spatialReference:
-              this.measurementTool.viewModel.tool.model.path.vertices.items[0].spatialReference,
-          },
-          area: this.measurementTool.viewModel.tool.area.value,
+          geometry: event.graphic.geometry,
+          area: 1,
         });
-      } else {
-        this.props.onDraw({
-          geometry: null,
-          area: 0,
-        });
+        this.model.update(event.graphic, { tool: 'reshape' });
       }
+    });
+
+    this.model.on('update', (event) => {
+      this.props.onDraw({
+        geometry: event.graphics[0].geometry,
+        area: 1,
+      });
     });
   }
 
   componentWillUnmount() {
-    this.watcher.remove();
-    this.measurementTool.destroy();
+    this.model.cancel();
+    this.props.view.map.remove(this.layer);
   }
 
   render() {
@@ -73,7 +70,7 @@ class DrawingTool extends Component {
 
 DrawingTool.propTypes = {
   onDraw: PropTypes.func,
-  unit: PropTypes.oneOf(unitOptions),
+  // unit: PropTypes.oneOf(unitOptions),
   view: PropTypes.object.isRequired,
 };
 
