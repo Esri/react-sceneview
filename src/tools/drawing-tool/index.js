@@ -37,7 +37,7 @@ class DrawingTool extends Component {
       view,
     });
 
-    this.model.create('polygon', { mode: 'click' });
+    this.model.create(this.props.geometryType, { mode: this.props.mode });
 
     this.model.on('create', (event) => {
       if (event.state === 'complete') {
@@ -70,12 +70,15 @@ class DrawingTool extends Component {
 
 DrawingTool.propTypes = {
   onDraw: PropTypes.func,
-  // unit: PropTypes.oneOf(unitOptions),
+  geometryType: PropTypes.oneOf(['point', 'multipoint', 'polyline', 'polygon', 'rectangle', 'circle']),
+  mode: PropTypes.oneOf(['hybrid', 'freehand', 'click']),
   view: PropTypes.object.isRequired,
 };
 
 
 DrawingTool.defaultProps = {
+  geometryType: 'polygon',
+  mode: 'click',
   unit: 'metric',
   onDraw: () => null,
 };
