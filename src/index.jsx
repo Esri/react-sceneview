@@ -87,6 +87,10 @@ class SceneView extends Component {
       this.state.view.qualityProfile = nextProps.qualityProfile;
     }
 
+    if (this.props.padding !== nextProps.padding) {
+      this.state.view.padding = nextProps.padding;
+    }
+
     if (this.props.goTo !== nextProps.goTo) {
       const camera = await getCameraFromProp(this.props.goTo, nextProps.goTo);
       if (Object.keys(camera).length > 0 && !this.state.view.interacting) {
@@ -196,6 +200,7 @@ class SceneView extends Component {
   async loadSceneView() {
     const viewSettings = {
       qualityProfile: this.props.qualityProfile,
+      padding: this.props.padding,
     };
     if (this.props.goTo) viewSettings.camera = this.props.goTo;
     const view = await loadEsriSceneView(this.componentRef, this.props.id, viewSettings);
@@ -253,6 +258,12 @@ SceneView.propTypes = {
   environment: PropTypes.object,
   highlightOptions: PropTypes.object,
   qualityProfile: PropTypes.oneOf(['low', 'medium', 'high']),
+  padding: PropTypes.shape({
+    top: PropTypes.number,
+    right: PropTypes.number,
+    bottom: PropTypes.number,
+    left: PropTypes.number,
+  }),
   goTo: PropTypes.object,
   goToLayers: PropTypes.object,
   turntable: PropTypes.object,
@@ -267,6 +278,12 @@ SceneView.defaultProps = {
   environment: null,
   highlightOptions: null,
   qualityProfile: 'medium',
+  padding: {
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+  },
   goTo: null,
   goToLayers: null,
   turntable: null,
