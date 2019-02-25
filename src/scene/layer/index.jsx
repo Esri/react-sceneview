@@ -60,6 +60,7 @@ const layerSettingsProps = {
   source: PropTypes.array,
   legendEnabled: PropTypes.bool,
   title: PropTypes.string,
+  maskingGeometry: PropTypes.object,
 };
 
 
@@ -142,11 +143,11 @@ class Layer extends Component {
     if (!updatesDiff) return;
 
     // update layer settings
-    const { rendererJson, source, ...updates } = updatesDiff;
+    const { rendererJson, source, maskingGeometry, ...updates } = updatesDiff;
 
     Object.keys(updates).forEach(key => this.state.layer[key] = updates[key]);
 
-    if (rendererJson) {
+    if (rendererJson && rendererJson !== prevProps.rendererJson) {
       const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
 
       // After every await, need to check if component is still mounted
@@ -180,6 +181,18 @@ class Layer extends Component {
     if (this.props.visible && this.props.visible !== prevProps.visible) {
       const layerView = this.state.layerView;
       if (layerView && layerView.refresh) layerView.refresh();
+    }
+
+    if (this.props.maskingGeometry !== prevProps.maskinggeometry) {
+      const [FeatureFilter, Polygon] = await esriLoader.loadModules([
+        'esri/views/layers/support/FeatureFilter',
+        'esri/geometry/Polygon',
+      ]);
+
+      this.state.layerView.filter = this.props.maskingGeometry ? new FeatureFilter({
+        geometry: new Polygon(this.props.maskingGeometry),
+        spatialRelationship: 'disjoint',
+      }) : null;
     }
   }
 
@@ -314,6 +327,7 @@ Layer.defaultProps = {
   source: null,
   legendEnabled: true,
   title: null,
+  maskingGeometry: null,
 };
 
 Layer.Graphic = Graphic;

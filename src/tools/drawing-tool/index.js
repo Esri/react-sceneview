@@ -17,57 +17,49 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
-import unitOptions from '../../helpers/unit-options';
-
-
-let measurementTool;
-let watcher;
+// import unitOptions from '../../helpers/unit-options';
 
 
 class DrawingTool extends Component {
   async componentDidMount() {
-    const [AreaMeasurement3DTool] = await esriLoader.loadModules([
-      'esri/views/3d/interactive/measurementTools/areaMeasurement3D/AreaMeasurement3DTool',
+    const { view } = this.props;
+
+    const [SketchViewModel, GraphicsLayer] = await esriLoader.loadModules([
+      'esri/widgets/Sketch/SketchViewModel',
+      'esri/layers/GraphicsLayer',
     ]);
 
-    measurementTool = new AreaMeasurement3DTool({ view: this.props.view, unit: this.props.unit });
+    this.layer = new GraphicsLayer();
+    view.map.add(this.layer);
 
-    measurementTool.show();
-    measurementTool.activate();
+    this.model = new SketchViewModel({
+      layer: this.layer,
+      view,
+    });
 
-    watcher = measurementTool.watch('pathLength', () => {
-      if (measurementTool.model.path.vertices.items <= 0) {
+    this.model.create(this.props.geometryType, { mode: this.props.mode });
+
+    this.model.on('create', (event) => {
+      if (event.state === 'complete') {
         this.props.onDraw({
-          geometry: null,
-          area: 0,
+          geometry: event.graphic.geometry,
+          area: 1,
         });
-
-        return;
+        this.model.update(event.graphic, { tool: 'reshape' });
       }
+    });
 
+    this.model.on('update', (event) => {
       this.props.onDraw({
-        geometry: {
-          points:
-            measurementTool.model.path.vertices.items.map(({ latitude, longitude, x, y, z }) => ({
-              latitude,
-              longitude,
-              x,
-              y,
-              z,
-            })),
-          spatialReference: measurementTool.model.path.vertices.items[0].spatialReference,
-        },
-        area: measurementTool.area,
+        geometry: event.graphics[0].geometry,
+        area: 1,
       });
     });
   }
 
   componentWillUnmount() {
-    if (watcher) watcher.remove();
-    if (measurementTool) {
-      measurementTool.deactivate();
-      measurementTool.hide();
-    }
+    this.model.cancel();
+    this.props.view.map.remove(this.layer);
   }
 
   render() {
@@ -78,12 +70,15 @@ class DrawingTool extends Component {
 
 DrawingTool.propTypes = {
   onDraw: PropTypes.func,
-  unit: PropTypes.oneOf(unitOptions),
+  geometryType: PropTypes.oneOf(['point', 'multipoint', 'polyline', 'polygon', 'rectangle', 'circle']),
+  mode: PropTypes.oneOf(['hybrid', 'freehand', 'click']),
   view: PropTypes.object.isRequired,
 };
 
 
 DrawingTool.defaultProps = {
+  geometryType: 'polygon',
+  mode: 'click',
   unit: 'metric',
   onDraw: () => null,
 };

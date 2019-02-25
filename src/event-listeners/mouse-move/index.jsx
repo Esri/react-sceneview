@@ -26,22 +26,21 @@ class MouseMoveEventListener extends Component {
       if (this.props.view.interacting) return;
 
       const { results } = await this.props.view.hitTest({ x: event.x, y: event.y });
-      if (!results || !results[0]) return;
 
-      const graphic = results[0].graphic;
-      const mapPoint = results[0].mapPoint;
+      const graphic = results && results[0] && results[0].graphic;
 
-      this.props.onMouseMove({
-        mapPoint,
-        graphic: graphic && graphic.layer && graphic.layer.selectable ? {
-          attributes: graphic.attributes,
-          geometry: graphic.geometry,
-          GlobalID: graphic.attributes.GlobalID,
-          objectId: graphic.attributes[graphic.layer.objectIdField],
-          layerId: graphic.layer && graphic.layer.id,
-        } : null,
-        event,
-      });
+      if (graphic && graphic.layer && graphic.layer.selectable) {
+        this.props.onMouseMove({
+          graphic: {
+            attributes: graphic.attributes,
+            geometry: graphic.geometry,
+            GlobalID: graphic.attributes.GlobalID,
+            objectId: graphic.attributes[graphic.layer.objectIdField],
+            layerId: graphic.layer && graphic.layer.id,
+          },
+          event,
+        });
+      }
     });
   }
 

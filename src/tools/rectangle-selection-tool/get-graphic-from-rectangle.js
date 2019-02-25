@@ -62,6 +62,9 @@ export const getGraphicFromRectangle = async (startPoint, endPoint, heading) => 
   const rectangle = geometryEngine.rotate(normalizedRectangle, -heading, startPoint.mapPoint);
 
   return {
+    attributes: {
+      ObjectID: 0,
+    },
     geometry: rectangle,
     spatialRelationship,
     symbol: {
