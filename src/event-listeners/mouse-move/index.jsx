@@ -40,6 +40,11 @@ class MouseMoveEventListener extends Component {
           },
           event,
         });
+      } else {
+        this.props.onMouseMove({
+          graphic: null,
+          event,
+        });
       }
     });
   }
