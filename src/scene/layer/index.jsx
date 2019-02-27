@@ -184,12 +184,15 @@ class Layer extends Component {
     }
 
     if (this.props.maskingGeometry !== prevProps.maskinggeometry) {
+      const layerView = this.state.layerView;
+      if (!layerView) return;
+
       const [FeatureFilter, Polygon] = await esriLoader.loadModules([
         'esri/views/layers/support/FeatureFilter',
         'esri/geometry/Polygon',
       ]);
 
-      this.state.layerView.filter = this.props.maskingGeometry ? new FeatureFilter({
+      layerView.filter = this.props.maskingGeometry ? new FeatureFilter({
         geometry: new Polygon(this.props.maskingGeometry),
         spatialRelationship: 'disjoint',
       }) : null;
