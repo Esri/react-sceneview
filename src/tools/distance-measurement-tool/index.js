@@ -41,8 +41,8 @@ class DistanceMeasurementTool extends Component {
   }
 
   componentWillUnmount() {
-    this.watcher.remove();
-    this.measurementTool.destroy();
+    if (this.watcher) this.watcher.remove();
+    if (this.measurementTool) this.measurementTool.destroy();
   }
 
   render() {
