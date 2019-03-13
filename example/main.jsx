@@ -38,6 +38,7 @@ render(
         zoomTo
         selectable
         url="https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Building_Montreal/SceneServer"
+        onLoad={({ id }) => console.log(id)}
       />
       <DistanceMeasurementTool
         onChange={e => console.log(e)}

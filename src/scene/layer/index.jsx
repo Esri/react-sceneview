@@ -61,6 +61,7 @@ const layerSettingsProps = {
   legendEnabled: PropTypes.bool,
   title: PropTypes.string,
   maskingGeometry: PropTypes.object,
+  onLoad: PropTypes.func,
 };
 
 
@@ -229,6 +230,7 @@ class Layer extends Component {
     // Add layer to map
     view.map.add(layer);
     const layerView = await view.whenLayerView(layer);
+    this.props.onLoad({ id: layerSettings.id });
 
     // After every await, need to check if component is still mounted
     if (!this.componentIsMounted) {
@@ -331,6 +333,7 @@ Layer.defaultProps = {
   legendEnabled: true,
   title: null,
   maskingGeometry: null,
+  onLoad: () => null,
 };
 
 Layer.Graphic = Graphic;
