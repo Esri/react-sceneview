@@ -210,14 +210,7 @@ class SceneView extends Component {
     const viewSettings = {
       qualityProfile: this.props.qualityProfile,
       padding: this.props.padding,
-      popup: {
-        autoCloseEnabled: true,
-        collapseEnabled: false,
-        autoOpenEnabled: false,
-        dockOptions: {
-          buttonEnabled: false,
-        },
-      },
+      popup: this.props.popup,
     };
     if (this.props.goTo) viewSettings.camera = this.props.goTo;
     const view = await loadEsriSceneView(this.componentRef, this.props.id, viewSettings);
@@ -284,6 +277,7 @@ SceneView.propTypes = {
   goTo: PropTypes.object,
   goToLayers: PropTypes.object,
   turntable: PropTypes.object,
+  popup: PropTypes.object,
   onCameraChange: PropTypes.func,
   onClick: PropTypes.func,
   onMouseMove: PropTypes.func,
@@ -304,6 +298,7 @@ SceneView.defaultProps = {
   goTo: null,
   goToLayers: null,
   turntable: null,
+  popup: null,
   onCameraChange: () => null,
   onClick: null,
   onMouseMove: null,
