@@ -34,33 +34,6 @@ const getSelectionGeometry = async (center) => {
 };
 
 
-// const getFeatureByGraphic = async (view, graphic) => {
-//   if (!graphic) return null;
-//
-//   const layerView = view.layerViews.items.find(e => e.layer.id === graphic.layer.id);
-//   const layerFeatures = await layerView.queryFeatures({
-//     objectIds: [graphic.attributes[graphic.layer.objectIdField]],
-//   });
-//
-//   return layerFeatures.length > 0 ? layerFeatures[0] : null;
-// };
-
-
-const calcDistance2 = (feature1, feature2) => {
-  if (!feature1.geometry || !feature2.geometry) return 0;
-  const point1 = feature1.geometry.extent.center;
-  const point2 = feature2.geometry.extent.center;
-  return ((point1.x - point2.x) ** 2) + ((point1.y - point2.y) ** 2);
-};
-
-
-// const calcNearestFeature = (features, targetFeature) => {
-//   const sortedFeatures = features.sort((a, b) =>
-//     (calcDistance2(a, targetFeature) > calcDistance2(b, targetFeature) ? 1 : -1));
-//   return sortedFeatures.slice(0, 1)[0];
-// };
-
-
 class ClickEventListener extends Component {
   async componentDidMount() {
     listener = this.props.view.on('click', async (event) => {
