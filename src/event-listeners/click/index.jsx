@@ -34,16 +34,16 @@ const getSelectionGeometry = async (center) => {
 };
 
 
-const getFeatureByGraphic = async (view, graphic) => {
-  if (!graphic) return null;
-
-  const layerView = view.layerViews.items.find(e => e.layer.id === graphic.layer.id);
-  const layerFeatures = await layerView.queryFeatures({
-    objectIds: [graphic.attributes[graphic.layer.objectIdField]],
-  });
-
-  return layerFeatures.length > 0 ? layerFeatures[0] : null;
-};
+// const getFeatureByGraphic = async (view, graphic) => {
+//   if (!graphic) return null;
+//
+//   const layerView = view.layerViews.items.find(e => e.layer.id === graphic.layer.id);
+//   const layerFeatures = await layerView.queryFeatures({
+//     objectIds: [graphic.attributes[graphic.layer.objectIdField]],
+//   });
+//
+//   return layerFeatures.length > 0 ? layerFeatures[0] : null;
+// };
 
 
 const calcDistance2 = (feature1, feature2) => {
@@ -54,11 +54,11 @@ const calcDistance2 = (feature1, feature2) => {
 };
 
 
-const calcNearestFeature = (features, targetFeature) => {
-  const sortedFeatures = features.sort((a, b) =>
-    (calcDistance2(a, targetFeature) > calcDistance2(b, targetFeature) ? 1 : -1));
-  return sortedFeatures.slice(0, 1)[0];
-};
+// const calcNearestFeature = (features, targetFeature) => {
+//   const sortedFeatures = features.sort((a, b) =>
+//     (calcDistance2(a, targetFeature) > calcDistance2(b, targetFeature) ? 1 : -1));
+//   return sortedFeatures.slice(0, 1)[0];
+// };
 
 
 class ClickEventListener extends Component {

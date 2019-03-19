@@ -180,6 +180,15 @@ class SceneView extends Component {
     };
   }
 
+
+  openPopup(params) {
+    this.state.view.popup.open(params);
+  }
+
+  closePopup() {
+    this.state.view.popup.close();
+  }
+
   parseEnvironment(inputEnvironment) {
     const { lighting: { utcDate, ...lighting }, ...environment } = inputEnvironment;
     environment.lighting = lighting;
@@ -201,6 +210,14 @@ class SceneView extends Component {
     const viewSettings = {
       qualityProfile: this.props.qualityProfile,
       padding: this.props.padding,
+      popup: {
+        autoCloseEnabled: true,
+        collapseEnabled: false,
+        autoOpenEnabled: false,
+        dockOptions: {
+          buttonEnabled: false,
+        },
+      },
     };
     if (this.props.goTo) viewSettings.camera = this.props.goTo;
     const view = await loadEsriSceneView(this.componentRef, this.props.id, viewSettings);
