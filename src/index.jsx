@@ -37,8 +37,7 @@ import { loadEsriSceneView } from './load';
 
 
 const ChildComponents = [Scene, DrawingTool, LineSelectionTool, RectangleSelectionTool,
-  LassoSelectionTool, DistanceMeasurementTool, AreaMeasurementTool, SliceTool,
-  ...Object.keys(UI).map(key => UI[key])];
+  LassoSelectionTool, DistanceMeasurementTool, AreaMeasurementTool, SliceTool, UI];
 
 
 const getCameraFromProp = async (current, { center, position, heading, tilt, scale, target }) => {
