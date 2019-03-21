@@ -44,7 +44,6 @@ export const loadLayer = async ({
 }) => {
   const layerSettings = {
     id,
-    popupEnabled: false,
     minScale: 0,
     maxScale: 0,
     ...layerOptions,

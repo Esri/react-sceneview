@@ -37,8 +37,7 @@ import { loadEsriSceneView } from './load';
 
 
 const ChildComponents = [Scene, DrawingTool, LineSelectionTool, RectangleSelectionTool,
-  LassoSelectionTool, DistanceMeasurementTool, AreaMeasurementTool, SliceTool,
-  ...Object.keys(UI).map(key => UI[key])];
+  LassoSelectionTool, DistanceMeasurementTool, AreaMeasurementTool, SliceTool, UI];
 
 
 const getCameraFromProp = async (current, { center, position, heading, tilt, scale, target }) => {
@@ -180,6 +179,15 @@ class SceneView extends Component {
     };
   }
 
+
+  openPopup(params) {
+    this.state.view.popup.open(params);
+  }
+
+  closePopup() {
+    this.state.view.popup.close();
+  }
+
   parseEnvironment(inputEnvironment) {
     const { lighting: { utcDate, ...lighting }, ...environment } = inputEnvironment;
     environment.lighting = lighting;
@@ -201,6 +209,7 @@ class SceneView extends Component {
     const viewSettings = {
       qualityProfile: this.props.qualityProfile,
       padding: this.props.padding,
+      popup: this.props.popup,
     };
     if (this.props.goTo) viewSettings.camera = this.props.goTo;
     const view = await loadEsriSceneView(this.componentRef, this.props.id, viewSettings);
@@ -267,6 +276,7 @@ SceneView.propTypes = {
   goTo: PropTypes.object,
   goToLayers: PropTypes.object,
   turntable: PropTypes.object,
+  popup: PropTypes.object,
   onCameraChange: PropTypes.func,
   onClick: PropTypes.func,
   onMouseMove: PropTypes.func,
@@ -287,6 +297,7 @@ SceneView.defaultProps = {
   goTo: null,
   goToLayers: null,
   turntable: null,
+  popup: null,
   onCameraChange: () => null,
   onClick: null,
   onMouseMove: null,

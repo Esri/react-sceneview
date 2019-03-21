@@ -61,6 +61,8 @@ const layerSettingsProps = {
   legendEnabled: PropTypes.bool,
   title: PropTypes.string,
   maskingGeometry: PropTypes.object,
+  popupEnabled: PropTypes.bool,
+  popupTemplate: PropTypes.object,
   onLoad: PropTypes.func,
 };
 
@@ -333,6 +335,8 @@ Layer.defaultProps = {
   legendEnabled: true,
   title: null,
   maskingGeometry: null,
+  popupEnabled: false,
+  popupTemplate: null,
   onLoad: () => null,
 };
 
