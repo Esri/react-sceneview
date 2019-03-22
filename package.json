@@ -1,6 +1,6 @@
 {
   "name": "react-sceneview",
-  "version": "0.1.33",
+  "version": "0.1.34",
   "description": "react-sceneview",
   "main": "dist/react-sceneview.js",
   "module": "dist/react-sceneview.js",
