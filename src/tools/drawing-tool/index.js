@@ -22,12 +22,11 @@ import esriLoader from 'esri-loader';
 
 class DrawingTool extends Component {
   async componentDidMount() {
-    const { view, initialGeometry } = this.props;
+    const { view } = this.props;
 
-    const [SketchViewModel, GraphicsLayer, Graphic] = await esriLoader.loadModules([
+    const [SketchViewModel, GraphicsLayer] = await esriLoader.loadModules([
       'esri/widgets/Sketch/SketchViewModel',
       'esri/layers/GraphicsLayer',
-      'esri/Graphic',
     ]);
 
     this.layer = new GraphicsLayer();
@@ -38,17 +37,6 @@ class DrawingTool extends Component {
       view,
     });
 
-    if (initialGeometry && ['point', 'multipoint', 'polyline', 'polygon'].includes(initialGeometry.type)) {
-      const initialGraphic = new Graphic({
-        geometry: initialGeometry,
-        symbol: this.getSymbol(initialGeometry.type),
-      });
-
-      this.layer.graphics.add(initialGraphic);
-    } else {
-      this.model.create(this.props.geometryType, { mode: this.props.mode });
-    }
-
     this.model.on('create', (event) => {
       if (event.state === 'complete') {
         this.props.onDraw({
@@ -56,22 +44,36 @@ class DrawingTool extends Component {
           area: 1,
         });
         this.model.update(event.graphic, { tool: 'reshape' });
-      } else if (event.state === 'cancel') {
-        this.model.create(this.props.geometryType, { mode: this.props.mode });
       }
     });
 
     this.model.on('update', (event) => {
-      this.props.onDraw({
-        geometry: event.graphics[0].geometry,
-        area: 1,
-      });
+      if (event.state === 'active' || event.state === 'complete') {
+        this.props.onDraw({
+          geometry: event.graphics[0].geometry,
+          area: 1,
+        });
+      }
     });
+
+    this.setGeometry();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!this.model) return;
+
+    if ((prevProps.geometry !== null && this.props.geometry === null) ||
+      (this.props.geometry && this.props.geometry.reset)) {
+      this.setGeometry();
+    }
   }
 
   componentWillUnmount() {
-    this.model.cancel();
-    this.props.view.map.remove(this.layer);
+    if (this.model) {
+      this.model.reset();
+      this.model.cancel();
+    }
+    if (this.layer) this.props.view.map.remove(this.layer);
   }
 
   getSymbol(type) {
@@ -88,6 +90,25 @@ class DrawingTool extends Component {
     }
   }
 
+  setGeometry() {
+    const { geometry } = this.props;
+
+    this.layer.graphics.removeAll();
+    this.model.reset();
+    this.model.cancel();
+
+    if (geometry && ['point', 'multipoint', 'polyline', 'polygon'].includes(geometry.type)) {
+      const initialGraphic = {
+        geometry,
+        symbol: this.getSymbol(geometry.type),
+      };
+
+      this.layer.graphics.add(initialGraphic);
+    } else {
+      this.model.create(this.props.geometryType, { mode: this.props.mode });
+    }
+  }
+
   render() {
     return null;
   }
@@ -99,7 +120,7 @@ DrawingTool.propTypes = {
   geometryType: PropTypes.oneOf(['point', 'multipoint', 'polyline', 'polygon', 'rectangle', 'circle']),
   mode: PropTypes.oneOf(['hybrid', 'freehand', 'click']),
   view: PropTypes.object.isRequired,
-  initialGeometry: PropTypes.object,
+  geometry: PropTypes.object,
 };
 
 
@@ -107,7 +128,7 @@ DrawingTool.defaultProps = {
   geometryType: 'polygon',
   mode: 'click',
   unit: 'metric',
-  initialGeometry: null,
+  geometry: null,
   onDraw: () => null,
 };
 
