@@ -37,17 +37,19 @@ class DrawingTool extends Component {
       view,
     });
 
-    this.model.on('create', (event) => {
+    this.onCreate = this.model.on('create', (event) => {
       if (event.state === 'complete') {
         this.props.onDraw({
           geometry: event.graphic.geometry,
           area: 1,
         });
         this.model.update(event.graphic, { tool: 'reshape' });
+      } else if (event.state === 'cancel') {
+        this.model.create(this.props.geometryType, { mode: this.props.mode });
       }
     });
 
-    this.model.on('update', (event) => {
+    this.onUpdate = this.model.on('update', (event) => {
       if (event.state === 'active' || event.state === 'complete') {
         this.props.onDraw({
           geometry: event.graphics[0].geometry,
@@ -64,15 +66,23 @@ class DrawingTool extends Component {
 
     if ((prevProps.geometry !== null && this.props.geometry === null) ||
       (this.props.geometry && this.props.geometry.reset)) {
+      this.layer.graphics.removeAll();
+      this.model.reset();
+      this.model.cancel();
+
       this.setGeometry();
     }
   }
 
   componentWillUnmount() {
+    if (this.onCreate) this.onCreate.remove();
+    if (this.onUpdate) this.onUpdate.remove();
+
     if (this.model) {
       this.model.reset();
       this.model.cancel();
     }
+
     if (this.layer) this.props.view.map.remove(this.layer);
   }
 
@@ -92,10 +102,6 @@ class DrawingTool extends Component {
 
   setGeometry() {
     const { geometry } = this.props;
-
-    this.layer.graphics.removeAll();
-    this.model.reset();
-    this.model.cancel();
 
     if (geometry && ['point', 'multipoint', 'polyline', 'polygon'].includes(geometry.type)) {
       const initialGraphic = {
