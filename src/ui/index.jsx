@@ -31,7 +31,6 @@ class UI extends Component {
   }
 
   updatePadding() {
-    console.log(this.props.padding);
     this.props.view.ui.padding = this.props.padding;
   }
 
