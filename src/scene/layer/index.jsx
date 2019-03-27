@@ -71,6 +71,7 @@ const getLayerSettings = (props) => {
   const settings = {};
 
   Object.keys(layerSettingsProps)
+    .filter(key => props.layerType !== 'point-cloud' || key !== 'opacity')
     .filter(key => props[key] !== null && props[key] !== undefined)
     .forEach(key => settings[key] = props[key]);
 
