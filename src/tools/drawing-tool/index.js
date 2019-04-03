@@ -83,7 +83,10 @@ class DrawingTool extends Component {
       this.model.cancel();
     }
 
-    if (this.layer) this.props.view.map.remove(this.layer);
+    if (this.layer) {
+      this.layer.graphics.removeAll();
+      this.props.view.map.remove(this.layer);
+    }
   }
 
   getSymbol(type) {
