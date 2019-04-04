@@ -45,7 +45,7 @@ class DrawingTool extends Component {
         });
         this.model.update(event.graphic, { tool: 'reshape' });
       } else if (event.state === 'cancel') {
-        this.model.create(this.props.geometryType, { mode: this.props.mode });
+        this.onCancel();
       }
     });
 
@@ -66,9 +66,9 @@ class DrawingTool extends Component {
 
     if ((prevProps.geometry !== null && this.props.geometry === null) ||
       (this.props.geometry && this.props.geometry.reset)) {
-      this.layer.graphics.removeAll();
-      this.model.reset();
       this.model.cancel();
+
+      this.layer.graphics.removeAll();
 
       this.setGeometry();
     }
@@ -79,14 +79,20 @@ class DrawingTool extends Component {
     if (this.onUpdate) this.onUpdate.remove();
 
     if (this.model) {
-      this.model.reset();
       this.model.cancel();
+      this.model.reset();
     }
 
     if (this.layer) {
       this.layer.graphics.removeAll();
       this.props.view.map.remove(this.layer);
     }
+  }
+
+  onCancel() {
+    if (this.props.geometry && this.props.geometry.reset) return;
+
+    this.model.create(this.props.geometryType, { mode: this.props.mode });
   }
 
   getSymbol(type) {
