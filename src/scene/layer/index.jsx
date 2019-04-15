@@ -136,6 +136,13 @@ class Layer extends Component {
 
   async componentDidUpdate(prevProps) {
     if (!this.state.layer) return;
+    const changedPropKeys = Object.keys(prevProps)
+      .filter(key => prevProps[key] !== this.props[key]);
+
+    if (changedPropKeys.length === 0) return;
+
+    console.log(`react-sceneview: Layer ${this.state.layer.id} prop change`);
+    console.log(changedPropKeys);
 
     // refresh layer
     if (this.props.refresh !== prevProps.refresh) {
@@ -277,7 +284,7 @@ class Layer extends Component {
   render() {
     return this.state.layer && (
       <div>
-        {React.Children.map(this.props.children, child =>
+        {this.props.children && React.Children.map(this.props.children, child =>
           child && React.cloneElement(child, { layer: this.state.layer }))}
       </div>
     );
@@ -306,7 +313,7 @@ Layer.propTypes = {
 
 
 Layer.defaultProps = {
-  children: [],
+  children: null,
   url: null,
   portalItem: null,
   visible: true,

@@ -74,6 +74,8 @@ class SceneView extends Component {
   }
 
   async componentWillUpdate(nextProps) {
+    console.log('react-sceneview: SceneView component prop change');
+
     if (this.props.environment !== nextProps.environment) {
       const environment = this.parseEnvironment(nextProps.environment);
       Object.keys(environment).forEach(key => this.state.view.environment[key] = {
@@ -226,7 +228,7 @@ class SceneView extends Component {
         style={{ width: '100%', height: '100%' }}
         ref={(ref) => { this.componentRef = ref; }}
       >
-        {this.state.view &&
+        {this.state.view && this.props.children &&
           React.Children.map(this.props.children,
             child => child && React.cloneElement(child, {
               ...this.state,
@@ -284,7 +286,7 @@ SceneView.propTypes = {
 
 
 SceneView.defaultProps = {
-  children: [],
+  children: null,
   environment: null,
   highlightOptions: null,
   qualityProfile: 'medium',
