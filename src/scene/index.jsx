@@ -82,8 +82,6 @@ class Scene extends Component {
 
 
   render() {
-    console.log('react-sceneview: Scene component render');
-
     return this.state.webscene && this.props.view && (
       <div id="scene">
         {this.renderWrappedChildren(this.props.children)}

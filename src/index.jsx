@@ -74,8 +74,6 @@ class SceneView extends Component {
   }
 
   async componentWillUpdate(nextProps) {
-    console.log('react-sceneview: SceneView component prop change');
-
     if (this.props.environment !== nextProps.environment) {
       const environment = this.parseEnvironment(nextProps.environment);
       Object.keys(environment).forEach(key => this.state.view.environment[key] = {

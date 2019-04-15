@@ -136,13 +136,7 @@ class Layer extends Component {
 
   async componentDidUpdate(prevProps) {
     if (!this.state.layer) return;
-    const changedPropKeys = Object.keys(prevProps)
-      .filter(key => prevProps[key] !== this.props[key]);
-
-    if (changedPropKeys.length === 0) return;
-
-    console.log(`react-sceneview: Layer ${this.state.layer.id} prop change`);
-    console.log(changedPropKeys);
+    if (!Object.keys(prevProps).find(key => prevProps[key] !== this.props[key])) return;
 
     // refresh layer
     if (this.props.refresh !== prevProps.refresh) {
