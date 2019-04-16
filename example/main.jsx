@@ -35,10 +35,16 @@ const initialGeometry = {
 };
 
 render(
-  <SceneView id="sceneview">
+  <SceneView
+    id="sceneview"
+    onLoad={e => console.log(e)}
+  >
     <UI.Zoom />
     <UI.Compass />
-    <Scene basemap="streets">
+    <Scene
+      basemap="streets"
+      onLoad={e => console.log(e)}
+    >
       <Ground
         opacity={0.5}
         navigationConstraint={{ type: 'none' }}
@@ -49,6 +55,7 @@ render(
         zoomTo
         selectable
         url="https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Building_Montreal/SceneServer"
+        onLoad={e => console.log(e)}
       />
     </Scene>
     <DrawingTool
