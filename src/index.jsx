@@ -217,6 +217,7 @@ class SceneView extends Component {
     if (this.props.highlightOptions) view.highlightOptions = this.props.highlightOptions;
 
     this.setState({ view });
+    if (this.props.onLoad) this.props.onLoad(view);
   }
 
   render() {
@@ -280,6 +281,7 @@ SceneView.propTypes = {
   onCameraChange: PropTypes.func,
   onClick: PropTypes.func,
   onMouseMove: PropTypes.func,
+  onLoad: PropTypes.func,
 };
 
 
@@ -301,6 +303,7 @@ SceneView.defaultProps = {
   onCameraChange: () => null,
   onClick: null,
   onMouseMove: null,
+  onLoad: null,
 };
 
 

@@ -52,7 +52,10 @@ class Scene extends Component {
     }
 
     await this.props.view.when();
+
     this.setState({ webscene: this.props.view.map });
+
+    if (this.props.onLoad) this.props.onLoad(this.props.view.map);
   }
 
 
@@ -100,6 +103,7 @@ Scene.propTypes = {
   initialViewProperties: PropTypes.object,
   view: PropTypes.object.isRequired,
   selectionQuery: PropTypes.object,
+  onLoad: PropTypes.func,
 };
 
 Scene.defaultProps = {
@@ -109,7 +113,8 @@ Scene.defaultProps = {
   ground: 'world-elevation',
   initialViewProperties: null,
   selectionQuery: null,
-  onSelect: () => null,
+  onLoad: null,
+  onView: null,
 };
 
 Scene.Layer = Layer;

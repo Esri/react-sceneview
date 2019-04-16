@@ -234,7 +234,7 @@ class Layer extends Component {
     // Add layer to map
     view.map.add(layer);
     const layerView = await view.whenLayerView(layer);
-    this.props.onLoad({ id: layerSettings.id });
+    this.props.onLoad(layer);
 
     // After every await, need to check if component is still mounted
     if (!this.componentIsMounted) {
