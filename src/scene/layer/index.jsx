@@ -136,6 +136,7 @@ class Layer extends Component {
 
   async componentDidUpdate(prevProps) {
     if (!this.state.layer) return;
+    if (!Object.keys(prevProps).find(key => prevProps[key] !== this.props[key])) return;
 
     // refresh layer
     if (this.props.refresh !== prevProps.refresh) {
@@ -277,7 +278,7 @@ class Layer extends Component {
   render() {
     return this.state.layer && (
       <div>
-        {React.Children.map(this.props.children, child =>
+        {this.props.children && React.Children.map(this.props.children, child =>
           child && React.cloneElement(child, { layer: this.state.layer }))}
       </div>
     );
@@ -306,7 +307,7 @@ Layer.propTypes = {
 
 
 Layer.defaultProps = {
-  children: [],
+  children: null,
   url: null,
   portalItem: null,
   visible: true,

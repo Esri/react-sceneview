@@ -57,6 +57,8 @@ class Scene extends Component {
 
 
   renderWrappedChildren(children) {
+    if (!children) return null;
+
     return React.Children.map(children, (child) => {
       // This is support for non-node elements (eg. pure text), they have no props
       if (!child || !child.props) {
@@ -101,7 +103,7 @@ Scene.propTypes = {
 };
 
 Scene.defaultProps = {
-  children: [],
+  children: null,
   portalItem: null,
   basemap: 'gray-vector',
   ground: 'world-elevation',
