@@ -234,7 +234,6 @@ class Layer extends Component {
     // Add layer to map
     view.map.add(layer);
     const layerView = await view.whenLayerView(layer);
-    this.props.onLoad(layer);
 
     // After every await, need to check if component is still mounted
     if (!this.componentIsMounted) {
@@ -273,6 +272,8 @@ class Layer extends Component {
       // TODO: check this syntax
       this.state.layer.when(() => this.props.view.goTo(this.state.layer.fullExtent));
     }
+
+    this.state.layer.when(() => this.props.onLoad(layer));
   }
 
   render() {
