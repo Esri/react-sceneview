@@ -1,4 +1,4 @@
-/* Copyright 2018 Esri
+/* Copyright 2019 Esri
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ const queryFeaturesByGeometry = async (layerView, geometry, spatialRelationship)
   const result = await layerView.queryFeatures({
     geometry: extent,
     spatialRelationship: 'intersects',
+    returnGeometry: true,
   });
 
   const features = result.features || [];
@@ -63,32 +64,10 @@ const querySelectionFeatures = async (view, geometry, spatialRelationship) => {
 };
 
 
-const queryRelatedFeatures = async (view, features) => {
-  const [Point] = await esriLoader.loadModules(['esri/geometry/Point']);
-
-  const featuresWithRelation = features.filter(feature => feature.layer.relatedLayer);
-
-  const queries = featuresWithRelation
-    .map(feature => queryFeaturesByGeometry(
-      view.layerViews.items.find(e => e.layer.id === feature.layer.relatedLayer),
-      new Point(feature.geometry.centroid),
-      'esriSpatialRelIntersects',
-    ));
-
-  const results = await Promise.all(queries);
-
-  return [].concat(...results.map((result, index) => result.map(e => ({
-    ...e.attributes,
-    parentFeatureGlobalID: featuresWithRelation[index].attributes.GlobalID,
-  }))));
-};
-
-
 export const handleSelectionQuery = async (view, selectionGeometry, spatialRelationship) => {
   const selectionFeatures =
     await querySelectionFeatures(view, selectionGeometry, spatialRelationship);
 
-  const relatedResults = await queryRelatedFeatures(view, selectionFeatures);
 
   return selectionFeatures
     .map(feature => ({
@@ -97,8 +76,6 @@ export const handleSelectionQuery = async (view, selectionGeometry, spatialRelat
       GlobalID: feature.attributes.GlobalID,
       objectId: feature.attributes[feature.layer.objectIdField],
       layerId: feature.layer.id,
-      relatedAttributes:
-        relatedResults.find(e => e.parentFeatureGlobalID === feature.attributes.GlobalID),
     }));
 };
 
