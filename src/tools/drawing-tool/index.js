@@ -84,8 +84,10 @@ class DrawingTool extends Component {
     if (this.onCreate) this.onCreate.remove();
     if (this.onUpdate) this.onUpdate.remove();
 
-    this.model.reset();
-    this.model.destroy();
+    if (this.model) {
+      this.model.reset();
+      this.model.destroy();
+    }
     if (this.layer) this.props.view.map.remove(this.layer);
   }
 
