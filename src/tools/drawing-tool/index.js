@@ -23,82 +23,97 @@ const isValidGeometry = geometry => geometry && ['point', 'multipoint', 'polylin
 
 class DrawingTool extends Component {
   async componentDidMount() {
-    const { view, geometry } = this.props;
+    try {
+      const { view, geometry } = this.props;
+      this.loadPromise = new Promise();
 
-    const [SketchViewModel, GraphicsLayer] = await esriLoader.loadModules([
-      'esri/widgets/Sketch/SketchViewModel',
-      'esri/layers/GraphicsLayer',
-    ]);
+      const [SketchViewModel, GraphicsLayer] = await esriLoader.loadModules([
+        'esri/widgets/Sketch/SketchViewModel',
+        'esri/layers/GraphicsLayer',
+      ]);
 
-    this.layer = new GraphicsLayer();
-    view.map.add(this.layer);
+      this.layer = new GraphicsLayer();
+      view.map.add(this.layer);
 
-    this.model = new SketchViewModel({
-      layer: this.layer,
-      view,
-    });
+      this.model = new SketchViewModel({
+        layer: this.layer,
+        view,
+      });
 
-    this.onCreate = this.model.on('create', (event) => {
-      if (event.state === 'complete') {
-        this.props.onDraw({
-          geometry: event.graphic.geometry,
-          area: 1,
-        });
-        this.model.update(event.graphic, { tool: 'reshape' });
-      } else if (event.state === 'cancel') {
-        this.onCancel();
+      this.onCreate = this.model.on('create', (event) => {
+        if (event.state === 'complete') {
+          this.props.onDraw({
+            geometry: event.graphic.geometry,
+            area: 1,
+          });
+          this.model.update(event.graphic, { tool: 'reshape' });
+        } else if (event.state === 'cancel') {
+          this.onCancel();
+        }
+      });
+
+      this.onUpdate = this.model.on('update', (event) => {
+        if (event.state === 'active' || event.state === 'complete') {
+          this.props.onDraw({
+            geometry: event.graphics[0].geometry,
+            area: 1,
+          });
+        }
+      });
+
+      if (isValidGeometry(geometry)) {
+        this.setGraphic(geometry);
+      } else {
+        this.createGraphic();
       }
-    });
-
-    this.onUpdate = this.model.on('update', (event) => {
-      if (event.state === 'active' || event.state === 'complete') {
-        this.props.onDraw({
-          geometry: event.graphics[0].geometry,
-          area: 1,
-        });
-      }
-    });
-
-    if (isValidGeometry(geometry)) {
-      this.setGraphic(geometry);
-    } else {
-      this.createGraphic();
+    } catch (e) {
+      // nothing
     }
   }
 
   componentDidUpdate(prevProps) {
-    const { geometry } = this.props;
+    try {
+      const { geometry } = this.props;
 
-    if (!this.model) return;
+      if (!this.model) return;
 
-    if (prevProps.geometry !== null && geometry === null) {
-      this.resetGraphic();
-      this.createGraphic();
-    } else if (isValidGeometry(geometry) && geometry.reset) {
-      this.resetGraphic();
-      this.setGraphic(geometry);
+      if (prevProps.geometry !== null && geometry === null) {
+        this.resetGraphic();
+        this.createGraphic();
+      } else if (isValidGeometry(geometry) && geometry.reset) {
+        this.resetGraphic();
+        this.setGraphic(geometry);
+      }
+    } catch (e) {
+      // nothing
     }
   }
 
   componentWillUnmount() {
-    if (this.onCreate) this.onCreate.remove();
-    if (this.onUpdate) this.onUpdate.remove();
+    try {
+      if (this.onCreate) this.onCreate.remove();
+      if (this.onUpdate) this.onUpdate.remove();
 
-    if (this.model) {
-      this.model.complete(); // !
-      this.model.cancel();   // !!
-      this.model.reset();    // !!!
-      this.model.destroy();  // !!!!
+      if (this.layer) this.props.view.map.remove(this.layer);
+
+      if (this.model && this.model.activeTool === 'reshape') this.model.cancel();
+      if (this.model && this.model.activeTool === this.props.geometryType) this.model.complete();
+      if (this.model) this.model.destroy();
+    } catch (e) {
+      // nothing
     }
-    if (this.layer) this.props.view.map.remove(this.layer);
   }
 
   onCancel() {
-    const { geometry } = this.props;
+    try {
+      const { geometry } = this.props;
 
-    if (geometry && geometry.reset) return;
+      if (geometry && geometry.reset) return;
 
-    this.createGraphic();
+      this.createGraphic();
+    } catch (e) {
+      // nothing
+    }
   }
 
   getSymbol(type) {
@@ -116,11 +131,15 @@ class DrawingTool extends Component {
   }
 
   setGraphic(geometry) {
-    this.layer.graphics.add({
-      geometry,
-      symbol: this.getSymbol(geometry.type),
-    });
-    this.model.update(this.layer.graphics.items[0], { tool: 'reshape' });
+    try {
+      this.layer.graphics.add({
+        geometry,
+        symbol: this.getSymbol(geometry.type),
+      });
+      this.model.update(this.layer.graphics.items[0], { tool: 'reshape' });
+    } catch (e) {
+      // nothing
+    }
   }
 
   resetGraphic() {
