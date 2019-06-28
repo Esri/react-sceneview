@@ -67,9 +67,9 @@ class DrawingTool extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { geometry } = this.props;
-
     if (!this.model) return;
+
+    const { geometry } = this.props;
 
     if (prevProps.geometry !== null && geometry === null) {
       this.resetGraphic();
@@ -81,20 +81,22 @@ class DrawingTool extends Component {
   }
 
   componentWillUnmount() {
+    this.willUnmount = true;
+
+    if (this.model && this.model.state === 'active') this.model.cancel();
+    if (this.layer) this.props.view.map.remove(this.layer);
     if (this.onCreate) this.onCreate.remove();
     if (this.onUpdate) this.onUpdate.remove();
 
-    if (this.model) {
-      this.model.destroy();
-    }
-
-    if (this.layer) {
-      this.layer.graphics.removeAll();
-      this.props.view.map.remove(this.layer);
-    }
+    // manually remove remaining tool handles
+    this.props.view.tools.items
+      .filter(tool => tool.type === 'reshape-3d')
+      .map(tool => tool.reset());
   }
 
   onCancel() {
+    if (this.willUnmount) return;
+
     const { geometry } = this.props;
 
     if (geometry && geometry.reset) return;
