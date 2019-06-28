@@ -38,6 +38,12 @@ class DrawingTool extends Component {
       view,
     });
 
+    if (isValidGeometry(geometry)) {
+      this.setGraphic(geometry);
+    } else {
+      this.createGraphic();
+    }
+
     this.onCreate = this.model.on('create', (event) => {
       if (event.state === 'complete') {
         this.props.onDraw({
@@ -58,12 +64,6 @@ class DrawingTool extends Component {
         });
       }
     });
-
-    if (isValidGeometry(geometry)) {
-      this.setGraphic(geometry);
-    } else {
-      this.createGraphic();
-    }
   }
 
   componentDidUpdate(prevProps) {
@@ -84,9 +84,14 @@ class DrawingTool extends Component {
     if (this.onCreate) this.onCreate.remove();
     if (this.onUpdate) this.onUpdate.remove();
 
-    this.model.reset();
-    this.model.destroy();
-    if (this.layer) this.props.view.map.remove(this.layer);
+    if (this.model) {
+      this.model.destroy();
+    }
+
+    if (this.layer) {
+      this.layer.graphics.removeAll();
+      this.props.view.map.remove(this.layer);
+    }
   }
 
   onCancel() {
