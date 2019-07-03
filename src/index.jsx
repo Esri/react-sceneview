@@ -36,10 +36,6 @@ import SliceTool from './tools/slice-tool';
 import { loadEsriSceneView } from './load';
 
 
-const ChildComponents = [Scene, DrawingTool, LineSelectionTool, RectangleSelectionTool,
-  LassoSelectionTool, DistanceMeasurementTool, AreaMeasurementTool, SliceTool, UI];
-
-
 const getCameraFromProp = async (current, { center, position, heading, tilt, scale, target }) => {
   const camera = {};
   if (position && current.position !== position) camera.position = position;
@@ -253,17 +249,7 @@ class SceneView extends Component {
 
 
 SceneView.propTypes = {
-  children: (props, propName, componentName) => {
-    const prop = props[propName];
-
-    let error = null;
-    React.Children.forEach(prop, (child) => {
-      if (child && !ChildComponents.includes(child.type)) {
-        error = new Error(`'${componentName}' has invalid children component(s).`);
-      }
-    });
-    return error;
-  },
+  children: PropTypes.node,
   id: PropTypes.string.isRequired,
   environment: PropTypes.object,
   highlightOptions: PropTypes.object,
