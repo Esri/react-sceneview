@@ -22,7 +22,6 @@ import { loadLayer } from './load';
 
 import Graphic from './graphic';
 
-const ChildComponents = [Graphic];
 
 const layerSettingsProps = {
   id: PropTypes.string.isRequired,
@@ -288,17 +287,7 @@ class Layer extends Component {
 
 
 Layer.propTypes = {
-  children: (props, propName, componentName) => {
-    const prop = props[propName];
-
-    let error = null;
-    React.Children.forEach(prop, (child) => {
-      if (child && !ChildComponents.includes(child.type)) {
-        error = new Error(`'${componentName}' has invalid children component(s).`);
-      }
-    });
-    return error;
-  },
+  children: PropTypes.node,
   ...layerSettingsProps,
   refresh: PropTypes.number,
   highlight: PropTypes.array,
