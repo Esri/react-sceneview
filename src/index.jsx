@@ -69,7 +69,7 @@ class SceneView extends Component {
     this.loadSceneView();
   }
 
-  async componentWillUpdate(nextProps) {
+  async UNSAFE_componentWillUpdate(nextProps) { // eslint-disable-line camelcase
     if (this.props.environment !== nextProps.environment) {
       const environment = this.parseEnvironment(nextProps.environment);
       Object.keys(environment).forEach(key => this.state.view.environment[key] = {

@@ -15,9 +15,11 @@
   "license": "Apache License - 2.0",
   "dependencies": {
     "esri-loader": "^2.6.0",
-    "prop-types": "^15.5.10",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0"
+    "prop-types": "^15.5.10"
+  },
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.5",
@@ -39,6 +41,8 @@
     "eslint-plugin-react": "^7.3.0",
     "jest": "^23.1.0",
     "jest-cli": "^23.6.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "react-test-renderer": "^15.6.2",
     "rimraf": "^2.6.2",
     "webpack": "^4.26.1",
