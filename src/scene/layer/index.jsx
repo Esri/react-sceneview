@@ -137,6 +137,8 @@ class Layer extends Component {
     if (!this.state.layer) return;
     if (!Object.keys(prevProps).find(key => prevProps[key] !== this.props[key])) return;
 
+    await this.state.layer.when();
+
     // refresh layer
     if (this.props.refresh !== prevProps.refresh) {
       const layerView = this.state.layerView;

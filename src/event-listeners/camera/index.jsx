@@ -1,4 +1,4 @@
-/* Copyright 2018 Esri
+/* Copyright 2019 Esri
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,29 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-let listener;
+const listeners = [];
 
 class CameraEventListener extends Component {
   componentDidMount() {
-    listener = this.props.view.watch('stationary', () => {
-      if (this.props.view.stationary) {
-        this.props.onCameraChange({
-          position: this.props.view.camera.position,
-          heading: this.props.view.camera.heading,
-          tilt: this.props.view.camera.tilt,
-          scale: this.props.view.scale,
-        });
-      }
-    });
+    listeners.push(this.props.view.watch('camera', () => this.handleUpdate()));
+    listeners.push(this.props.view.watch('stationary', () => this.handleUpdate()));
   }
 
   componentWillUnmount() {
-    listener.remove();
+    listeners.forEach(listener => listener.remove());
+  }
+
+  handleUpdate() {
+    this.props.onCameraChange({
+      camera: {
+        position: this.props.view.camera.position,
+        heading: this.props.view.camera.heading,
+        tilt: this.props.view.camera.tilt,
+        scale: this.props.view.scale,
+      },
+      stationary: this.props.view.stationary,
+      interacting: this.props.view.interacting,
+    });
   }
 
   render() {
