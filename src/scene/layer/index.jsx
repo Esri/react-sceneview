@@ -16,14 +16,13 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import esriLoader from 'esri-loader';
 
 import { loadLayer } from './load';
 
 import Graphic from './graphic';
+import { applyUpdates } from './update';
 
-
-const layerSettingsProps = {
+export const layerSettingsProps = {
   id: PropTypes.string.isRequired,
   url: PropTypes.string,
   portalItem: PropTypes.object,
@@ -78,19 +77,6 @@ const getLayerSettings = (props) => {
 };
 
 
-const getLayerUpdates = (props, nextProps) => {
-  const changes = Object.keys(layerSettingsProps)
-    .filter(key => props[key] !== nextProps[key]);
-
-  if (changes.length === 0) return null;
-
-  const updates = {};
-  changes.forEach(key => updates[key] = nextProps[key]);
-
-  return updates;
-};
-
-
 const getOIDfromGlobalId = (layerView, GlobalID) => {
   const graphic = layerView.controller.graphics.find(e => e.attributes.GlobalID === GlobalID);
 
@@ -127,83 +113,26 @@ class Layer extends Component {
     };
   }
 
+
   componentDidMount() {
     this.componentIsMounted = true;
     const layerSettings = getLayerSettings(this.props);
     this.load(this.props.view, layerSettings);
   }
 
+
   async componentDidUpdate(prevProps) {
     if (!this.state.layer) return;
     if (!Object.keys(prevProps).find(key => prevProps[key] !== this.props[key])) return;
 
-    await this.state.layer.when();
-
     // refresh layer
     if (this.props.refresh !== prevProps.refresh) {
-      const layerView = this.state.layerView;
-      layerView.refresh();
+      this.state.layerView.refresh();
     }
 
-    const updatesDiff = getLayerUpdates(prevProps, this.props);
-    if (!updatesDiff) return;
-
-    // update layer settings
-    const { rendererJson, source, maskingGeometry, ...updates } = updatesDiff;
-
-    Object.keys(updates).forEach(key => this.state.layer[key] = updates[key]);
-
-    if (rendererJson && rendererJson !== prevProps.rendererJson) {
-      const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
-
-      // After every await, need to check if component is still mounted
-      if (!this.componentIsMounted) return;
-
-      this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
-    }
-
-    // update source graphics
-    if (this.props.source !== prevProps.source) {
-      const newFeatures = this.props.source
-        .filter(feature => !prevProps.source.includes(feature));
-
-      const oldFeatures = prevProps.source
-        .filter(feature => !this.props.source.includes(feature));
-
-      if (!newFeatures.length && !oldFeatures.length) return;
-
-      this.state.layer.applyEdits({
-        addFeatures: newFeatures,
-        deleteFeatures: oldFeatures,
-      });
-    }
-
-    // update zoomTo
-    if (this.props.zoomTo && !prevProps.zoomTo) {
-      this.state.layer.when(() => this.props.view.goTo(this.state.layer.fullExtent));
-    }
-
-    // fix refresh bug
-    if (this.props.visible && this.props.visible !== prevProps.visible) {
-      const layerView = this.state.layerView;
-      if (layerView && layerView.refresh) layerView.refresh();
-    }
-
-    if (this.props.maskingGeometry !== prevProps.maskinggeometry) {
-      const layerView = this.state.layerView;
-      if (!layerView) return;
-
-      const [FeatureFilter, Polygon] = await esriLoader.loadModules([
-        'esri/views/layers/support/FeatureFilter',
-        'esri/geometry/Polygon',
-      ]);
-
-      layerView.filter = this.props.maskingGeometry ? new FeatureFilter({
-        geometry: new Polygon(this.props.maskingGeometry),
-        spatialRelationship: 'disjoint',
-      }) : null;
-    }
+    await applyUpdates(prevProps, this.props, this.state.layer, this.state.layerView);
   }
+
 
   componentWillUnmount() {
     this.componentIsMounted = false;
@@ -228,10 +157,6 @@ class Layer extends Component {
     // After every await, need to check if component is still mounted
     if (!this.componentIsMounted || !layer) return;
 
-    this.setState({
-      layer,
-    });
-
     // Add layer to map
     view.map.add(layer);
     const layerView = await view.whenLayerView(layer);
@@ -242,39 +167,19 @@ class Layer extends Component {
       return;
     }
 
-    this.setState({
-      layerView,
-    });
-
-    // Apply layer updates if needed
-    const {
-      rendererJson,
-      labelingInfoJson,
-      source,
-      ...updates
-    } = layerSettings;
-
-    Object.keys(updates).forEach(key => this.state.layer[key] = updates[key]);
-
-    if (rendererJson) {
-      const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
-
-      // After every await, need to check if component is still mounted
-      if (!this.componentIsMounted) return;
-
-      this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
-    }
+    await layer.when();
+    await applyUpdates(layerSettings, this.props, this.state.layer, this.state.layerView);
 
     if (this.props.selection && this.props.selection.length) {
       this.setState({ highlights: this.state.layerView.highlight(this.props.selection) });
     }
 
-    if (this.props.zoomTo) {
-      // TODO: check this syntax
-      this.state.layer.when(() => this.props.view.goTo(this.state.layer.fullExtent));
-    }
+    this.setState({
+      layer,
+      layerView,
+    });
 
-    this.state.layer.when(() => this.props.onLoad(layer));
+    this.props.onLoad(layer);
   }
 
   render() {
@@ -293,7 +198,6 @@ Layer.propTypes = {
   ...layerSettingsProps,
   refresh: PropTypes.number,
   highlight: PropTypes.array,
-  zoomTo: PropTypes.bool,
   view: PropTypes.object.isRequired,
 };
 
@@ -320,7 +224,6 @@ Layer.defaultProps = {
   spatialReference: null,
   refresh: null,
   highlight: [],
-  zoomTo: false,
   opacity: null,
   minScale: null,
   maxScale: null,
