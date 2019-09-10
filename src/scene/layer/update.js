@@ -13,16 +13,16 @@
  * limitations under the License.
  *
  */
-import esriLoader from 'esri-loader';
-
 import { layerSettingsProps } from './index';
 
 
-const getLayerUpdates = (props, nextProps) => {
-  const changes = Object.keys(layerSettingsProps)
-    .filter(key => props[key] !== nextProps[key]);
+const getLayerUpdates = (prevProps, nextProps) => {
+  const changes = Object
+    .keys(layerSettingsProps)
+    .filter(key => !(prevProps[key] === undefined && nextProps[key] === null))
+    .filter(key => prevProps[key] !== nextProps[key]);
 
-  if (changes.length === 0) return null;
+  if (changes.length === 0) return {};
 
   const updates = {};
   changes.forEach(key => updates[key] = nextProps[key]);
@@ -31,30 +31,20 @@ const getLayerUpdates = (props, nextProps) => {
 };
 
 
-// TODO: do we use this?
-const applyRenderer = async (rendererJson) => {
-  const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
-
-  this.state.layer.renderer = rendererJsonUtils.fromJSON(rendererJson);
-};
-
-
-export const applyUpdates = async (prevProps, nextProps, layer, layerView) => {
+export const applyUpdates = (prevProps, nextProps, layer, layerView, esriUtils) => {
   const updatesDiff = getLayerUpdates(prevProps, nextProps);
-  console.log(updatesDiff);
 
   const {
     rendererJson,
-    labelingInfoJson, // ???
     source,
     maskingGeometry,
     ...updates
   } = updatesDiff;
 
-  Object.keys(updates).forEach(key => this.state.layer[key] = updates[key]);
+  Object.keys(updates).forEach(key => layer[key] = updates[key]);
 
   if (rendererJson) {
-    await applyRenderer(rendererJson);
+    layer.renderer = esriUtils.rendererJsonUtils.fromJSON(rendererJson);
   }
 
   // update source graphics
@@ -81,13 +71,8 @@ export const applyUpdates = async (prevProps, nextProps, layer, layerView) => {
   if (maskingGeometry) {
     if (!layerView) return;
 
-    const [FeatureFilter, Polygon] = await esriLoader.loadModules([
-      'esri/views/layers/support/FeatureFilter',
-      'esri/geometry/Polygon',
-    ]);
-
-    layerView.filter = nextProps.maskingGeometry ? new FeatureFilter({
-      geometry: new Polygon(nextProps.maskingGeometry),
+    layerView.filter = nextProps.maskingGeometry ? new esriUtils.FeatureFilter({
+      geometry: new esriUtils.Polygon(nextProps.maskingGeometry),
       spatialRelationship: 'disjoint',
     }) : null;
   }

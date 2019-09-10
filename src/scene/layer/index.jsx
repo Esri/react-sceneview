@@ -1,4 +1,4 @@
-/* Copyright 2018 Esri
+/* Copyright 2019 Esri
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,15 @@
  * limitations under the License.
  *
  */
-
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import esriLoader from 'esri-loader';
 
 import { loadLayer } from './load';
 
 import Graphic from './graphic';
 import { applyUpdates } from './update';
+
 
 export const layerSettingsProps = {
   id: PropTypes.string.isRequired,
@@ -121,7 +122,7 @@ class Layer extends Component {
   }
 
 
-  async componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     if (!this.state.layer) return;
     if (!Object.keys(prevProps).find(key => prevProps[key] !== this.props[key])) return;
 
@@ -130,7 +131,7 @@ class Layer extends Component {
       this.state.layerView.refresh();
     }
 
-    await applyUpdates(prevProps, this.props, this.state.layer, this.state.layerView);
+    applyUpdates(prevProps, this.props, this.state.layer, this.state.layerView, this.esriUtils);
   }
 
 
@@ -147,8 +148,29 @@ class Layer extends Component {
   }
 
 
+  async initEsriUtils() {
+    const [
+      FeatureFilter,
+      Polygon,
+      rendererJsonUtils,
+    ] = await esriLoader.loadModules([
+      'esri/views/layers/support/FeatureFilter',
+      'esri/geometry/Polygon',
+      'esri/renderers/support/jsonUtils',
+    ]);
+
+    this.esriUtils = {
+      FeatureFilter,
+      Polygon,
+      rendererJsonUtils,
+    };
+  }
+
+
   async load(view, layerSettings) {
     if (!view) return;
+
+    await this.initEsriUtils();
 
     // Check if already exists (e.g., after hot reload)
     const existingLayer = view.map.layers.items.find(l => l.id === layerSettings.id);
@@ -168,7 +190,7 @@ class Layer extends Component {
     }
 
     await layer.when();
-    await applyUpdates(layerSettings, this.props, this.state.layer, this.state.layerView);
+    applyUpdates(layerSettings, this.props, layer, layerView, this.esriUtils);
 
     if (this.props.selection && this.props.selection.length) {
       this.setState({ highlights: this.state.layerView.highlight(this.props.selection) });
