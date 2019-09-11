@@ -17,7 +17,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import { SceneView, Scene, Layer, UI, Ground, SliceTool, DistanceMeasurementTool, DrawingTool } from 'react-sceneview'; // eslint-disable-line
+import { SceneView, Scene, Layer, UI, Ground, SliceTool, DistanceMeasurementTool, DrawingTool } from '../src'; // eslint-disable-line
 
 const initialGeometry = {
   type: 'polygon',

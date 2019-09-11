@@ -1,23 +1,32 @@
 module.exports = {
-    "extends": "airbnb",
-    "rules": {
-      "react/forbid-prop-types": 0,
-      "jsx-a11y/href-no-hash": 0,
-      "import/no-named-as-default": 0,
-      "no-param-reassign": ["error", { "props": false }],
-      "no-return-assign": 0,
-      "react/no-array-index-key": 0,
-      "jsx-a11y/no-autofocus": 0,
+  env: {
+    browser: true,
+    es6: true,
+    jest: true,
+  },
+  extends: [
+    'airbnb',
+  ],
+  parserOptions: {
+    sourceType: 'module',
+    ecmaVersion: 2018,
+    ecmaFeatures : {
+      jsx : true,
     },
-    "env": {
-      "browser": true,
-      "jest": true,
-    },
-    "settings": {
-      "import/resolver": {
-        "node": {
-          "paths": ["src"]
-        }
-      }
-    }
+  },
+  rules: {
+    'no-param-reassign': ['error', { props: false }],
+    'no-return-assign': 0,
+    'operator-linebreak': ['error', 'after'],
+    'implicit-arrow-linebreak': 0,
+    'arrow-parens': 0,
+    'prefer-destructuring': 0,
+    'object-curly-newline' :0,
+    'import/no-named-as-default': 0,
+    'react/destructuring-assignment': 0,
+    'react/forbid-prop-types': 0,
+    'react/no-access-state-in-setstate': 0,
+    'react/jsx-fragments' :0,
+    'react/jsx-wrap-multilines': 0,
+  },
 };
