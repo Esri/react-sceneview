@@ -25,8 +25,6 @@ class SelectionEventListener extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      startPoint: null,
-      endPoint: null,
       points: [],
     };
   }
@@ -44,7 +42,6 @@ class SelectionEventListener extends Component {
       switch (event.action) {
         case 'start': {
           this.setState({
-            startPoint: point,
             points: [point],
           });
           break;
@@ -52,7 +49,6 @@ class SelectionEventListener extends Component {
 
         case 'update': {
           this.setState({
-            endPoint: point,
             points: [...this.state.points, point],
           });
           this.updateSelectionGraphic(await this.getGraphic());
@@ -91,8 +87,6 @@ class SelectionEventListener extends Component {
 
   clearSelectionShape() {
     this.setState({
-      startPoint: null,
-      endPoint: null,
       points: [],
     });
     this.clearSelectionGraphic();

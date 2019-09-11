@@ -170,8 +170,7 @@ class SceneView extends Component {
     return {
       ...graphic.geometry,
       rings: graphic.geometry.rings.map(ring =>
-        ring.map(point => [point[0], point[1], point[3]]),
-      ),
+        ring.map(point => [point[0], point[1], point[3]])),
     };
   }
 

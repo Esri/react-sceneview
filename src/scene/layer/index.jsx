@@ -18,52 +18,10 @@ import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
 import { loadLayer } from './load';
+import layerSettingsProps from './layer-settings-props';
 
 import Graphic from './graphic';
 import { applyUpdates } from './update';
-
-
-export const layerSettingsProps = {
-  id: PropTypes.string.isRequired,
-  url: PropTypes.string,
-  portalItem: PropTypes.object,
-  layerType: PropTypes.oneOf([
-    'feature',
-    'scene',
-    'tile',
-    'vector-tile',
-    'integrated-mesh',
-    'point-cloud',
-    'building-scene',
-  ]).isRequired,
-  visible: PropTypes.bool,
-  definitionExpression: PropTypes.string,
-  renderer: PropTypes.object,
-  rendererJson: PropTypes.object,
-  labelingInfo: PropTypes.object,
-  labelsVisible: PropTypes.bool,
-  outFields: PropTypes.arrayOf(PropTypes.string),
-  elevationInfo: PropTypes.object,
-  geometryType: PropTypes.string,
-  hasZ: PropTypes.bool,
-  fields: PropTypes.array,
-  objectIdField: PropTypes.string,
-  objectIdFilter: PropTypes.object,
-  selectable: PropTypes.bool,
-  relatedLayer: PropTypes.string,
-  spatialReference: PropTypes.object,
-  opacity: PropTypes.number,
-  minScale: PropTypes.number,
-  maxScale: PropTypes.number,
-  featureReduction: PropTypes.object,
-  source: PropTypes.array,
-  legendEnabled: PropTypes.bool,
-  title: PropTypes.string,
-  maskingGeometry: PropTypes.object,
-  popupEnabled: PropTypes.bool,
-  popupTemplate: PropTypes.object,
-  onLoad: PropTypes.func,
-};
 
 
 const getLayerSettings = (props) => {
@@ -224,6 +182,7 @@ Layer.propTypes = {
 };
 
 
+/* eslint react/default-props-match-prop-types: 0 */
 Layer.defaultProps = {
   children: null,
   url: null,

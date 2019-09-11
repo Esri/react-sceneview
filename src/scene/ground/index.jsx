@@ -73,6 +73,7 @@ Ground.propTypes = {
 };
 
 
+/* eslint react/default-props-match-prop-types: 0 */
 Ground.defaultProps = {
   navigationConstraint: null,
   opacity: null,

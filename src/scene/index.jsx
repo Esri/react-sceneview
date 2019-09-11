@@ -114,7 +114,6 @@ Scene.defaultProps = {
   initialViewProperties: null,
   selectionQuery: null,
   onLoad: null,
-  onView: null,
 };
 
 Scene.Layer = Layer;

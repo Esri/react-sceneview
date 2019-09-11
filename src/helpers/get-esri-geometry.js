@@ -26,19 +26,12 @@ export const getEsriGeometry = async (geometry) => {
       'esri/geometry/Mesh',
     ]);
 
-  if (geometry.rings) {
-    return new Polygon(geometry);
-  } else if (geometry.paths) {
-    return new Polyline(geometry);
-  } else if (geometry.components) {
-    return new Mesh(geometry);
-  } else if (geometry.points) {
-    return 'multipoint';
-  } else if (geometry.x) {
-    return new Point(geometry);
-  } else if (geometry.xmin) {
-    return 'extent';
-  }
+  if (geometry.rings) return new Polygon(geometry);
+  if (geometry.paths) return new Polyline(geometry);
+  if (geometry.components) return new Mesh(geometry);
+  if (geometry.points) return 'multipoint';
+  if (geometry.x) return new Point(geometry);
+  if (geometry.xmin) return 'extent';
 
   return null;
 };

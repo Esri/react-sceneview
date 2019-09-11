@@ -13,7 +13,7 @@
  * limitations under the License.
  *
  */
-import { layerSettingsProps } from './index';
+import layerSettingsProps from './layer-settings-props';
 
 
 const getLayerUpdates = (prevProps, nextProps) => {

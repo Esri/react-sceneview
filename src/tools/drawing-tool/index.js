@@ -153,7 +153,6 @@ DrawingTool.propTypes = {
 DrawingTool.defaultProps = {
   geometryType: 'polygon',
   mode: 'click',
-  unit: 'metric',
   geometry: null,
   onDraw: () => null,
 };
