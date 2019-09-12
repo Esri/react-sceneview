@@ -53,12 +53,13 @@ class DistanceMeasurementTool extends Component {
 DistanceMeasurementTool.propTypes = {
   onChange: PropTypes.func,
   unit: PropTypes.oneOf(unitOptions),
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
 };
 
 DistanceMeasurementTool.defaultProps = {
   onChange: () => null,
   unit: 'metric',
+  view: null,
 };
 
 

@@ -45,11 +45,12 @@ class SliceTool extends Component {
 
 SliceTool.propTypes = {
   excludeGround: PropTypes.bool,
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
 };
 
 SliceTool.defaultProps = {
   excludeGround: false,
+  view: null,
 };
 
 export default SliceTool;

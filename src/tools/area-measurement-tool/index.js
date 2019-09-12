@@ -53,12 +53,13 @@ class AreaMeasurementTool extends Component {
 AreaMeasurementTool.propTypes = {
   onChange: PropTypes.func,
   unit: PropTypes.oneOf(unitOptions),
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
 };
 
 AreaMeasurementTool.defaultProps = {
   onChange: () => null,
   unit: 'metric',
+  view: null,
 };
 
 

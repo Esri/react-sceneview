@@ -51,12 +51,13 @@ class NavigationToggle extends Component {
 
 NavigationToggle.propTypes = {
   position: PropTypes.string,
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
 };
 
 
 NavigationToggle.defaultProps = {
   position: 'top-left',
+  view: null,
 };
 
 

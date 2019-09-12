@@ -40,7 +40,12 @@ class SelectionLayer extends Component {
 
 SelectionLayer.propTypes = {
   id: PropTypes.string.isRequired,
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
+};
+
+
+SelectionLayer.defaultProps = {
+  view: null,
 };
 
 

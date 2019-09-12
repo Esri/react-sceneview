@@ -178,12 +178,13 @@ Layer.propTypes = {
   ...layerSettingsProps,
   refresh: PropTypes.number,
   highlight: PropTypes.array,
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
 };
 
 
 /* eslint react/default-props-match-prop-types: 0 */
 Layer.defaultProps = {
+  view: null,
   children: null,
   url: null,
   portalItem: null,

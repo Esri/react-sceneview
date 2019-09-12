@@ -49,8 +49,13 @@ class CameraEventListener extends Component {
 
 
 CameraEventListener.propTypes = {
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
   onCameraChange: PropTypes.func.isRequired,
+};
+
+
+CameraEventListener.defaultProps = {
+  view: null,
 };
 
 

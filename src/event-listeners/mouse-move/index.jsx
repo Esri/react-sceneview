@@ -61,8 +61,13 @@ class MouseMoveEventListener extends Component {
 
 
 MouseMoveEventListener.propTypes = {
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
   onMouseMove: PropTypes.func.isRequired,
+};
+
+
+MouseMoveEventListener.defaultProps = {
+  view: null,
 };
 
 

@@ -145,7 +145,7 @@ DrawingTool.propTypes = {
   onDraw: PropTypes.func,
   geometryType: PropTypes.oneOf(['point', 'multipoint', 'polyline', 'polygon', 'rectangle', 'circle']),
   mode: PropTypes.oneOf(['hybrid', 'freehand', 'click']),
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
   geometry: PropTypes.object,
 };
 
@@ -153,6 +153,7 @@ DrawingTool.propTypes = {
 DrawingTool.defaultProps = {
   geometryType: 'polygon',
   mode: 'click',
+  view: null,
   geometry: null,
   onDraw: () => null,
 };

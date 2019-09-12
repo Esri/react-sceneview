@@ -108,9 +108,13 @@ class SelectionEventListener extends Component {
 
 
 SelectionEventListener.propTypes = {
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
   onSelect: PropTypes.func.isRequired,
 };
 
+
+SelectionEventListener.defaultProps = {
+  view: null,
+};
 
 export default SelectionEventListener;

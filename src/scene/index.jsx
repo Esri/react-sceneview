@@ -101,7 +101,7 @@ Scene.propTypes = {
   basemap: PropTypes.string,
   ground: PropTypes.string,
   initialViewProperties: PropTypes.object,
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
   selectionQuery: PropTypes.object,
   onLoad: PropTypes.func,
 };
@@ -112,6 +112,7 @@ Scene.defaultProps = {
   basemap: 'gray-vector',
   ground: 'world-elevation',
   initialViewProperties: null,
+  view: null,
   selectionQuery: null,
   onLoad: null,
 };

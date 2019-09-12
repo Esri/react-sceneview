@@ -68,7 +68,6 @@ Dynamically add and remove layers:
 ```jsx
   <SceneView
     id="sceneview"
-    initialCamera={initialCamera}
   >
     <Scene>
       {layers.map(({ layerId, ...layerSettings }) => (
@@ -132,7 +131,6 @@ Supports client-side graphics: dynamically add and remove graphics from feature 
 | url          | string         |  | URL of scene or feature layer. If omitted, a layer `source` is required. |
 | visible        | bool | `true` | Indicates if the layer is visible in the SceneView. |
 | selectable     | bool | `false` | Indicates if features on this layer are returned in `onClick` and `onMouseMove` events, as well as from the selection tools. |
-| zoomTo         | bool | `false` | When set to `true`, the scene view will zoom to the layer extent. |
 | highlight | array | `[]` | Feature object ids to be highlighted (usually selection). |
 | definitionExpression | string |  | The SQL where clause used to filter features on the client. |
 | renderer | object | | The renderer assigned to the layer, supplied as an [Auto-casting object](https://developers.arcgis.com/javascript/latest/guide/autocasting/index.html). |
