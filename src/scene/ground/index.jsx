@@ -69,14 +69,16 @@ class Ground extends Component {
 
 Ground.propTypes = {
   ...groundSettingsProps,
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
 };
 
 
+/* eslint react/default-props-match-prop-types: 0 */
 Ground.defaultProps = {
   navigationConstraint: null,
   opacity: null,
   surfaceColor: null,
+  view: null,
 };
 
 

@@ -74,7 +74,7 @@ UI.propTypes = {
     left: PropTypes.number,
   }),
   children: PropTypes.node,
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
 };
 
 
@@ -86,6 +86,7 @@ UI.defaultProps = {
     left: 15,
   },
   children: [],
+  view: null,
 };
 
 

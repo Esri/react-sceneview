@@ -53,12 +53,13 @@ class Compass extends Component {
 
 Compass.propTypes = {
   position: PropTypes.string,
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
 };
 
 
 Compass.defaultProps = {
   position: 'top-left',
+  view: null,
 };
 
 

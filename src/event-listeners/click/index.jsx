@@ -84,8 +84,13 @@ class ClickEventListener extends Component {
 
 
 ClickEventListener.propTypes = {
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
   onClick: PropTypes.func.isRequired,
+};
+
+
+ClickEventListener.defaultProps = {
+  view: null,
 };
 
 

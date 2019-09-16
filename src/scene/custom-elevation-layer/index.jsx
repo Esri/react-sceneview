@@ -56,12 +56,13 @@ class CustomElevationLayer extends Component {
 CustomElevationLayer.propTypes = {
   url: PropTypes.string,
   portalItem: PropTypes.object,
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
 };
 
 CustomElevationLayer.defaultProps = {
   url: null,
   portalItem: null,
+  view: null,
 };
 
 

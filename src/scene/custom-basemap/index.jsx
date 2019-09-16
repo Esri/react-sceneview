@@ -53,12 +53,13 @@ class CustomBasemap extends Component {
 CustomBasemap.propTypes = {
   basemap: PropTypes.string,
   portalItem: PropTypes.object,
-  view: PropTypes.object.isRequired,
+  view: PropTypes.object,
 };
 
 CustomBasemap.defaultProps = {
   basemap: 'gray-vector',
   portalItem: null,
+  view: null,
 };
 
 

@@ -14,54 +14,60 @@
  *
  */
 
+/* eslint-disable no-unused-vars */
+
 import React from 'react';
 import { render } from 'react-dom';
 
-import { SceneView, Scene, Layer, UI, Ground, SliceTool, DistanceMeasurementTool, DrawingTool } from 'react-sceneview'; // eslint-disable-line
+import {
+  SceneView,
+  Scene,
+  Layer,
+  UI,
+  Ground,
+  SliceTool,
+  DistanceMeasurementTool,
+  DrawingTool,
+} from '../src';
 
-const initialGeometry = {
-  type: 'polygon',
-  rings: [
-    [-8188825.165368124, 5702959.769073752],
-    [-8188716.615804167, 5703128.839067342],
-    [-8188563.815668999, 5703041.904958983],
-    [-8188626.09936864, 5702945.593375879],
-    [-8188825.165368124, 5702959.769073752],
-  ],
-  spatialReference: {
-    wkid: 102100,
-    latestWkid: 3857,
+const initialViewProperties = {
+  viewpoint: {
+    camera: {
+      position: {
+        latitude: 45.49329824845787,
+        longitude: -73.56433825651148,
+        z: 1491.931965556927,
+      },
+      tilt: 60,
+      heading: 355,
+    },
   },
 };
 
 render(
   <SceneView
     id="sceneview"
-    onLoad={e => console.log(e)}
+    // onLoad={e => console.log(e)}
   >
     <UI.Zoom />
     <UI.Compass />
     <Scene
       basemap="streets"
-      onLoad={e => console.log(e)}
+      initialViewProperties={initialViewProperties}
+      // onLoad={e => console.log(e)}
     >
       <Ground
         opacity={0.5}
         navigationConstraint={{ type: 'none' }}
       />
-      <Scene.Layer
+      <Layer
         id="buildings"
         layerType="scene"
-        zoomTo
         selectable
         url="https://tiles.arcgis.com/tiles/P3ePLMYs2RVChkJx/arcgis/rest/services/Building_Montreal/SceneServer"
-        onLoad={e => console.log(e)}
+        // onLoad={e => console.log(e)}
       />
     </Scene>
-    <DrawingTool
-      onDraw={e => console.log(e)}
-      initialGeometry={initialGeometry}
-    />
   </SceneView>,
   document.getElementById('root'),
 );

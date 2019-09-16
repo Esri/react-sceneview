@@ -65,7 +65,7 @@ const viewMock = {
 
 
 describe('components', () => {
-  describe('<Scene />', async () => {
+  describe('<Scene />', () => {
     it('should render self, load webscene, and attach it to view', async () => {
       const props = {
         view: viewMock,

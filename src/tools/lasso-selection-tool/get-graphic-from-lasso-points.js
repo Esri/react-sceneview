@@ -23,8 +23,7 @@ export const getGraphicFromLassoPoints = async (polyPoints) => {
   const distance2 =
     ((start.x - end.x) * (start.x - end.x)) + ((start.y - end.y) * (start.y - end.y));
 
-  return (distance2 > 50 ?
-  {
+  return (distance2 > 50 ? {
     attributes: {
       ObjectID: 0,
     },
@@ -39,8 +38,7 @@ export const getGraphicFromLassoPoints = async (polyPoints) => {
       color: [255, 192, 0, 1],
       width: '3px',
     },
-  } :
-  {
+  } : {
     attributes: {
       ObjectID: 0,
     },
