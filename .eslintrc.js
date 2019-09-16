@@ -28,5 +28,6 @@ module.exports = {
     'react/no-access-state-in-setstate': 0,
     'react/jsx-fragments' :0,
     'react/jsx-wrap-multilines': 0,
+    'react/jsx-props-no-spreading': 0,
   },
 };
