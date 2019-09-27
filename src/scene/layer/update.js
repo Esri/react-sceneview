@@ -43,7 +43,7 @@ export const applyUpdates = (prevProps, nextProps, layer, layerView, esriUtils) 
 
   Object.keys(updates).forEach(key => layer[key] = updates[key]);
 
-  if (rendererJson) {
+  if (rendererJson !== undefined) {
     layer.renderer = esriUtils.rendererJsonUtils.fromJSON(rendererJson);
   }
 
@@ -68,7 +68,7 @@ export const applyUpdates = (prevProps, nextProps, layer, layerView, esriUtils) 
     if (layerView && layerView.refresh) layerView.refresh();
   }
 
-  if (maskingGeometry) {
+  if (maskingGeometry !== undefined) {
     if (!layerView) return;
 
     layerView.filter = nextProps.maskingGeometry ? new esriUtils.FeatureFilter({
