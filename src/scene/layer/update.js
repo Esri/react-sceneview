@@ -19,6 +19,7 @@ import layerSettingsProps from './layer-settings-props';
 const getLayerUpdates = (prevProps, nextProps) => {
   const changes = Object
     .keys(layerSettingsProps)
+    .filter(key => prevProps.layerType !== 'web-tile' || (key !== 'legendEnabled' && key !== 'popupEnabled'))
     .filter(key => !(prevProps[key] === undefined && nextProps[key] === null))
     .filter(key => prevProps[key] !== nextProps[key]);
 
