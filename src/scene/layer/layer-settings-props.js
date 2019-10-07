@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 export default {
   id: PropTypes.string.isRequired,
   url: PropTypes.string,
+  urlTemplate: PropTypes.string,
   portalItem: PropTypes.object,
   layerType: PropTypes.oneOf([
     'feature',
     'scene',
     'tile',
     'vector-tile',
+    'web-tile',
     'integrated-mesh',
     'point-cloud',
     'building-scene',

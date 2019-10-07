@@ -1,4 +1,4 @@
-/* Copyright 2018 Esri
+/* Copyright 2019 Esri
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ const layerTypes = {
   graphics: 'esri/layers/GraphicsLayer',
   tile: 'esri/layers/TileLayer',
   'vector-tile': 'esri/layers/VectorTileLayer',
+  'web-tile': 'esri/layers/WebTileLayer',
   'integrated-mesh': 'esri/layers/IntegratedMeshLayer',
   'point-cloud': 'esri/layers/PointCloudLayer',
   'building-scene': 'esri/layers/BuildingSceneLayer',

@@ -29,6 +29,7 @@ const getLayerSettings = (props) => {
 
   Object.keys(layerSettingsProps)
     .filter(key => props.layerType !== 'point-cloud' || key !== 'opacity')
+    .filter(key => props.layerType !== 'web-tile' || (key !== 'legendEnabled' && key !== 'popupEnabled'))
     .filter(key => props[key] !== null && props[key] !== undefined)
     .forEach(key => settings[key] = props[key]);
 
@@ -187,6 +188,7 @@ Layer.defaultProps = {
   view: null,
   children: null,
   url: null,
+  urlTemplate: null,
   portalItem: null,
   visible: true,
   selectable: false,
