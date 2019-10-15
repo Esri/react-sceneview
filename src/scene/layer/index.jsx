@@ -218,6 +218,7 @@ Layer.defaultProps = {
   maskingGeometry: null,
   popupEnabled: false,
   popupTemplate: null,
+  style: null,
   onLoad: () => null,
 };
 

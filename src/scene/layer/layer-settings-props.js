@@ -42,4 +42,5 @@ export default {
   popupEnabled: PropTypes.bool,
   popupTemplate: PropTypes.object,
   onLoad: PropTypes.func,
+  style: PropTypes.object,
 };
