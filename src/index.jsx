@@ -70,6 +70,8 @@ class SceneView extends Component {
   }
 
   async UNSAFE_componentWillUpdate(nextProps) { // eslint-disable-line camelcase
+    if (!this.state.view) return;
+
     if (this.props.environment !== nextProps.environment) {
       const environment = this.parseEnvironment(nextProps.environment);
       Object.keys(environment).forEach(key => this.state.view.environment[key] = {
@@ -210,6 +212,8 @@ class SceneView extends Component {
     const view = await loadEsriSceneView(this.componentRef, this.props.id, viewSettings);
 
     if (this.props.highlightOptions) view.highlightOptions = this.props.highlightOptions;
+    if (this.props.environment) view.highlightOptions = this.props.environment;
+    if (this.props.padding) view.highlightOptions = this.props.padding;
 
     this.setState({ view });
     if (this.props.onLoad) this.props.onLoad(view);
