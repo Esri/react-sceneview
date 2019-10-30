@@ -37,39 +37,16 @@ const getLayerSettings = (props) => {
 };
 
 
-const getOIDfromGlobalId = (layerView, GlobalID) => {
-  const graphic = layerView.controller.graphics.find(e => e.attributes.GlobalID === GlobalID);
-
-  if (!graphic) return null;
-  return graphic.attributes[layerView.layer.objectIdField];
-};
-
-
-const getHighlightOIDs = (layerView, mysteryIds) => mysteryIds.map(mysteryId => (
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(mysteryId) ?
-    getOIDfromGlobalId(layerView, mysteryId) : mysteryId
-));
+const arrayCompare = (a, b) => !Array.isArray(a) || !Array.isArray(b) ||
+  a.length !== b.length || !a.every(e => b.includes(e)) || !b.every(e => a.includes(e));
 
 
 class Layer extends Component {
-  static getDerivedStateFromProps(props, state) {
-    const newState = {
-      highlights: props.highlight && props.highlight.length &&
-        state.layerView && state.layerView.highlight &&
-        state.layerView.highlight(getHighlightOIDs(state.layerView, props.highlight)),
-    };
-
-    if (state.highlights) state.highlights.remove();
-
-    return newState;
-  }
-
   constructor(props) {
     super(props);
     this.state = {
       layer: null,
       layerView: null,
-      highlights: null,
     };
   }
 
@@ -88,6 +65,12 @@ class Layer extends Component {
     // refresh layer
     if (this.props.refresh !== prevProps.refresh) {
       this.state.layerView.refresh();
+    }
+
+    // highlights
+    if (this.props.highlight !== prevProps.highlight &&
+      arrayCompare(this.props.highlight, prevProps.highlight)) {
+      this.updateHighlights();
     }
 
     applyUpdates(prevProps, this.props, this.state.layer, this.state.layerView, this.esriUtils);
@@ -126,6 +109,23 @@ class Layer extends Component {
   }
 
 
+  updateHighlights() {
+    if (!this.state.layerView) return;
+
+    try {
+      if (this.highlights) this.highlights.remove();
+    } catch (e) {
+      // not sure
+    }
+
+    if (this.props.highlight && this.props.highlight.length) {
+      this.highlights = this.state.layerView.highlight(this.props.highlight);
+    } else {
+      this.highlights = null;
+    }
+  }
+
+
   async load(view, layerSettings) {
     if (!view) return;
 
@@ -149,16 +149,13 @@ class Layer extends Component {
     }
 
     await layer.when();
-    applyUpdates(layerSettings, this.props, layer, layerView, this.esriUtils);
-
-    if (this.props.selection && this.props.selection.length) {
-      this.setState({ highlights: this.state.layerView.highlight(this.props.selection) });
-    }
-
     this.setState({
       layer,
       layerView,
     });
+
+    applyUpdates(layerSettings, this.props, layer, layerView, this.esriUtils);
+    this.updateHighlights();
 
     this.props.onLoad(layer);
   }

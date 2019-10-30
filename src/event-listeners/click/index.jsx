@@ -61,13 +61,24 @@ class ClickEventListener extends Component {
       this.props.onClick({
         mapPoint,
         graphic: graphic && graphic.layer && graphic.layer.selectable ? {
-          attributes: graphic.attributes,
+          attributes: {
+            ...graphic.attributes,
+            esriObjectId: graphic.attributes[graphic.layer.objectIdField],
+          },
           geometry: graphic.geometry,
           GlobalID: graphic.attributes.GlobalID,
           objectId: graphic.attributes[graphic.layer.objectIdField],
           layerId: graphic.layer && graphic.layer.id,
         } : null,
-        features: features.slice(0, 1),
+        features: features
+          .slice(0, 1)
+          .map(feature => ({
+            ...feature,
+            attributes: {
+              ...feature.attributes,
+              esriObjectId: feature.objectId,
+            },
+          })),
         event,
       });
     });
