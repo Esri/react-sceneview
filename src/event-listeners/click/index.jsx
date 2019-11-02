@@ -70,15 +70,7 @@ class ClickEventListener extends Component {
           objectId: graphic.attributes[graphic.layer.objectIdField],
           layerId: graphic.layer && graphic.layer.id,
         } : null,
-        features: features
-          .slice(0, 1)
-          .map(feature => ({
-            ...feature,
-            attributes: {
-              ...feature.attributes,
-              esriObjectId: feature.objectId,
-            },
-          })),
+        features: features.slice(0, 1),
         event,
       });
     });

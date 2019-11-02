@@ -68,10 +68,12 @@ export const handleSelectionQuery = async (view, selectionGeometry, spatialRelat
   const selectionFeatures =
     await querySelectionFeatures(view, selectionGeometry, spatialRelationship);
 
-
   return selectionFeatures
     .map(feature => ({
-      attributes: feature.attributes,
+      attributes: {
+        ...feature.attributes,
+        esriObjectId: feature.attributes[feature.layer.objectIdField],
+      },
       geometry: feature.geometry,
       GlobalID: feature.attributes.GlobalID,
       objectId: feature.attributes[feature.layer.objectIdField],
