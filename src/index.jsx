@@ -212,8 +212,8 @@ class SceneView extends Component {
     const view = await loadEsriSceneView(this.componentRef, this.props.id, viewSettings);
 
     if (this.props.highlightOptions) view.highlightOptions = this.props.highlightOptions;
-    if (this.props.environment) view.highlightOptions = this.props.environment;
-    if (this.props.padding) view.highlightOptions = this.props.padding;
+    if (this.props.environment) view.environment = this.props.environment;
+    if (this.props.padding) view.padding = this.props.padding;
 
     this.setState({ view });
     if (this.props.onLoad) this.props.onLoad(view);
