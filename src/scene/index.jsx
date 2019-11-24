@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
 import Layer, { Graphic } from './layer';
-// import Webscene from './webscene';
+import Webscene from './webscene';
 import Ground from './ground';
 import CustomBasemap from './custom-basemap';
 import CustomElevationLayer from './custom-elevation-layer';
@@ -70,13 +70,10 @@ class Scene extends Component {
         return React.cloneElement(child, {
           children: this.renderWrappedChildren(child.props.children),
           view: this.props.view,
-          // selectionQuery,
         });
       }
 
-      return React.cloneElement(child, { view: this.props.view,
-        // selectionQuery,
-      });
+      return React.cloneElement(child, { view: this.props.view });
     });
   }
 
@@ -84,7 +81,6 @@ class Scene extends Component {
     const {
       children,
       view,
-      // selectionQuery,
     } = this.props;
 
     return view && this.state.mapLoaded && (
@@ -103,7 +99,6 @@ Scene.propTypes = {
   ground: PropTypes.string,
   initialViewProperties: PropTypes.object,
   view: PropTypes.object,
-  // selectionQuery: PropTypes.object,
   onLoad: PropTypes.func,
 };
 
@@ -113,14 +108,14 @@ Scene.defaultProps = {
   ground: 'world-elevation',
   initialViewProperties: null,
   view: null,
-  // selectionQuery: null,
   onLoad: null,
 };
 
 Scene.Layer = Layer;
+Scene.Webscene = Webscene;
 Scene.CustomBasemap = CustomBasemap;
 Scene.CustomElevationLayer = CustomElevationLayer;
 
-export { Scene, Layer, Ground, Graphic, CustomBasemap, CustomElevationLayer };
+export { Scene, Layer, Webscene, Ground, Graphic, CustomBasemap, CustomElevationLayer };
 
 export default Scene;
