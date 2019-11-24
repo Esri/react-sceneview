@@ -56,7 +56,7 @@ class SceneView extends Component {
     this.state = {
       view: (window.sceneViews && window.sceneViews[this.props.id] &&
         window.sceneViews[this.props.id].view) || null,
-      selectionQuery: null,
+      // selectionQuery: null,
     };
   }
 

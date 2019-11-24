@@ -12,4 +12,13 @@ module.exports = merge(common, {
     library: 'react-sceneview',
     libraryTarget: 'umd',
   },
+  externals: {
+    react: {
+      root: 'React',
+      commonjs2: 'react',
+      commonjs: 'react',
+      amd: 'react',
+      umd: 'react',
+    },
+  },
 });
