@@ -23,7 +23,7 @@ class Webscene extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      layers: [],
+      groupLayer: null,
     };
   }
 
@@ -42,21 +42,21 @@ class Webscene extends Component {
   componentWillUnmount() {
     if (!this.props.view || !this.props.view.map) return;
     this.componentIsMounted = false;
-    this.props.view.map.removeMany(this.state.layers);
+    this.props.view.map.remove(this.state.groupLayer);
   }
 
 
   update(prevProps = {}) {
-    if (!this.props.view || !this.props.view.map) return;
+    if (!this.props.view || !this.state.groupLayer) return;
 
     if (prevProps.visible !== this.props.visible) {
-      this.state.layers.forEach(layer => layer.visible = this.props.visible);
+      this.state.groupLayer.visible = this.props.visible;
     }
 
     if (prevProps.layerSettings !== this.props.layerSettings) {
       Object.keys(this.props.layerSettings).forEach(layerId => {
         const settings = this.props.layerSettings[layerId];
-        const layer = this.props.view.map.layers.items.find(l => l.id === layerId);
+        const layer = this.state.groupLayer.layers.items.find(l => l.id === layerId);
         if (!layer) return;
 
         Object.keys(settings).forEach(field => layer[field] = settings[field]);
@@ -68,8 +68,9 @@ class Webscene extends Component {
   async loadWebscene() {
     if (!this.props.view || !this.props.view.map) return;
 
-    const [EsriWebScene, EsriLayer] = await esriLoader.loadModules([
+    const [EsriWebScene, EsriGroupLayer, EsriLayer] = await esriLoader.loadModules([
       'esri/WebScene',
+      'esri/layers/GroupLayer',
       'esri/layers/Layer',
     ]);
     if (!this.componentIsMounted) return;
@@ -90,17 +91,19 @@ class Webscene extends Component {
         // give up
       }
     }
-    layers.forEach(layer => layer.visible = this.props.visible);
+
+    const groupLayer = new EsriGroupLayer({ visible: this.props.visible });
 
     if (!this.componentIsMounted) return;
 
-    this.setState({ layers });
-    this.props.view.map.layers.addMany(layers);
+    this.setState({ groupLayer });
+    this.state.groupLayer.addMany(layers);
+    this.props.view.map.layers.add(groupLayer);
 
-    await Promise.all(layers.map(layer => this.props.view.whenLayerView(layer)));
+    await this.props.view.whenLayerView(groupLayer);
     this.update();
 
-    if (this.props.onLoad) this.props.onLoad(this.state.layers);
+    if (this.props.onLoad) this.props.onLoad(this.state.groupLayer.layers.items);
   }
 
   render() {
