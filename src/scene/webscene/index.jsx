@@ -35,16 +35,32 @@ class Webscene extends Component {
 
 
   componentDidUpdate(prevProps) {
-    if (this.props.visible !== prevProps.visible) {
-      this.state.layers.forEach(layer => layer.visible = this.props.visible);
-    }
+    this.update(prevProps);
   }
 
 
   componentWillUnmount() {
-    this.componentIsMounted = false;
     if (!this.props.view || !this.props.view.map) return;
+    this.componentIsMounted = false;
     this.props.view.map.removeMany(this.state.layers);
+  }
+
+
+  update(prevProps = {}) {
+    if (!this.props.view || !this.props.view.map) return;
+
+    if (prevProps.visible !== this.props.visible) {
+      this.state.layers.forEach(layer => layer.visible = this.props.visible);
+    }
+
+    if (prevProps.layerSettings !== this.props.layerSettings) {
+      Object.keys(this.props.layerSettings).forEach(layerId => {
+        const layer = this.props.view.map.layers.items.find(l => l.id === layerId);
+        const settings = this.props.layerSettings[layerId];
+
+        Object.keys(settings).forEach(field => layer[field] = settings[field]);
+      });
+    }
   }
 
 
@@ -81,7 +97,7 @@ class Webscene extends Component {
     this.props.view.map.layers.addMany(layers);
 
     await Promise.all(layers.map(layer => this.props.view.whenLayerView(layer)));
-    layers.forEach(layer => layer.visible = this.props.visible);
+    this.update();
 
     if (this.props.onLoad) this.props.onLoad(this.state.layers);
   }
@@ -97,6 +113,7 @@ Webscene.propTypes = {
   view: PropTypes.object,
   visible: PropTypes.bool,
   onLoad: PropTypes.func,
+  layerSettings: PropTypes.object,
 };
 
 
@@ -104,6 +121,7 @@ Webscene.defaultProps = {
   view: null,
   visible: true,
   onLoad: null,
+  layerSettings: {},
 };
 
 
