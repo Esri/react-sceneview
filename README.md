@@ -28,11 +28,13 @@ import { SceneView, Scene } from 'react-sceneview';
 ```jsx
 import React from 'react';
 import { render } from 'react-dom';
-import { SceneView, Scene } from 'react-sceneview';
+import { SceneView, Scene, Webscene } from 'react-sceneview';
 
 render(
   <SceneView id="sceneview">
-    <Scene portalItem={{ id: '34859cee6739438d93262a5aa91bf834' }} />
+    <Scene>
+      <Webscene  portalItem={{ id: '34859cee6739438d93262a5aa91bf834' }} />
+    </Scene>
   </SceneView>,
   document.getElementById('root'),
 );

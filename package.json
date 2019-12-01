@@ -1,6 +1,6 @@
 {
   "name": "react-sceneview",
-  "version": "0.1.75",
+  "version": "0.2.3",
   "description": "react-sceneview",
   "main": "dist/react-sceneview.js",
   "module": "dist/react-sceneview.js",
@@ -17,8 +17,7 @@
     "prop-types": "^15.5.10"
   },
   "peerDependencies": {
-    "react": ">=16.9.0",
-    "react-dom": ">=16.9.0"
+    "react": ">=16.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
@@ -36,8 +35,7 @@
     "eslint-plugin-react": "^7.14.3",
     "jest": "^24.9.0",
     "jest-cli": "^24.9.0",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
+    "react": ">=16.9.0",
     "react-test-renderer": "^15.6.2",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.8",
