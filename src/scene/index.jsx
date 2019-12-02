@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
 import Layer, { Graphic } from './layer';
+import Webscene from './webscene';
 import Ground from './ground';
 import CustomBasemap from './custom-basemap';
 import CustomElevationLayer from './custom-elevation-layer';
@@ -28,36 +29,33 @@ import SelectionLayer from './selection-layer';
 class Scene extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      webscene: null,
-    };
-
-    this.loadWebscene();
+    this.state = { mapLoaded: false };
   }
 
-  async loadWebscene() {
-    if (!this.props.view.map) {
-      const [WebScene] = await esriLoader.loadModules(['esri/WebScene']);
-
-      const webscene = new WebScene({
-        portalItem: this.props.portalItem,
-        basemap: this.props.basemap,
-        ground: this.props.ground,
-        initialViewProperties: this.props.initialViewProperties,
-      });
-
-      await webscene.load();
-
-      this.props.view.map = webscene;
-    }
-
-    await this.props.view.when();
-
-    this.setState({ webscene: this.props.view.map });
-
-    if (this.props.onLoad) this.props.onLoad(this.props.view.map);
+  componentDidMount() {
+    this.loadMap();
   }
 
+  async loadMap() {
+    const {
+      basemap,
+      ground,
+      initialViewProperties,
+      view,
+      onLoad,
+    } = this.props;
+
+    const [WebScene] = await esriLoader.loadModules(['esri/WebScene']);
+    const newMap = new WebScene({ basemap, ground, initialViewProperties });
+    await newMap.load();
+
+    view.map = newMap;
+    await view.when();
+
+    this.setState({ mapLoaded: true });
+
+    if (this.props.onLoad) onLoad(view.map);
+  }
 
   renderWrappedChildren(children) {
     if (!children) return null;
@@ -72,23 +70,23 @@ class Scene extends Component {
         return React.cloneElement(child, {
           children: this.renderWrappedChildren(child.props.children),
           view: this.props.view,
-          selectionQuery: this.props.selectionQuery,
         });
       }
 
-      return React.cloneElement(child, {
-        view: this.props.view,
-        selectionQuery: this.props.selectionQuery,
-      });
+      return React.cloneElement(child, { view: this.props.view });
     });
   }
 
-
   render() {
-    return this.state.webscene && this.props.view && (
+    const {
+      children,
+      view,
+    } = this.props;
+
+    return view && this.state.mapLoaded && (
       <div id="scene">
-        {this.renderWrappedChildren(this.props.children)}
-        <SelectionLayer id="selection-shape" view={this.props.view} />
+        {this.renderWrappedChildren(children)}
+        <SelectionLayer id="selection-shape" view={view} />
       </div>
     );
   }
@@ -97,30 +95,27 @@ class Scene extends Component {
 
 Scene.propTypes = {
   children: PropTypes.node,
-  portalItem: PropTypes.object,
   basemap: PropTypes.string,
   ground: PropTypes.string,
   initialViewProperties: PropTypes.object,
   view: PropTypes.object,
-  selectionQuery: PropTypes.object,
   onLoad: PropTypes.func,
 };
 
 Scene.defaultProps = {
   children: null,
-  portalItem: null,
   basemap: 'gray-vector',
   ground: 'world-elevation',
   initialViewProperties: null,
   view: null,
-  selectionQuery: null,
   onLoad: null,
 };
 
 Scene.Layer = Layer;
+Scene.Webscene = Webscene;
 Scene.CustomBasemap = CustomBasemap;
 Scene.CustomElevationLayer = CustomElevationLayer;
 
-export { Scene, Layer, Ground, Graphic, CustomBasemap, CustomElevationLayer };
+export { Scene, Layer, Webscene, Ground, Graphic, CustomBasemap, CustomElevationLayer };
 
 export default Scene;
