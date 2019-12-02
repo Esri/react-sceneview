@@ -30,6 +30,8 @@ class CameraEventListener extends Component {
   }
 
   handleUpdate() {
+    if (!this.props.view.camera) return;
+
     this.props.onCameraChange({
       camera: {
         position: this.props.view.camera.position,
