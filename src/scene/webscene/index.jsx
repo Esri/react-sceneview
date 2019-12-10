@@ -103,7 +103,9 @@ class Webscene extends Component {
     await this.props.view.whenLayerView(groupLayer);
     this.update();
 
-    if (this.props.onLoad) this.props.onLoad(this.state.groupLayer.layers.items);
+    if (this.props.onLoad) {
+      this.props.onLoad(this.state.groupLayer.layers.items, this.state.groupLayer.id);
+    }
   }
 
   render() {
