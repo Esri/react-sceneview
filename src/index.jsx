@@ -1,4 +1,4 @@
-/* Copyright 2019 Esri
+/* Copyright 2020 Esri
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import LassoSelectionTool from './tools/lasso-selection-tool';
 import DistanceMeasurementTool from './tools/distance-measurement-tool';
 import AreaMeasurementTool from './tools/area-measurement-tool';
 import SliceTool from './tools/slice-tool';
+import LineOfSightTool from './tools/line-of-sight-tool';
 
 
 import { loadEsriSceneView } from './load';
@@ -304,6 +305,7 @@ SceneView.LassoSelectionTool = LassoSelectionTool;
 SceneView.DistanceMeasurementTool = DistanceMeasurementTool;
 SceneView.AreaMeasurementTool = AreaMeasurementTool;
 SceneView.SliceTool = SliceTool;
+SceneView.LineOfSightTool = LineOfSightTool;
 
 export {
   SceneView,
@@ -320,6 +322,7 @@ export {
   DistanceMeasurementTool,
   AreaMeasurementTool,
   SliceTool,
+  LineOfSightTool,
 };
 
 export default SceneView;
