@@ -1,4 +1,4 @@
-/* Copyright 2019 Esri
+/* Copyright 2020 Esri
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,12 @@ import esriLoader from 'esri-loader';
 
 class SliceTool extends Component {
   async componentDidMount() {
+    this.componentIsMounted = true;
+
     const [Slice] = await esriLoader.loadModules([
       'esri/widgets/Slice',
     ]);
+    if (!this.componentIsMounted) return;
 
     this.sliceTool = new Slice({
       view: this.props.view,
@@ -35,6 +38,7 @@ class SliceTool extends Component {
   }
 
   componentWillUnmount() {
+    this.componentIsMounted = false;
     this.sliceTool.destroy();
   }
 

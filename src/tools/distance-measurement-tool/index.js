@@ -1,4 +1,4 @@
-/* Copyright 2019 Esri
+/* Copyright 2020 Esri
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,12 @@ import unitOptions from '../../helpers/unit-options';
 
 class DistanceMeasurementTool extends Component {
   async componentDidMount() {
+    this.componentIsMounted = true;
+
     const [DirectLineMeasurement3D] = await esriLoader.loadModules([
       'esri/widgets/DirectLineMeasurement3D',
     ]);
+    if (!this.componentIsMounted) return;
 
     this.measurementTool = new DirectLineMeasurement3D({
       view: this.props.view,
@@ -43,6 +46,7 @@ class DistanceMeasurementTool extends Component {
   }
 
   componentWillUnmount() {
+    this.componentIsMounted = false;
     if (this.watcher) this.watcher.remove();
     if (this.measurementTool) this.measurementTool.destroy();
   }

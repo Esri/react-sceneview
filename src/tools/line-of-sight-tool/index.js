@@ -20,9 +20,12 @@ import esriLoader from 'esri-loader';
 
 class LineOfSightTool extends Component {
   async componentDidMount() {
+    this.componentIsMounted = true;
+
     const [LineOfSight] = await esriLoader.loadModules([
       'esri/widgets/LineOfSight',
     ]);
+    if (!this.componentIsMounted) return;
 
     this.lineOfSight = new LineOfSight({
       view: this.props.view,
@@ -32,6 +35,7 @@ class LineOfSightTool extends Component {
   }
 
   componentWillUnmount() {
+    this.componentIsMounted = false;
     if (this.lineOfSight) this.lineOfSight.destroy();
   }
 
