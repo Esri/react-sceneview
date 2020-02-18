@@ -1,4 +1,4 @@
-/* Copyright 2019 Esri
+/* Copyright 2020 Esri
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,12 @@ import unitOptions from '../../helpers/unit-options';
 
 class AreaMeasurementTool extends Component {
   async componentDidMount() {
+    this.componentIsMounted = true;
+
     const [AreaMeasurement3DTool] = await esriLoader.loadModules([
       'esri/widgets/AreaMeasurement3D',
     ]);
+    if (!this.componentIsMounted) return;
 
     this.measurementTool = new AreaMeasurement3DTool({
       view: this.props.view,
@@ -41,6 +44,7 @@ class AreaMeasurementTool extends Component {
   }
 
   componentWillUnmount() {
+    this.componentIsMounted = false;
     if (this.watcher) this.watcher.remove();
     if (this.measurementTool) this.measurementTool.destroy();
   }

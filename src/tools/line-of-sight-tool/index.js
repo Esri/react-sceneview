@@ -18,28 +18,25 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
-
-class SliceTool extends Component {
+class LineOfSightTool extends Component {
   async componentDidMount() {
     this.componentIsMounted = true;
 
-    const [Slice] = await esriLoader.loadModules([
-      'esri/widgets/Slice',
+    const [LineOfSight] = await esriLoader.loadModules([
+      'esri/widgets/LineOfSight',
     ]);
     if (!this.componentIsMounted) return;
 
-    this.sliceTool = new Slice({
+    this.lineOfSight = new LineOfSight({
       view: this.props.view,
     });
 
-    this.sliceTool.viewModel.newSlice();
-
-    this.sliceTool.viewModel.excludeGroundSurface = this.props.excludeGround;
+    this.lineOfSight.viewModel.start();
   }
 
   componentWillUnmount() {
     this.componentIsMounted = false;
-    this.sliceTool.destroy();
+    if (this.lineOfSight) this.lineOfSight.destroy();
   }
 
   render() {
@@ -47,14 +44,13 @@ class SliceTool extends Component {
   }
 }
 
-SliceTool.propTypes = {
-  excludeGround: PropTypes.bool,
+LineOfSightTool.propTypes = {
   view: PropTypes.object,
 };
 
-SliceTool.defaultProps = {
-  excludeGround: false,
+LineOfSightTool.defaultProps = {
   view: null,
 };
 
-export default SliceTool;
+
+export default LineOfSightTool;
