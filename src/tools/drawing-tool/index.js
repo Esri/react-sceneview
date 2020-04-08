@@ -30,7 +30,9 @@ class DrawingTool extends Component {
       'esri/layers/GraphicsLayer',
     ]);
 
-    this.layer = new GraphicsLayer();
+    this.layer = new GraphicsLayer({
+      elevationInfo: { mode: 'on-the-ground' },
+    });
     view.map.add(this.layer);
 
     this.model = new SketchViewModel({
