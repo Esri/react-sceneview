@@ -34,6 +34,7 @@ class DrawingTool extends Component {
       elevationInfo: { mode: 'on-the-ground' },
     });
     view.map.add(this.layer);
+    this.layerView = await view.whenLayerView(this.layer);
 
     this.model = new SketchViewModel({
       layer: this.layer,
@@ -47,14 +48,25 @@ class DrawingTool extends Component {
     }
 
     this.onCreate = this.model.on('create', (event) => {
-      if (event.state === 'complete') {
-        this.props.onDraw({
-          geometry: event.graphic.geometry,
-          area: 1,
-        });
-        this.model.update(event.graphic, { tool: 'reshape' });
-      } else if (event.state === 'cancel') {
-        this.onCancel();
+      switch (event.state) {
+        case 'start': {
+          this.layerView.highlight(event.graphic);
+          break;
+        }
+        case 'complete': {
+          this.props.onDraw({
+            geometry: event.graphic.geometry,
+            area: 1,
+          });
+          this.model.update(event.graphic, { tool: 'reshape' });
+          break;
+        }
+        case 'cancel': {
+          this.onCancel();
+          break;
+        }
+        default:
+          break;
       }
     });
 
