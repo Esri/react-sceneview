@@ -72,8 +72,8 @@ class SelectionEventListener extends Component {
           }
 
           const { geometry, spatialRelationship } = await this.getGraphic();
-          this.doSelection(geometry, spatialRelationship, event);
           this.clearSelectionShape();
+          this.doSelection(geometry, spatialRelationship, event);
           break;
         }
       }
