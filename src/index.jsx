@@ -131,7 +131,7 @@ class SceneView extends Component {
             view.goTo({
               target,
               heading: view.camera.heading + 0.2,
-            }, { animation: false });
+            }, { animate: false });
           } catch (err) {
             // do nothing
           }
