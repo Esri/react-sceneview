@@ -38,12 +38,11 @@ class SelectionEventListener extends Component {
 
       const screenPoint = { x: event.x, y: event.y };
       const mapPoint = this.props.view.toMap(screenPoint);
-      if (!mapPoint) return;
-
       const point = { screenPoint, mapPoint };
 
       switch (event.action) {
         case 'start': {
+          if (!point.mapPoint) break;
           this.setState({
             startPoint: point,
             points: [point],
@@ -53,6 +52,7 @@ class SelectionEventListener extends Component {
         }
 
         case 'update': {
+          if (!this.state.startPoint || !point.mapPoint) break;
           this.setState({
             endPoint: point,
             points: [...this.state.points, point],
@@ -66,6 +66,11 @@ class SelectionEventListener extends Component {
 
         case 'end':
         default: {
+          if (!this.state.startPoint || !this.state.endPoint) {
+            this.clearSelectionShape();
+            break;
+          }
+
           const { geometry, spatialRelationship } = await this.getGraphic();
           this.clearSelectionShape();
           this.doSelection(geometry, spatialRelationship, event);
