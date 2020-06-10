@@ -66,12 +66,14 @@ class SelectionEventListener extends Component {
 
         case 'end':
         default: {
-          this.clearSelectionShape();
-
-          if (!this.state.startPoint || !this.state.endPoint) break;
+          if (!this.state.startPoint || !this.state.endPoint) {
+            this.clearSelectionShape();
+            break;
+          }
 
           const { geometry, spatialRelationship } = await this.getGraphic();
           this.doSelection(geometry, spatialRelationship, event);
+          this.clearSelectionShape();
           break;
         }
       }
