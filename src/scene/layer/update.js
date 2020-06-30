@@ -15,7 +15,6 @@
  */
 import layerSettingsProps from './layer-settings-props';
 
-
 const getLayerUpdates = (prevProps, nextProps) => {
   const changes = Object
     .keys(layerSettingsProps)
@@ -30,7 +29,6 @@ const getLayerUpdates = (prevProps, nextProps) => {
 
   return updates;
 };
-
 
 export const applyUpdates = (prevProps, nextProps, layer, layerView, esriUtils) => {
   const updatesDiff = getLayerUpdates(prevProps, nextProps);
@@ -78,6 +76,5 @@ export const applyUpdates = (prevProps, nextProps, layer, layerView, esriUtils) 
     }) : null;
   }
 };
-
 
 export default applyUpdates;

@@ -15,7 +15,6 @@
  */
 import esriLoader from 'esri-loader';
 
-
 export const getGraphicFromRectangle = async (startPoint, endPoint, heading) => {
   const [Polygon, Polyline, geometryEngine] = await esriLoader.loadModules([
     'esri/geometry/Polygon',

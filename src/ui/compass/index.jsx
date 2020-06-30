@@ -18,7 +18,6 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
-
 class Compass extends Component {
   constructor(props) {
     super(props);
@@ -50,17 +49,14 @@ class Compass extends Component {
   }
 }
 
-
 Compass.propTypes = {
   position: PropTypes.string,
   view: PropTypes.object,
 };
 
-
 Compass.defaultProps = {
   position: 'top-left',
   view: null,
 };
-
 
 export default Compass;

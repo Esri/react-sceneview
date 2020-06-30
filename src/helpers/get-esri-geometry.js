@@ -16,7 +16,6 @@
 
 import esriLoader from 'esri-loader';
 
-
 export const getEsriGeometry = async (geometry) => {
   const [Polygon, Polyline, Point, Mesh] =
     await esriLoader.loadModules([
@@ -35,6 +34,5 @@ export const getEsriGeometry = async (geometry) => {
 
   return null;
 };
-
 
 export default getEsriGeometry;

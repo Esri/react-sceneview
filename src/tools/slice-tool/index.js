@@ -18,7 +18,6 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
-
 class SliceTool extends Component {
   async componentDidMount() {
     this.componentIsMounted = true;

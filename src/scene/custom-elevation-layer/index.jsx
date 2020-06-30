@@ -18,7 +18,6 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
-
 class CustomElevationLayer extends Component {
   constructor(props) {
     super(props);
@@ -52,7 +51,6 @@ class CustomElevationLayer extends Component {
   }
 }
 
-
 CustomElevationLayer.propTypes = {
   url: PropTypes.string,
   portalItem: PropTypes.object,
@@ -64,6 +62,5 @@ CustomElevationLayer.defaultProps = {
   portalItem: null,
   view: null,
 };
-
 
 export default CustomElevationLayer;
