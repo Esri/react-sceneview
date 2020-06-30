@@ -18,7 +18,6 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
-
 class Zoom extends Component {
   constructor(props) {
     super(props);
@@ -55,19 +54,16 @@ class Zoom extends Component {
   }
 }
 
-
 Zoom.propTypes = {
   position: PropTypes.oneOf(['top-left', 'top-right', 'bottom-right', 'bottom-left']),
   layout: PropTypes.oneOf(['horizontal', 'vertical']),
   view: PropTypes.object,
 };
 
-
 Zoom.defaultProps = {
   position: 'top-left',
   layout: 'vertical',
   view: null,
 };
-
 
 export default Zoom;

@@ -24,7 +24,6 @@ import { loadEsriSceneView } from '../load';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-
 jest.mock('../scene', () => (view, mode) => {
   if (!view || !mode) return null;
   return <div id="scene" />;
@@ -47,7 +46,6 @@ jest.mock('../load', () => ({
     watch: jest.fn(),
   })),
 }));
-
 
 describe('components', () => {
   describe('<SceneView />', () => {

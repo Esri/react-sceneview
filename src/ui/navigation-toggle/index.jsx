@@ -18,7 +18,6 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
-
 class NavigationToggle extends Component {
   constructor(props) {
     super(props);
@@ -48,17 +47,14 @@ class NavigationToggle extends Component {
   }
 }
 
-
 NavigationToggle.propTypes = {
   position: PropTypes.string,
   view: PropTypes.object,
 };
 
-
 NavigationToggle.defaultProps = {
   position: 'top-left',
   view: null,
 };
-
 
 export default NavigationToggle;

@@ -17,7 +17,8 @@
     "prop-types": "^15.5.10"
   },
   "peerDependencies": {
-    "react": ">=16.9.0"
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
@@ -27,7 +28,7 @@
     "babel-loader": "^8.0.4",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
-    "eslint": "^6.3.0",
+    "eslint": "7.3.1",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-loader": "^3.0.0",
     "eslint-plugin-import": "^2.18.2",
@@ -36,6 +37,7 @@
     "jest": "^24.9.0",
     "jest-cli": "^24.9.0",
     "react": ">=16.9.0",
+    "react-dom": ">=16.9.0",
     "react-test-renderer": "^15.6.2",
     "webpack": "^4.39.3",
     "webpack-cli": "^3.3.8",

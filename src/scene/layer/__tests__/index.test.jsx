@@ -57,7 +57,6 @@ jest.mock('../load', () => ({
   })),
 }));
 
-
 describe('components', () => {
   describe('<Layer />', () => {
     const layer = {

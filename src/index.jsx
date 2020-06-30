@@ -33,9 +33,7 @@ import AreaMeasurementTool from './tools/area-measurement-tool';
 import SliceTool from './tools/slice-tool';
 import LineOfSightTool from './tools/line-of-sight-tool';
 
-
 import { loadEsriSceneView } from './load';
-
 
 const getCameraFromProp = async (current, { center, position, heading, tilt, scale, target }) => {
   const camera = {};
@@ -49,7 +47,6 @@ const getCameraFromProp = async (current, { center, position, heading, tilt, sca
 };
 
 let animation;
-
 
 class SceneView extends Component {
   constructor(props) {
@@ -176,7 +173,6 @@ class SceneView extends Component {
     };
   }
 
-
   openPopup(params) {
     this.state.view.popup.open(params);
   }
@@ -250,7 +246,6 @@ class SceneView extends Component {
   }
 }
 
-
 SceneView.propTypes = {
   children: PropTypes.node,
   id: PropTypes.string.isRequired,
@@ -273,7 +268,6 @@ SceneView.propTypes = {
   onLoad: PropTypes.func,
 };
 
-
 SceneView.defaultProps = {
   children: null,
   environment: null,
@@ -294,7 +288,6 @@ SceneView.defaultProps = {
   onMouseMove: null,
   onLoad: null,
 };
-
 
 SceneView.Scene = Scene;
 SceneView.UI = UI;

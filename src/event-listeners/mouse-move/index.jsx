@@ -48,27 +48,22 @@ class MouseMoveEventListener extends Component {
     });
   }
 
-
   componentWillUnmount() {
     listener.remove();
   }
-
 
   render() {
     return null;
   }
 }
 
-
 MouseMoveEventListener.propTypes = {
   view: PropTypes.object,
   onMouseMove: PropTypes.func.isRequired,
 };
 
-
 MouseMoveEventListener.defaultProps = {
   view: null,
 };
-
 
 export default MouseMoveEventListener;

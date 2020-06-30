@@ -20,7 +20,6 @@ import esriLoader from 'esri-loader';
 
 import selectionLayerSettings from './selection-layer-settings';
 
-
 class SelectionLayer extends Component {
   async componentDidMount() {
     const [GraphicsLayer] = await esriLoader.loadModules(['esri/layers/GraphicsLayer']);
@@ -31,22 +30,18 @@ class SelectionLayer extends Component {
     }));
   }
 
-
   render() {
     return null;
   }
 }
-
 
 SelectionLayer.propTypes = {
   id: PropTypes.string.isRequired,
   view: PropTypes.object,
 };
 
-
 SelectionLayer.defaultProps = {
   view: null,
 };
-
 
 export default SelectionLayer;

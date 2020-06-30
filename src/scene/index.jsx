@@ -25,7 +25,6 @@ import CustomBasemap from './custom-basemap';
 import CustomElevationLayer from './custom-elevation-layer';
 import SelectionLayer from './selection-layer';
 
-
 class Scene extends Component {
   constructor(props) {
     super(props);
@@ -91,7 +90,6 @@ class Scene extends Component {
     );
   }
 }
-
 
 Scene.propTypes = {
   children: PropTypes.node,

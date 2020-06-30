@@ -19,7 +19,6 @@ import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 import unitOptions from '../../helpers/unit-options';
 
-
 class AreaMeasurementTool extends Component {
   async componentDidMount() {
     this.componentIsMounted = true;
@@ -65,6 +64,5 @@ AreaMeasurementTool.defaultProps = {
   unit: 'metric',
   view: null,
 };
-
 
 export default AreaMeasurementTool;

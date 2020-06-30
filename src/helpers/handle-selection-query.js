@@ -16,7 +16,6 @@
 
 import esriLoader from 'esri-loader';
 
-
 const getExtent = point => ({
   type: 'extent',
   spatialReference: point.spatialReference,
@@ -27,7 +26,6 @@ const getExtent = point => ({
   hasM: false,
   hasZ: false,
 });
-
 
 const queryFeaturesByGeometry = async (layerView, geometry, spatialRelationship) => {
   const [geometryEngine] = await esriLoader.loadModules(['esri/geometry/geometryEngine']);
@@ -51,7 +49,6 @@ const queryFeaturesByGeometry = async (layerView, geometry, spatialRelationship)
   return selectionFeatures;
 };
 
-
 const querySelectionFeatures = async (view, geometry, spatialRelationship) => {
   const layerViews = view.layerViews.items.filter(e => e.layer.selectable);
   if (layerViews.length < 1) return [];
@@ -62,7 +59,6 @@ const querySelectionFeatures = async (view, geometry, spatialRelationship) => {
   const results = await Promise.all(queries);
   return [].concat(...results);
 };
-
 
 export const handleSelectionQuery = async (view, selectionGeometry, spatialRelationship) => {
   const selectionFeatures =
@@ -80,6 +76,5 @@ export const handleSelectionQuery = async (view, selectionGeometry, spatialRelat
       layerId: feature.layer.id,
     }));
 };
-
 
 export default handleSelectionQuery;

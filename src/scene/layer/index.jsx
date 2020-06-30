@@ -23,7 +23,6 @@ import layerSettingsProps from './layer-settings-props';
 import Graphic from './graphic';
 import { applyUpdates } from './update';
 
-
 const getLayerSettings = (props) => {
   const settings = {};
 
@@ -36,10 +35,8 @@ const getLayerSettings = (props) => {
   return settings;
 };
 
-
 const arrayCompare = (a, b) => !Array.isArray(a) || !Array.isArray(b) ||
   a.length !== b.length || !a.every(e => b.includes(e)) || !b.every(e => a.includes(e));
-
 
 class Layer extends Component {
   constructor(props) {
@@ -50,13 +47,11 @@ class Layer extends Component {
     };
   }
 
-
   componentDidMount() {
     this.componentIsMounted = true;
     const layerSettings = getLayerSettings(this.props);
     this.load(this.props.view, layerSettings);
   }
-
 
   componentDidUpdate(prevProps) {
     if (!this.state.layer) return;
@@ -76,7 +71,6 @@ class Layer extends Component {
     applyUpdates(prevProps, this.props, this.state.layer, this.state.layerView, this.esriUtils);
   }
 
-
   componentWillUnmount() {
     this.componentIsMounted = false;
     if (!this.state.layer) return;
@@ -88,7 +82,6 @@ class Layer extends Component {
 
     this.props.view.map.layers.remove(this.state.layer);
   }
-
 
   async initEsriUtils() {
     const [
@@ -108,7 +101,6 @@ class Layer extends Component {
     };
   }
 
-
   updateHighlights() {
     if (!this.state.layerView) return;
 
@@ -124,7 +116,6 @@ class Layer extends Component {
       this.highlights = null;
     }
   }
-
 
   async load(view, layerSettings) {
     if (!view) return;
@@ -170,7 +161,6 @@ class Layer extends Component {
   }
 }
 
-
 Layer.propTypes = {
   children: PropTypes.node,
   ...layerSettingsProps,
@@ -178,7 +168,6 @@ Layer.propTypes = {
   highlight: PropTypes.array,
   view: PropTypes.object,
 };
-
 
 /* eslint react/default-props-match-prop-types: 0 */
 Layer.defaultProps = {

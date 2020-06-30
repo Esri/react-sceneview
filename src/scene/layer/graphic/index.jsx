@@ -17,7 +17,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-
 class Graphic extends Component {
   componentDidMount() {
     this.loadGraphic();
@@ -54,7 +53,6 @@ class Graphic extends Component {
   }
 }
 
-
 Graphic.propTypes = {
   layer: PropTypes.object.isRequired,
   geometry: PropTypes.object.isRequired,
@@ -62,10 +60,8 @@ Graphic.propTypes = {
   symbol: PropTypes.object,
 };
 
-
 Graphic.defaultProps = {
   symbol: null,
 };
-
 
 export default Graphic;

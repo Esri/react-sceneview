@@ -21,9 +21,7 @@ import PropTypes from 'prop-types';
 
 import { handleSelectionQuery } from '../../helpers/handle-selection-query';
 
-
 let listener;
-
 
 const getSelectionGeometry = async (center) => {
   const [Circle] = await esriLoader.loadModules(['esri/geometry/Circle']);
@@ -33,7 +31,6 @@ const getSelectionGeometry = async (center) => {
   });
 };
 
-
 class ClickEventListener extends Component {
   async componentDidMount() {
     listener = this.props.view.on('click', async (event) => {
@@ -41,7 +38,6 @@ class ClickEventListener extends Component {
 
       const graphic = results && results[0] && results[0].graphic;
       const mapPoint = this.props.view.toMap(screenPoint);
-
 
       let features = [];
       if (mapPoint) {
@@ -85,16 +81,13 @@ class ClickEventListener extends Component {
   }
 }
 
-
 ClickEventListener.propTypes = {
   view: PropTypes.object,
   onClick: PropTypes.func.isRequired,
 };
 
-
 ClickEventListener.defaultProps = {
   view: null,
 };
-
 
 export default ClickEventListener;

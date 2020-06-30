@@ -76,7 +76,6 @@ class SelectionEventListener extends Component {
     listener.remove();
   }
 
-
   getGraphic() {
     return getGraphicFromLine(this.state.startPoint, this.state.endPoint);
   }
@@ -104,7 +103,6 @@ class SelectionEventListener extends Component {
   async doSelection(geometry, spatialRelationship, event) {
     const features = await handleSelectionQuery(this.props.view, geometry, spatialRelationship);
 
-
     this.props.onSelect({
       features,
       event: { ...event, geometry, spatialRelationship },
@@ -116,16 +114,13 @@ class SelectionEventListener extends Component {
   }
 }
 
-
 SelectionEventListener.propTypes = {
   view: PropTypes.object,
   onSelect: PropTypes.func.isRequired,
 };
 
-
 SelectionEventListener.defaultProps = {
   view: null,
 };
-
 
 export default SelectionEventListener;

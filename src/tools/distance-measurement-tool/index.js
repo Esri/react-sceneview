@@ -19,7 +19,6 @@ import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 import unitOptions from '../../helpers/unit-options';
 
-
 class DistanceMeasurementTool extends Component {
   async componentDidMount() {
     this.componentIsMounted = true;
@@ -67,6 +66,5 @@ DistanceMeasurementTool.defaultProps = {
   unit: 'metric',
   view: null,
 };
-
 
 export default DistanceMeasurementTool;

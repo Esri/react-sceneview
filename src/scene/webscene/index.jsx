@@ -18,7 +18,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
-
 class Webscene extends Component {
   constructor(props) {
     super(props);
@@ -27,24 +26,20 @@ class Webscene extends Component {
     };
   }
 
-
   componentDidMount() {
     this.componentIsMounted = true;
     this.loadWebscene();
   }
 
-
   componentDidUpdate(prevProps) {
     this.update(prevProps);
   }
-
 
   componentWillUnmount() {
     if (!this.props.view || !this.props.view.map) return;
     this.componentIsMounted = false;
     this.props.view.map.remove(this.state.groupLayer);
   }
-
 
   update(prevProps = {}) {
     if (!this.props.view || !this.state.groupLayer) return;
@@ -63,7 +58,6 @@ class Webscene extends Component {
       });
     }
   }
-
 
   async loadWebscene() {
     if (!this.props.view || !this.props.view.map) return;
@@ -113,7 +107,6 @@ class Webscene extends Component {
   }
 }
 
-
 Webscene.propTypes = {
   portalItem: PropTypes.object.isRequired,
   view: PropTypes.object,
@@ -122,13 +115,11 @@ Webscene.propTypes = {
   layerSettings: PropTypes.object,
 };
 
-
 Webscene.defaultProps = {
   view: null,
   visible: true,
   onLoad: null,
   layerSettings: {},
 };
-
 
 export default Webscene;
