@@ -18,7 +18,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
-
 class Legend extends Component {
   constructor(props) {
     super(props);
@@ -41,7 +40,6 @@ class Legend extends Component {
     return <div ref={this.legendRef} />;
   }
 }
-
 
 Legend.propTypes = {
   sceneViewId: PropTypes.string.isRequired,

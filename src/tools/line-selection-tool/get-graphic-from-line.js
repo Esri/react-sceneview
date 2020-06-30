@@ -16,7 +16,6 @@
 
 import getEsriGeometry from '../../helpers/get-esri-geometry';
 
-
 export const getGraphicFromLine = async (startPoint, endPoint) => ({
   attributes: {
     ObjectID: 0,
@@ -36,6 +35,5 @@ export const getGraphicFromLine = async (startPoint, endPoint) => ({
     width: '3px',
   },
 });
-
 
 export default getGraphicFromLine;

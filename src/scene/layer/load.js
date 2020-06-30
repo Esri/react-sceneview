@@ -16,7 +16,6 @@
 
 import esriLoader from 'esri-loader';
 
-
 const layerTypes = {
   feature: 'esri/layers/FeatureLayer',
   scene: 'esri/layers/SceneLayer',
@@ -28,7 +27,6 @@ const layerTypes = {
   'point-cloud': 'esri/layers/PointCloudLayer',
   'building-scene': 'esri/layers/BuildingSceneLayer',
 };
-
 
 export const loadLayer = async ({
   id,
@@ -69,6 +67,5 @@ export const loadLayer = async ({
   const [Layer] = await esriLoader.loadModules([layerTypes[layerType]]);
   return new Layer(layerSettings);
 };
-
 
 export default loadLayer;

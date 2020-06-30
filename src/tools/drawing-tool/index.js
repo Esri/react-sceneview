@@ -154,7 +154,6 @@ class DrawingTool extends Component {
   }
 }
 
-
 DrawingTool.propTypes = {
   onDraw: PropTypes.func,
   geometryType: PropTypes.oneOf(['point', 'multipoint', 'polyline', 'polygon', 'rectangle', 'circle']),
@@ -163,7 +162,6 @@ DrawingTool.propTypes = {
   geometry: PropTypes.object,
 };
 
-
 DrawingTool.defaultProps = {
   geometryType: 'polygon',
   mode: 'click',
@@ -171,6 +169,5 @@ DrawingTool.defaultProps = {
   geometry: null,
   onDraw: () => null,
 };
-
 
 export default DrawingTool;

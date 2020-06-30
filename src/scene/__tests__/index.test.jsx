@@ -20,10 +20,10 @@ import Adapter from 'enzyme-adapter-react-16';
 import esriLoader from 'esri-loader';
 
 import Scene from '../index';
-import Layer from '../layer';
-import CustomBasemap from '../custom-basemap';
-import CustomElevationLayer from '../custom-elevation-layer';
-import SelectionLayer from '../selection-layer';
+// import Layer from '../layer';
+// import CustomBasemap from '../custom-basemap';
+// import CustomElevationLayer from '../custom-elevation-layer';
+// import SelectionLayer from '../selection-layer';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -63,7 +63,6 @@ const viewMock = {
   when: jest.fn(() => viewPromise),
 };
 
-
 describe('components', () => {
   describe('<Scene />', () => {
     it('should render self, load webscene, and attach it to view', async () => {
@@ -72,7 +71,7 @@ describe('components', () => {
         mode: 'nav',
         basemap: 'gray-vector',
         ground: 'world-elevation',
-        portalItem: { id: '1234' },
+        // portalItem: { id: '1234' },
         initialViewProperties: {
           environment: {
             lighting: {
@@ -97,8 +96,11 @@ describe('components', () => {
       await WebScene.prototype.load();
       expect(viewMock.when).toHaveBeenCalled();
 
-      // await viewMock.when();
-      // expect(wrapper.find('div').exists()).toBe(true);
+      await viewMock.when();
+
+      wrapper.update();
+
+      expect(wrapper.find('div').exists()).toBe(true);
     });
 
     // it('should render Children', (done) => {

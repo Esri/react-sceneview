@@ -32,7 +32,6 @@ jest.mock('esri-loader', () => {
   };
 });
 
-
 describe('components', () => {
   describe('loadEsriSceneView', () => {
     const id = 'sceneview';

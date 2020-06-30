@@ -34,7 +34,6 @@ class UI extends Component {
     this.props.view.ui.padding = this.props.padding;
   }
 
-
   renderWrappedChildren(children) {
     return React.Children.map(children, (child) => {
       // This is support for non-node elements (eg. pure text), they have no props
@@ -55,7 +54,6 @@ class UI extends Component {
     });
   }
 
-
   render() {
     return this.props.view && (
       <React.Fragment>
@@ -64,7 +62,6 @@ class UI extends Component {
     );
   }
 }
-
 
 UI.propTypes = {
   padding: PropTypes.shape({
@@ -77,7 +74,6 @@ UI.propTypes = {
   view: PropTypes.object,
 };
 
-
 UI.defaultProps = {
   padding: {
     top: 15,
@@ -88,7 +84,6 @@ UI.defaultProps = {
   children: [],
   view: null,
 };
-
 
 UI.Compass = Compass;
 UI.NavigationToggle = NavigationToggle;

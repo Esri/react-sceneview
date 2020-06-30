@@ -18,7 +18,6 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 
-
 class CustomBasemap extends Component {
   componentDidMount() {
     this.loadBasemap();
@@ -49,7 +48,6 @@ class CustomBasemap extends Component {
   }
 }
 
-
 CustomBasemap.propTypes = {
   basemap: PropTypes.string,
   portalItem: PropTypes.object,
@@ -61,6 +59,5 @@ CustomBasemap.defaultProps = {
   portalItem: null,
   view: null,
 };
-
 
 export default CustomBasemap;

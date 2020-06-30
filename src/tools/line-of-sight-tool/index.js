@@ -52,5 +52,4 @@ LineOfSightTool.defaultProps = {
   view: null,
 };
 
-
 export default LineOfSightTool;
