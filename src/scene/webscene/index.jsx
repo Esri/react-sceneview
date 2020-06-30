@@ -83,6 +83,7 @@ class Webscene extends Component {
 
       layers.push(...webscene.layers.items);
     } catch (err) {
+      if (err.message === 'Failed to load portal item') return;
       // if portal item turns out to be a layer instead of a webscene, don't care and add it anyway.
       try {
         const layer = await EsriLayer.fromPortalItem({ portalItem: this.props.portalItem });
