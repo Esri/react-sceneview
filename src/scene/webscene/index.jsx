@@ -81,7 +81,9 @@ class Webscene extends Component {
     } catch (err) {
       // if portal item turns out to be a layer instead of a webscene, don't care and add it anyway.
       try {
-        const layer = await EsriLayer.fromPortalItem({ portalItem: this.props.portalItem });
+        const layer = await EsriLayer.fromPortalItem({ portalItem: this.props.portalItem }).catch(() => {
+          // nevermind
+        });;
         layers.push(layer);
       } catch (e) {
         // give up
