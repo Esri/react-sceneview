@@ -18,14 +18,7 @@ import esriLoader from 'esri-loader';
 
 const layerTypes = {
   feature: 'esri/layers/FeatureLayer',
-  scene: 'esri/layers/SceneLayer',
   graphics: 'esri/layers/GraphicsLayer',
-  tile: 'esri/layers/TileLayer',
-  'vector-tile': 'esri/layers/VectorTileLayer',
-  'web-tile': 'esri/layers/WebTileLayer',
-  'integrated-mesh': 'esri/layers/IntegratedMeshLayer',
-  'point-cloud': 'esri/layers/PointCloudLayer',
-  'building-scene': 'esri/layers/BuildingSceneLayer',
 };
 
 export const loadLayer = async ({
@@ -48,21 +41,35 @@ export const loadLayer = async ({
     ...layerOptions,
   };
 
-  if (url) {
-    layerSettings.url = url;
-  } else if (portalItem) {
-    layerSettings.portalItem = portalItem;
-  } else {
-    layerSettings.source = source || [];
-    layerSettings.fields = fields;
-    layerSettings.objectIdField = objectIdField;
-    layerSettings.geometryType = geometryType;
-  }
-
   if (rendererJson) {
-    const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
+    const [rendererJsonUtils] = await esriLoader.loadModules([
+      'esri/renderers/support/jsonUtils',
+    ]);
     layerSettings.renderer = rendererJsonUtils.fromJSON(rendererJson);
   }
+
+  if (url) {
+    const [EsriLayer] = await esriLoader.loadModules(['esri/layers/Layer']);
+    const layer = await EsriLayer.fromArcGISServerUrl({ url });
+    Object.keys(layerSettings).forEach(
+      key => layer[key] = layerSettings[key],
+    );
+    return layer;
+  }
+
+  if (portalItem) {
+    const [EsriLayer] = await esriLoader.loadModules(['esri/layers/Layer']);
+    const layer = await EsriLayer.fromPortalItem({ portalItem });
+    Object.keys(layerSettings).forEach(
+      key => (layer[key] = layerSettings[key]),
+    );
+    return layer;
+  }
+
+  layerSettings.source = source || [];
+  layerSettings.fields = fields;
+  layerSettings.objectIdField = objectIdField;
+  layerSettings.geometryType = geometryType;
 
   const [Layer] = await esriLoader.loadModules([layerTypes[layerType]]);
   return new Layer(layerSettings);
