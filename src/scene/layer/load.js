@@ -18,7 +18,14 @@ import esriLoader from 'esri-loader';
 
 const layerTypes = {
   feature: 'esri/layers/FeatureLayer',
+  scene: 'esri/layers/SceneLayer',
   graphics: 'esri/layers/GraphicsLayer',
+  tile: 'esri/layers/TileLayer',
+  'vector-tile': 'esri/layers/VectorTileLayer',
+  'web-tile': 'esri/layers/WebTileLayer',
+  'integrated-mesh': 'esri/layers/IntegratedMeshLayer',
+  'point-cloud': 'esri/layers/PointCloudLayer',
+  'building-scene': 'esri/layers/BuildingSceneLayer',
 };
 
 export const loadLayer = async ({
