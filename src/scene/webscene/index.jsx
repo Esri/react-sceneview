@@ -70,12 +70,14 @@ class Webscene extends Component {
     if (!this.componentIsMounted) return;
 
     const layers = [];
+    const groundLayers = [];
 
     try {
       const webscene = new EsriWebScene({ portalItem: this.props.portalItem });
       await webscene.load();
 
       layers.push(...webscene.layers.items);
+      groundLayers.push(...webscene.ground.layers.items);
     } catch (err) {
       // if portal item turns out to be a layer instead of a webscene, don't care and add it anyway.
       try {
@@ -93,6 +95,8 @@ class Webscene extends Component {
     this.setState({ groupLayer });
     this.state.groupLayer.addMany(layers);
     this.props.view.map.layers.add(groupLayer);
+
+    this.props.view.map.ground.layers.addMany(groundLayers);
 
     await this.props.view.whenLayerView(groupLayer);
     this.update();
