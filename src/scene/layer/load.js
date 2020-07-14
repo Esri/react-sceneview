@@ -48,21 +48,35 @@ export const loadLayer = async ({
     ...layerOptions,
   };
 
-  if (url) {
-    layerSettings.url = url;
-  } else if (portalItem) {
-    layerSettings.portalItem = portalItem;
-  } else {
-    layerSettings.source = source || [];
-    layerSettings.fields = fields;
-    layerSettings.objectIdField = objectIdField;
-    layerSettings.geometryType = geometryType;
-  }
-
   if (rendererJson) {
-    const [rendererJsonUtils] = await esriLoader.loadModules(['esri/renderers/support/jsonUtils']);
+    const [rendererJsonUtils] = await esriLoader.loadModules([
+      'esri/renderers/support/jsonUtils',
+    ]);
     layerSettings.renderer = rendererJsonUtils.fromJSON(rendererJson);
   }
+
+  if (url) {
+    const [EsriLayer] = await esriLoader.loadModules(['esri/layers/Layer']);
+    const layer = await EsriLayer.fromArcGISServerUrl({ url });
+    Object.keys(layerSettings).forEach(
+      key => layer[key] = layerSettings[key],
+    );
+    return layer;
+  }
+
+  if (portalItem) {
+    const [EsriLayer] = await esriLoader.loadModules(['esri/layers/Layer']);
+    const layer = await EsriLayer.fromPortalItem({ portalItem });
+    Object.keys(layerSettings).forEach(
+      key => (layer[key] = layerSettings[key]),
+    );
+    return layer;
+  }
+
+  layerSettings.source = source || [];
+  layerSettings.fields = fields;
+  layerSettings.objectIdField = objectIdField;
+  layerSettings.geometryType = geometryType;
 
   const [Layer] = await esriLoader.loadModules([layerTypes[layerType]]);
   return new Layer(layerSettings);
