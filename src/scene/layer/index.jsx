@@ -88,16 +88,22 @@ class Layer extends Component {
       FeatureFilter,
       Polygon,
       rendererJsonUtils,
+      SceneModifications,
+      SceneModification,
     ] = await esriLoader.loadModules([
       'esri/views/layers/support/FeatureFilter',
       'esri/geometry/Polygon',
       'esri/renderers/support/jsonUtils',
+      'esri/layers/support/SceneModifications',
+      'esri/layers/support/SceneModification',
     ]);
 
     this.esriUtils = {
       FeatureFilter,
       Polygon,
       rendererJsonUtils,
+      SceneModifications,
+      SceneModification,
     };
   }
 
