@@ -68,10 +68,13 @@ export const applyUpdates = (prevProps, nextProps, layer, layerView, esriUtils) 
   }
 
   if (maskingGeometry !== undefined) {
-    const polygon = nextProps.maskingGeometry ?
-      new esriUtils.Polygon(nextProps.maskingGeometry) : null;
+    if (!nextProps.maskingGeometry) {
+      if (layerView) layerView.filter = null;
+      layer.modifications = null;
+      return;
+    }
 
-    if (!polygon) return;
+    const polygon = new esriUtils.Polygon(nextProps.maskingGeometry);
 
     if (layer.type === 'scene' && layerView) {
       layerView.filter = new esriUtils.FeatureFilter({
