@@ -68,12 +68,28 @@ export const applyUpdates = (prevProps, nextProps, layer, layerView, esriUtils) 
   }
 
   if (maskingGeometry !== undefined) {
-    if (!layerView) return;
+    if (!nextProps.maskingGeometry) {
+      if (layerView) layerView.filter = null;
+      layer.modifications = null;
+      return;
+    }
 
-    layerView.filter = nextProps.maskingGeometry ? new esriUtils.FeatureFilter({
-      geometry: new esriUtils.Polygon(nextProps.maskingGeometry),
-      spatialRelationship: 'disjoint',
-    }) : null;
+    const polygon = new esriUtils.Polygon(nextProps.maskingGeometry);
+
+    if (layer.type === 'scene' && layerView) {
+      layerView.filter = new esriUtils.FeatureFilter({
+        geometry: polygon,
+        spatialRelationship: 'disjoint',
+      });
+    }
+
+    if (layer.type === 'integrated-mesh') {
+      layer.modifications = new esriUtils.SceneModifications(
+        [
+          new esriUtils.SceneModification({ geometry: polygon, type: 'clip' }),
+        ],
+      );
+    }
   }
 };
 
