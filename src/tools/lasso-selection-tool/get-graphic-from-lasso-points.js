@@ -50,7 +50,7 @@ export const getGraphicFromLassoPoints = async (polyPoints) => {
       ],
       spatialReference: { wkid: 3857 },
     }),
-    spatialRelationship: 'esriSpatialRelContains',
+    spatialRelationship: 'esriSpatialRelIntersects',
     symbol: {
       type: 'simple-fill', // autocasts as new SimpleFillSymbol()
       color: [0, 255, 255, 0.5],
