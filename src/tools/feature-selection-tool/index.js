@@ -32,8 +32,18 @@ class FeatureSelectionEventListener extends Component {
 
       const graphics = results
         .map(result => result.graphic)
-        .filter(graphic => graphic.layer && !graphic.layer.selectable);
-      if (!graphics.length || !graphics[0].geometry) return;
+        .filter(graphic => graphic.layer && !graphic.layer.selectable)
+        .filter(graphic => graphic.geometry)
+        .filter(graphic => graphic.geometry.type === 'polygon');
+
+      if (!graphics.length || !graphics[0].geometry) {
+        this.props.onSelect({
+          graphics: [],
+          features: [],
+          event,
+        });
+        return;
+      }
 
       const [{ geometry }] = graphics;
 
