@@ -130,7 +130,14 @@ class Layer extends Component {
 
     // Check if already exists (e.g., after hot reload)
     const existingLayer = view.map.layers.items.find(l => l.id === layerSettings.id);
-    const layer = existingLayer || await loadLayer(layerSettings);
+    let layer;
+
+    try {
+      layer = existingLayer || await loadLayer(layerSettings);
+    } catch (error) {
+      // Don't try to continue and add layer to map if layer cannot be loaded (e.g. does not exist)
+      return;
+    }
 
     // After every await, need to check if component is still mounted
     if (!this.componentIsMounted || !layer) return;
