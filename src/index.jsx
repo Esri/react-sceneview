@@ -28,6 +28,7 @@ import DrawingTool from './tools/drawing-tool';
 import LineSelectionTool from './tools/line-selection-tool';
 import RectangleSelectionTool from './tools/rectangle-selection-tool';
 import LassoSelectionTool from './tools/lasso-selection-tool';
+import FeatureSelectionTool from './tools/feature-selection-tool';
 import DistanceMeasurementTool from './tools/distance-measurement-tool';
 import AreaMeasurementTool from './tools/area-measurement-tool';
 import SliceTool from './tools/slice-tool';
@@ -294,6 +295,7 @@ SceneView.UI = UI;
 SceneView.DrawingTool = DrawingTool;
 SceneView.LineSelectionTool = LineSelectionTool;
 SceneView.RectangleSelectionTool = RectangleSelectionTool;
+SceneView.FeatureSelectionTool = FeatureSelectionTool;
 SceneView.LassoSelectionTool = LassoSelectionTool;
 SceneView.DistanceMeasurementTool = DistanceMeasurementTool;
 SceneView.AreaMeasurementTool = AreaMeasurementTool;
@@ -311,6 +313,7 @@ export {
   DrawingTool,
   LineSelectionTool,
   RectangleSelectionTool,
+  FeatureSelectionTool,
   LassoSelectionTool,
   DistanceMeasurementTool,
   AreaMeasurementTool,
