@@ -36,7 +36,12 @@ class AreaMeasurementTool extends Component {
     this.measurementTool.viewModel.newMeasurement();
 
     this.watcher = this.measurementTool.view.on('click', () => {
-      if (this.measurementTool.viewModel.measurement.area.state === 'available') {
+      if (
+        this.measurementTool &&
+        this.measurementTool.viewModel &&
+        this.measurementTool.viewModel.measurement &&
+        this.measurementTool.viewModel.measurement.area &&
+        this.measurementTool.viewModel.measurement.area.state === 'available') {
         this.props.onChange(this.measurementTool.viewModel.measurement);
       }
     });
