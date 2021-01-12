@@ -41,6 +41,8 @@ class DrawingTool extends Component {
       view,
     });
 
+    this.model.snappingOptions.selfEnabled = true;
+
     if (isValidGeometry(geometry)) {
       this.setGraphic(geometry);
     } else {
