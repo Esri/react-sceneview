@@ -18,7 +18,6 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-import esriLoader from 'esri-loader';
 import { loadLayer } from '../load';
 
 import Layer from '../index';
