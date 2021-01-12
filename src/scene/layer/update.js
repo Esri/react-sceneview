@@ -16,31 +16,35 @@
 import layerSettingsProps from './layer-settings-props';
 
 const getLayerUpdates = (prevProps, nextProps) => {
-  const changes = Object
-    .keys(layerSettingsProps)
-    .filter(key => prevProps.layerType !== 'web-tile' || (key !== 'legendEnabled' && key !== 'popupEnabled'))
+  const changes = Object.keys(layerSettingsProps)
+    .filter(
+      key =>
+        prevProps.layerType !== 'web-tile' ||
+        (key !== 'legendEnabled' && key !== 'popupEnabled'),
+    )
     .filter(key => !(prevProps[key] === undefined && nextProps[key] === null))
     .filter(key => prevProps[key] !== nextProps[key]);
 
   if (changes.length === 0) return {};
 
   const updates = {};
-  changes.forEach(key => updates[key] = nextProps[key]);
+  changes.forEach(key => (updates[key] = nextProps[key]));
 
   return updates;
 };
 
-export const applyUpdates = (prevProps, nextProps, layer, layerView, esriUtils) => {
+export const applyUpdates = (
+  prevProps,
+  nextProps,
+  layer,
+  layerView,
+  esriUtils,
+) => {
   const updatesDiff = getLayerUpdates(prevProps, nextProps);
 
-  const {
-    rendererJson,
-    source,
-    maskingGeometry,
-    ...updates
-  } = updatesDiff;
+  const { rendererJson, source, maskingGeometry, ...updates } = updatesDiff;
 
-  Object.keys(updates).forEach(key => layer[key] = updates[key]);
+  Object.keys(updates).forEach(key => (layer[key] = updates[key]));
 
   if (rendererJson !== undefined) {
     layer.renderer = esriUtils.rendererJsonUtils.fromJSON(rendererJson);
@@ -48,11 +52,13 @@ export const applyUpdates = (prevProps, nextProps, layer, layerView, esriUtils) 
 
   // update source graphics
   if (source) {
-    const newFeatures = nextProps.source
-      .filter(feature => !prevProps.source.includes(feature));
+    const newFeatures = nextProps.source.filter(
+      feature => !prevProps.source.includes(feature),
+    );
 
-    const oldFeatures = prevProps.source
-      .filter(feature => !nextProps.source.includes(feature));
+    const oldFeatures = prevProps.source.filter(
+      feature => !nextProps.source.includes(feature),
+    );
 
     if (!newFeatures.length && !oldFeatures.length) return;
 
@@ -84,11 +90,9 @@ export const applyUpdates = (prevProps, nextProps, layer, layerView, esriUtils) 
     }
 
     if (layer.type === 'integrated-mesh') {
-      layer.modifications = new esriUtils.SceneModifications(
-        [
-          new esriUtils.SceneModification({ geometry: polygon, type: 'clip' }),
-        ],
-      );
+      layer.modifications = new esriUtils.SceneModifications([
+        new esriUtils.SceneModification({ geometry: polygon, type: 'clip' }),
+      ]);
     }
   }
 };

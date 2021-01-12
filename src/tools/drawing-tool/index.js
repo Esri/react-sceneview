@@ -19,7 +19,9 @@ import PropTypes from 'prop-types';
 import esriLoader from 'esri-loader';
 // import unitOptions from '../../helpers/unit-options';
 
-const isValidGeometry = geometry => geometry && ['point', 'multipoint', 'polyline', 'polygon'].includes(geometry.type);
+const isValidGeometry = geometry =>
+  geometry &&
+  ['point', 'multipoint', 'polyline', 'polygon'].includes(geometry.type);
 
 class DrawingTool extends Component {
   async componentDidMount() {
@@ -49,7 +51,7 @@ class DrawingTool extends Component {
       this.createGraphic();
     }
 
-    this.onCreate = this.model.on('create', (event) => {
+    this.onCreate = this.model.on('create', event => {
       switch (event.state) {
         case 'start': {
           this.layerView.highlight(event.graphic);
@@ -72,7 +74,7 @@ class DrawingTool extends Component {
       }
     });
 
-    this.onUpdate = this.model.on('update', (event) => {
+    this.onUpdate = this.model.on('update', event => {
       if (event.state === 'active' || event.state === 'complete') {
         this.props.onDraw({
           geometry: event.graphics[0].geometry,
@@ -158,7 +160,14 @@ class DrawingTool extends Component {
 
 DrawingTool.propTypes = {
   onDraw: PropTypes.func,
-  geometryType: PropTypes.oneOf(['point', 'multipoint', 'polyline', 'polygon', 'rectangle', 'circle']),
+  geometryType: PropTypes.oneOf([
+    'point',
+    'multipoint',
+    'polyline',
+    'polygon',
+    'rectangle',
+    'circle',
+  ]),
   mode: PropTypes.oneOf(['hybrid', 'freehand', 'click']),
   view: PropTypes.object,
   geometry: PropTypes.object,

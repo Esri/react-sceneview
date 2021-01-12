@@ -41,7 +41,8 @@ class AreaMeasurementTool extends Component {
         this.measurementTool.viewModel &&
         this.measurementTool.viewModel.measurement &&
         this.measurementTool.viewModel.measurement.area &&
-        this.measurementTool.viewModel.measurement.area.state === 'available') {
+        this.measurementTool.viewModel.measurement.area.state === 'available'
+      ) {
         this.props.onChange(this.measurementTool.viewModel.measurement);
       }
     });

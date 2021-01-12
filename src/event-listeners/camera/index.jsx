@@ -22,7 +22,9 @@ const listeners = [];
 class CameraEventListener extends Component {
   componentDidMount() {
     listeners.push(this.props.view.watch('camera', () => this.handleUpdate()));
-    listeners.push(this.props.view.watch('stationary', () => this.handleUpdate()));
+    listeners.push(
+      this.props.view.watch('stationary', () => this.handleUpdate()),
+    );
   }
 
   componentWillUnmount() {

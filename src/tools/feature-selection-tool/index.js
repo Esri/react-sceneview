@@ -25,8 +25,11 @@ let listener;
 
 class FeatureSelectionEventListener extends Component {
   async componentDidMount() {
-    listener = this.props.view.on('click', async (event) => {
-      const { results } = await this.props.view.hitTest({ x: event.x, y: event.y });
+    listener = this.props.view.on('click', async event => {
+      const { results } = await this.props.view.hitTest({
+        x: event.x,
+        y: event.y,
+      });
 
       if (!results) return;
 
@@ -47,9 +50,15 @@ class FeatureSelectionEventListener extends Component {
 
       const [{ geometry }] = graphics;
 
-      const [geometryEngine] = await esriLoader.loadModules(['esri/geometry/geometryEngine']);
+      const [geometryEngine] = await esriLoader.loadModules([
+        'esri/geometry/geometryEngine',
+      ]);
 
-      const intersectGeometry = geometryEngine.geodesicBuffer(geometry, -0.5, 'meters');
+      const intersectGeometry = geometryEngine.geodesicBuffer(
+        geometry,
+        -0.5,
+        'meters',
+      );
 
       const features = await handleSelectionQuery(
         this.props.view,

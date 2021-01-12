@@ -37,8 +37,12 @@ class NavigationToggle extends Component {
   }
 
   async loadNavigationToggle() {
-    const [EsriNavigationToggle] = await esriLoader.loadModules(['esri/widgets/NavigationToggle']);
-    this.setState({ navigationToggle: new EsriNavigationToggle({ view: this.props.view }) });
+    const [EsriNavigationToggle] = await esriLoader.loadModules([
+      'esri/widgets/NavigationToggle',
+    ]);
+    this.setState({
+      navigationToggle: new EsriNavigationToggle({ view: this.props.view }),
+    });
     this.props.view.ui.add(this.state.navigationToggle, this.props.position);
   }
 

@@ -31,9 +31,12 @@ class Legend extends Component {
   async load(sceneViewId) {
     const [EsriLegend] = await esriLoader.loadModules(['esri/widgets/Legend']);
 
-    return new EsriLegend({
-      view: window.sceneViews[sceneViewId].view,
-    }, this.legendRef.current);
+    return new EsriLegend(
+      {
+        view: window.sceneViews[sceneViewId].view,
+      },
+      this.legendRef.current,
+    );
   }
 
   render() {

@@ -36,9 +36,13 @@ class DistanceMeasurementTool extends Component {
     this.measurementTool.viewModel.newMeasurement();
 
     this.watcher = this.measurementTool.view.on('pointer-move', () => {
-      if (this.props.onChange && this.measurementTool.viewModel.measurement &&
+      if (
+        this.props.onChange &&
+        this.measurementTool.viewModel.measurement &&
         this.measurementTool.viewModel.measurement.directDistance &&
-        this.measurementTool.viewModel.measurement.directDistance.state === 'available') {
+        this.measurementTool.viewModel.measurement.directDistance.state ===
+          'available'
+      ) {
         this.props.onChange(this.measurementTool.viewModel.measurement);
       }
     });

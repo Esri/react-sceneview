@@ -55,7 +55,12 @@ class Zoom extends Component {
 }
 
 Zoom.propTypes = {
-  position: PropTypes.oneOf(['top-left', 'top-right', 'bottom-right', 'bottom-left']),
+  position: PropTypes.oneOf([
+    'top-left',
+    'top-right',
+    'bottom-right',
+    'bottom-left',
+  ]),
   layout: PropTypes.oneOf(['horizontal', 'vertical']),
   view: PropTypes.object,
 };

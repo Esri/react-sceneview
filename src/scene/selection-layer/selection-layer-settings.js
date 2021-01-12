@@ -20,9 +20,7 @@ export const layerSettings = {
   visible: true,
   popupEnabled: false,
   source: [],
-  fields: [
-    { name: 'ObjectID', alias: 'ObjectID', type: 'oid' },
-  ],
+  fields: [{ name: 'ObjectID', alias: 'ObjectID', type: 'oid' }],
   objectIdField: 'ObjectID',
   geometryType: 'polygon',
   spatialReference: { wkid: 4326 },

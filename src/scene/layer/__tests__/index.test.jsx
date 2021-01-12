@@ -51,10 +51,12 @@ jest.mock('esri-loader', () => {
 const mockWhen = jest.fn(() => Promise.resolve());
 
 jest.mock('../load', () => ({
-  loadLayer: jest.fn(layerSettings => Promise.resolve({
-    ...layerSettings,
-    when: mockWhen,
-  })),
+  loadLayer: jest.fn(layerSettings =>
+    Promise.resolve({
+      ...layerSettings,
+      when: mockWhen,
+    }),
+  ),
 }));
 
 describe('components', () => {

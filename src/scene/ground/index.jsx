@@ -23,12 +23,12 @@ const groundSettingsProps = {
   surfaceColor: PropTypes.node,
 };
 
-const getSettings = (props) => {
+const getSettings = props => {
   const settings = {};
 
   Object.keys(groundSettingsProps)
     .filter(key => props[key] !== null && props[key] !== undefined)
-    .forEach(key => settings[key] = props[key]);
+    .forEach(key => (settings[key] = props[key]));
 
   return settings;
 };
@@ -38,7 +38,7 @@ const getUpdates = (props, nextProps) => {
 
   Object.keys(groundSettingsProps)
     .filter(key => props[key] !== nextProps[key])
-    .forEach(key => updates[key] = nextProps[key]);
+    .forEach(key => (updates[key] = nextProps[key]));
 
   return updates;
 };
@@ -48,13 +48,17 @@ class Ground extends Component {
     super(props);
 
     const settings = getSettings(this.props);
-    Object.keys(settings).forEach(key => this.props.view.map.ground[key] = settings[key]);
+    Object.keys(settings).forEach(
+      key => (this.props.view.map.ground[key] = settings[key]),
+    );
   }
 
   async componentDidUpdate(prevProps) {
     const updates = getUpdates(prevProps, this.props);
 
-    Object.keys(updates).forEach(key => this.props.view.map.ground[key] = updates[key]);
+    Object.keys(updates).forEach(
+      key => (this.props.view.map.ground[key] = updates[key]),
+    );
   }
 
   render() {

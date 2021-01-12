@@ -59,7 +59,7 @@ export const loadLayer = async ({
     const [EsriLayer] = await esriLoader.loadModules(['esri/layers/Layer']);
     const layer = await EsriLayer.fromArcGISServerUrl({ url });
     Object.keys(layerSettings).forEach(
-      key => layer[key] = layerSettings[key],
+      key => (layer[key] = layerSettings[key]),
     );
     return layer;
   }
