@@ -27,5 +27,6 @@ module.exports = {
     'react/jsx-fragments': 0,
     'react/jsx-wrap-multilines': 0,
     'react/jsx-props-no-spreading': 0,
+    'operator-linebreak': 0,
   },
 };
