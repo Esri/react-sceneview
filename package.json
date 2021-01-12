@@ -13,7 +13,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "lint-staged"
     }
   },
   "author": "Michael Van den Bergh",
@@ -44,8 +44,8 @@
     "husky": "^4.3.7",
     "jest": "^24.9.0",
     "jest-cli": "^24.9.0",
+    "lint-staged": "^10.5.3",
     "prettier": "2.2.1",
-    "pretty-quick": "^3.1.0",
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0",
     "react-test-renderer": "^15.6.2",
@@ -53,5 +53,9 @@
     "webpack-cli": "^3.3.8",
     "webpack-dev-server": "^3.8.0",
     "webpack-merge": "^4.2.2"
+  },
+  "lint-staged": {
+    "*.{jsx,js}": "eslint --cache --fix",
+    "*.--write": "prettier --write"
   }
 }
