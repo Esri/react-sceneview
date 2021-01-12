@@ -73,8 +73,8 @@ class SceneView extends Component {
     this.loadSceneView();
   }
 
+  // eslint-disable-next-line
   async UNSAFE_componentWillUpdate(nextProps) {
-    // eslint-disable-line camelcase
     if (!this.state.view) return;
 
     if (this.props.environment !== nextProps.environment) {
