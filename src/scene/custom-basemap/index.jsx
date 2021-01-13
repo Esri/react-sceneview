@@ -24,8 +24,10 @@ class CustomBasemap extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.portalItem !== prevProps.portalItem ||
-      this.props.basemap !== prevProps.basemap) {
+    if (
+      this.props.portalItem !== prevProps.portalItem ||
+      this.props.basemap !== prevProps.basemap
+    ) {
       this.loadBasemap();
     }
   }
@@ -37,7 +39,9 @@ class CustomBasemap extends Component {
   async loadBasemap() {
     if (this.props.portalItem) {
       const [Basemap] = await esriLoader.loadModules(['esri/Basemap']);
-      this.props.view.map.basemap = new Basemap({ portalItem: this.props.portalItem });
+      this.props.view.map.basemap = new Basemap({
+        portalItem: this.props.portalItem,
+      });
     } else {
       this.props.view.map.basemap = this.props.basemap;
     }

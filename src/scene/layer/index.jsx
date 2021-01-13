@@ -23,20 +23,28 @@ import layerSettingsProps from './layer-settings-props';
 import Graphic from './graphic';
 import { applyUpdates } from './update';
 
-const getLayerSettings = (props) => {
+const getLayerSettings = props => {
   const settings = {};
 
   Object.keys(layerSettingsProps)
     .filter(key => props.layerType !== 'point-cloud' || key !== 'opacity')
-    .filter(key => props.layerType !== 'web-tile' || (key !== 'legendEnabled' && key !== 'popupEnabled'))
+    .filter(
+      key =>
+        props.layerType !== 'web-tile' ||
+        (key !== 'legendEnabled' && key !== 'popupEnabled'),
+    )
     .filter(key => props[key] !== null && props[key] !== undefined)
-    .forEach(key => settings[key] = props[key]);
+    .forEach(key => (settings[key] = props[key]));
 
   return settings;
 };
 
-const arrayCompare = (a, b) => !Array.isArray(a) || !Array.isArray(b) ||
-  a.length !== b.length || !a.every(e => b.includes(e)) || !b.every(e => a.includes(e));
+const arrayCompare = (a, b) =>
+  !Array.isArray(a) ||
+  !Array.isArray(b) ||
+  a.length !== b.length ||
+  !a.every(e => b.includes(e)) ||
+  !b.every(e => a.includes(e));
 
 class Layer extends Component {
   constructor(props) {
@@ -55,7 +63,8 @@ class Layer extends Component {
 
   componentDidUpdate(prevProps) {
     if (!this.state.layer) return;
-    if (!Object.keys(prevProps).find(key => prevProps[key] !== this.props[key])) return;
+    if (!Object.keys(prevProps).find(key => prevProps[key] !== this.props[key]))
+      return;
 
     // refresh layer
     if (this.props.refresh !== prevProps.refresh) {
@@ -63,12 +72,20 @@ class Layer extends Component {
     }
 
     // highlights
-    if (this.props.highlight !== prevProps.highlight &&
-      arrayCompare(this.props.highlight, prevProps.highlight)) {
+    if (
+      this.props.highlight !== prevProps.highlight &&
+      arrayCompare(this.props.highlight, prevProps.highlight)
+    ) {
       this.updateHighlights();
     }
 
-    applyUpdates(prevProps, this.props, this.state.layer, this.state.layerView, this.esriUtils);
+    applyUpdates(
+      prevProps,
+      this.props,
+      this.state.layer,
+      this.state.layerView,
+      this.esriUtils,
+    );
   }
 
   componentWillUnmount() {
@@ -129,11 +146,13 @@ class Layer extends Component {
     await this.initEsriUtils();
 
     // Check if already exists (e.g., after hot reload)
-    const existingLayer = view.map.layers.items.find(l => l.id === layerSettings.id);
+    const existingLayer = view.map.layers.items.find(
+      l => l.id === layerSettings.id,
+    );
     let layer;
 
     try {
-      layer = existingLayer || await loadLayer(layerSettings);
+      layer = existingLayer || (await loadLayer(layerSettings));
     } catch (error) {
       // Don't try to continue and add layer to map if layer cannot be loaded (e.g. does not exist)
       return;
@@ -165,11 +184,17 @@ class Layer extends Component {
   }
 
   render() {
-    return this.state.layer && (
-      <div>
-        {this.props.children && React.Children.map(this.props.children, child =>
-          child && React.cloneElement(child, { layer: this.state.layer }))}
-      </div>
+    return (
+      this.state.layer && (
+        <div>
+          {this.props.children &&
+            React.Children.map(
+              this.props.children,
+              child =>
+                child && React.cloneElement(child, { layer: this.state.layer }),
+            )}
+        </div>
+      )
     );
   }
 }

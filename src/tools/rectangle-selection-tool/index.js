@@ -33,7 +33,7 @@ class SelectionEventListener extends Component {
   }
 
   async componentDidMount() {
-    listener = this.props.view.on('drag', async (event) => {
+    listener = this.props.view.on('drag', async event => {
       event.stopPropagation();
 
       const screenPoint = { x: event.x, y: event.y };
@@ -85,16 +85,24 @@ class SelectionEventListener extends Component {
   }
 
   getGraphic() {
-    return getGraphicFromRectangle(this.state.startPoint, this.state.endPoint, this.state.heading);
+    return getGraphicFromRectangle(
+      this.state.startPoint,
+      this.state.endPoint,
+      this.state.heading,
+    );
   }
 
   clearSelectionGraphic() {
-    const selectionShapeLayer = this.props.view.map.layers.items.find(l => l.id === 'selection-shape');
+    const selectionShapeLayer = this.props.view.map.layers.items.find(
+      l => l.id === 'selection-shape',
+    );
     selectionShapeLayer.graphics.removeAll();
   }
 
   updateSelectionGraphic(graphic) {
-    const selectionShapeLayer = this.props.view.map.layers.items.find(l => l.id === 'selection-shape');
+    const selectionShapeLayer = this.props.view.map.layers.items.find(
+      l => l.id === 'selection-shape',
+    );
     selectionShapeLayer.graphics.removeAll();
     selectionShapeLayer.graphics.add(graphic);
   }
@@ -109,7 +117,11 @@ class SelectionEventListener extends Component {
   }
 
   async doSelection(geometry, spatialRelationship, event) {
-    const features = await handleSelectionQuery(this.props.view, geometry, spatialRelationship);
+    const features = await handleSelectionQuery(
+      this.props.view,
+      geometry,
+      spatialRelationship,
+    );
 
     this.props.onSelect({
       features,

@@ -27,8 +27,14 @@ const getExtent = point => ({
   hasZ: false,
 });
 
-const queryFeaturesByGeometry = async (layerView, geometry, spatialRelationship) => {
-  const [geometryEngine] = await esriLoader.loadModules(['esri/geometry/geometryEngine']);
+const queryFeaturesByGeometry = async (
+  layerView,
+  geometry,
+  spatialRelationship,
+) => {
+  const [geometryEngine] = await esriLoader.loadModules([
+    'esri/geometry/geometryEngine',
+  ]);
 
   const extent = geometry.extent || getExtent(geometry);
 
@@ -40,11 +46,14 @@ const queryFeaturesByGeometry = async (layerView, geometry, spatialRelationship)
 
   const features = result.features || [];
 
-  const spatialFn = spatialRelationship === 'esriSpatialRelIntersects' ?
-    geometryEngine.intersects : geometryEngine.contains;
+  const spatialFn =
+    spatialRelationship === 'esriSpatialRelIntersects'
+      ? geometryEngine.intersects
+      : geometryEngine.contains;
 
-  const selectionFeatures = features
-    .filter(feature => (feature.geometry ? spatialFn(geometry, feature.geometry) : true));
+  const selectionFeatures = features.filter(feature =>
+    feature.geometry ? spatialFn(geometry, feature.geometry) : true,
+  );
 
   return selectionFeatures;
 };
@@ -53,28 +62,35 @@ const querySelectionFeatures = async (view, geometry, spatialRelationship) => {
   const layerViews = view.layerViews.items.filter(e => e.layer.selectable);
   if (layerViews.length < 1) return [];
 
-  const queries = layerViews
-    .map(layerView => queryFeaturesByGeometry(layerView, geometry, spatialRelationship));
+  const queries = layerViews.map(layerView =>
+    queryFeaturesByGeometry(layerView, geometry, spatialRelationship),
+  );
 
   const results = await Promise.all(queries);
   return [].concat(...results);
 };
 
-export const handleSelectionQuery = async (view, selectionGeometry, spatialRelationship) => {
-  const selectionFeatures =
-    await querySelectionFeatures(view, selectionGeometry, spatialRelationship);
+export const handleSelectionQuery = async (
+  view,
+  selectionGeometry,
+  spatialRelationship,
+) => {
+  const selectionFeatures = await querySelectionFeatures(
+    view,
+    selectionGeometry,
+    spatialRelationship,
+  );
 
-  return selectionFeatures
-    .map(feature => ({
-      attributes: {
-        ...feature.attributes,
-        esriObjectId: feature.attributes[feature.layer.objectIdField],
-      },
-      geometry: feature.geometry,
-      GlobalID: feature.attributes.GlobalID,
-      objectId: feature.attributes[feature.layer.objectIdField],
-      layerId: feature.layer.id,
-    }));
+  return selectionFeatures.map(feature => ({
+    attributes: {
+      ...feature.attributes,
+      esriObjectId: feature.attributes[feature.layer.objectIdField],
+    },
+    geometry: feature.geometry,
+    GlobalID: feature.attributes.GlobalID,
+    objectId: feature.attributes[feature.layer.objectIdField],
+    layerId: feature.layer.id,
+  }));
 };
 
 export default handleSelectionQuery;

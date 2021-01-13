@@ -41,10 +41,12 @@ jest.mock('../event-listeners', () => ({
 }));
 
 jest.mock('../load', () => ({
-  loadEsriSceneView: jest.fn(() => Promise.resolve({
-    on: jest.fn(),
-    watch: jest.fn(),
-  })),
+  loadEsriSceneView: jest.fn(() =>
+    Promise.resolve({
+      on: jest.fn(),
+      watch: jest.fn(),
+    }),
+  ),
 }));
 
 describe('components', () => {

@@ -39,7 +39,9 @@ class Compass extends Component {
   }
 
   async loadCompass() {
-    const [EsriCompass] = await esriLoader.loadModules(['esri/widgets/Compass']);
+    const [EsriCompass] = await esriLoader.loadModules([
+      'esri/widgets/Compass',
+    ]);
     this.setState({ compass: new EsriCompass({ view: this.props.view }) });
     this.props.view.ui.add(this.state.compass, this.props.position);
   }

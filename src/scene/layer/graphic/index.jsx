@@ -40,8 +40,9 @@ class Graphic extends Component {
 
   destroyGraphic() {
     if (this.objectId) {
-      const graphic = this.props.layer.graphics
-        .find(i => i.attributes[this.props.layer.objectIdField] === this.objectId);
+      const graphic = this.props.layer.graphics.find(
+        i => i.attributes[this.props.layer.objectIdField] === this.objectId,
+      );
       if (graphic) {
         this.props.layer.remove(graphic);
       }

@@ -36,7 +36,10 @@ import LineOfSightTool from './tools/line-of-sight-tool';
 
 import { loadEsriSceneView } from './load';
 
-const getCameraFromProp = async (current, { center, position, heading, tilt, scale, target }) => {
+const getCameraFromProp = async (
+  current,
+  { center, position, heading, tilt, scale, target },
+) => {
   const camera = {};
   if (position && current.position !== position) camera.position = position;
   if (center && current.center !== center) camera.center = center;
@@ -53,8 +56,11 @@ class SceneView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: (window.sceneViews && window.sceneViews[this.props.id] &&
-        window.sceneViews[this.props.id].view) || null,
+      view:
+        (window.sceneViews &&
+          window.sceneViews[this.props.id] &&
+          window.sceneViews[this.props.id].view) ||
+        null,
     };
   }
 
@@ -67,15 +73,19 @@ class SceneView extends Component {
     this.loadSceneView();
   }
 
-  async UNSAFE_componentWillUpdate(nextProps) { // eslint-disable-line camelcase
+  // eslint-disable-next-line
+  async UNSAFE_componentWillUpdate(nextProps) {
     if (!this.state.view) return;
 
     if (this.props.environment !== nextProps.environment) {
       const environment = this.parseEnvironment(nextProps.environment);
-      Object.keys(environment).forEach(key => this.state.view.environment[key] = {
-        ...this.state.view.environment[key],
-        ...environment[key],
-      });
+      Object.keys(environment).forEach(
+        key =>
+          (this.state.view.environment[key] = {
+            ...this.state.view.environment[key],
+            ...environment[key],
+          }),
+      );
     }
 
     if (this.props.qualityProfile !== nextProps.qualityProfile) {
@@ -93,13 +103,18 @@ class SceneView extends Component {
       }
     }
 
-    if (this.props.goToLayers !== nextProps.goToLayers &&
-      nextProps.goToLayers && nextProps.goToLayers.length > 0) {
+    if (
+      this.props.goToLayers !== nextProps.goToLayers &&
+      nextProps.goToLayers &&
+      nextProps.goToLayers.length > 0
+    ) {
       const layers = nextProps.goToLayers
         .map(id => this.state.view.map.layers.items.find(i => i.id === id))
         .filter(layer => layer);
 
-      const extentResults = await Promise.all(layers.map(layer => layer.queryExtent()));
+      const extentResults = await Promise.all(
+        layers.map(layer => layer.queryExtent()),
+      );
       const extents = extentResults
         .filter(({ count }) => count > 0)
         .map(({ extent }) => extent);
@@ -114,11 +129,16 @@ class SceneView extends Component {
       if (this.state.view.interacting) return;
       if (!nextProps.turntable || !nextProps.turntable.target) return;
 
-      const camera = await getCameraFromProp(this.props.turntable, nextProps.turntable);
+      const camera = await getCameraFromProp(
+        this.props.turntable,
+        nextProps.turntable,
+      );
       await this.state.view.goTo(camera);
 
-      const [scheduling, watchUtils] =
-        await esriLoader.loadModules(['esri/core/scheduling', 'esri/core/watchUtils']);
+      const [scheduling, watchUtils] = await esriLoader.loadModules([
+        'esri/core/scheduling',
+        'esri/core/watchUtils',
+      ]);
 
       const view = this.state.view;
       const target = nextProps.turntable.target;
@@ -126,10 +146,13 @@ class SceneView extends Component {
       animation = scheduling.addFrameTask({
         update: () => {
           try {
-            view.goTo({
-              target,
-              heading: view.camera.heading + 0.2,
-            }, { animate: false });
+            view.goTo(
+              {
+                target,
+                heading: view.camera.heading + 0.2,
+              },
+              { animate: false },
+            );
           } catch (err) {
             // do nothing
           }
@@ -157,12 +180,15 @@ class SceneView extends Component {
   getGeometry(layerId, id) {
     if (!this.state.view || !this.state.view.layerViews) return null;
 
-    const layerView = this.state.view.layerViews.items.find(e => e.layer.id === layerId);
+    const layerView = this.state.view.layerViews.items.find(
+      e => e.layer.id === layerId,
+    );
     if (!layerView) return null;
     const { objectIdField } = layerView.layer;
 
-    const graphic = layerView.controller.graphics
-      .find(e => e.attributes.GlobalID === id || e.attributes[objectIdField] === id);
+    const graphic = layerView.controller.graphics.find(
+      e => e.attributes.GlobalID === id || e.attributes[objectIdField] === id,
+    );
     if (!graphic) return null;
 
     // TODO: this dirty hack needs improvement
@@ -170,7 +196,8 @@ class SceneView extends Component {
     return {
       ...graphic.geometry,
       rings: graphic.geometry.rings.map(ring =>
-        ring.map(point => [point[0], point[1], point[3]])),
+        ring.map(point => [point[0], point[1], point[3]]),
+      ),
     };
   }
 
@@ -183,12 +210,18 @@ class SceneView extends Component {
   }
 
   parseEnvironment(inputEnvironment) {
-    const { lighting: { utcDate, ...lighting }, ...environment } = inputEnvironment;
+    const {
+      lighting: { utcDate, ...lighting },
+      ...environment
+    } = inputEnvironment;
     environment.lighting = lighting;
 
     if (utcDate) {
-      const { hours, minutes, seconds } =
-        this.state.view.environment.lighting.positionTimezoneInfo;
+      const {
+        hours,
+        minutes,
+        seconds,
+      } = this.state.view.environment.lighting.positionTimezoneInfo;
 
       const newDate = new Date(utcDate);
       newDate.setUTCHours(utcDate.getUTCHours() - hours);
@@ -206,9 +239,14 @@ class SceneView extends Component {
       popup: this.props.popup,
     };
     if (this.props.goTo) viewSettings.camera = this.props.goTo;
-    const view = await loadEsriSceneView(this.componentRef, this.props.id, viewSettings);
+    const view = await loadEsriSceneView(
+      this.componentRef,
+      this.props.id,
+      viewSettings,
+    );
 
-    if (this.props.highlightOptions) view.highlightOptions = this.props.highlightOptions;
+    if (this.props.highlightOptions)
+      view.highlightOptions = this.props.highlightOptions;
     if (this.props.environment) view.environment = this.props.environment;
     if (this.props.padding) view.padding = this.props.padding;
 
@@ -221,27 +259,40 @@ class SceneView extends Component {
       <div
         id="sceneview"
         style={{ width: '100%', height: '100%' }}
-        ref={(ref) => { this.componentRef = ref; }}
+        ref={ref => {
+          this.componentRef = ref;
+        }}
       >
-        {this.state.view && this.props.children &&
-          React.Children.map(this.props.children,
-            child => child && React.cloneElement(child, {
-              ...this.state,
-            }))}
-        {this.state.view && this.props.onCameraChange &&
-          !(this.props.turntable && this.props.turntable.target) &&
-          <EventListeners.Camera
+        {this.state.view &&
+          this.props.children &&
+          React.Children.map(
+            this.props.children,
+            child =>
+              child &&
+              React.cloneElement(child, {
+                ...this.state,
+              }),
+          )}
+        {this.state.view &&
+          this.props.onCameraChange &&
+          !(this.props.turntable && this.props.turntable.target) && (
+            <EventListeners.Camera
+              view={this.state.view}
+              onCameraChange={this.props.onCameraChange}
+            />
+          )}
+        {this.state.view && this.props.onClick && (
+          <EventListeners.Click
             view={this.state.view}
-            onCameraChange={this.props.onCameraChange}
-          />}
-        {this.state.view && this.props.onClick && <EventListeners.Click
-          view={this.state.view}
-          onClick={this.props.onClick}
-        />}
-        {this.state.view && this.props.onMouseMove && <EventListeners.MouseMove
-          view={this.state.view}
-          onMouseMove={this.props.onMouseMove}
-        />}
+            onClick={this.props.onClick}
+          />
+        )}
+        {this.state.view && this.props.onMouseMove && (
+          <EventListeners.MouseMove
+            view={this.state.view}
+            onMouseMove={this.props.onMouseMove}
+          />
+        )}
       </div>
     );
   }

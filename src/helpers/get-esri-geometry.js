@@ -16,14 +16,13 @@
 
 import esriLoader from 'esri-loader';
 
-export const getEsriGeometry = async (geometry) => {
-  const [Polygon, Polyline, Point, Mesh] =
-    await esriLoader.loadModules([
-      'esri/geometry/Polygon',
-      'esri/geometry/Polyline',
-      'esri/geometry/Point',
-      'esri/geometry/Mesh',
-    ]);
+export const getEsriGeometry = async geometry => {
+  const [Polygon, Polyline, Point, Mesh] = await esriLoader.loadModules([
+    'esri/geometry/Polygon',
+    'esri/geometry/Polyline',
+    'esri/geometry/Point',
+    'esri/geometry/Mesh',
+  ]);
 
   if (geometry.rings) return new Polygon(geometry);
   if (geometry.paths) return new Polyline(geometry);

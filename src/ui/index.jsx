@@ -35,7 +35,7 @@ class UI extends Component {
   }
 
   renderWrappedChildren(children) {
-    return React.Children.map(children, (child) => {
+    return React.Children.map(children, child => {
       // This is support for non-node elements (eg. pure text), they have no props
       if (!child || !child.props) {
         return child;
@@ -55,10 +55,12 @@ class UI extends Component {
   }
 
   render() {
-    return this.props.view && (
-      <React.Fragment>
-        {this.renderWrappedChildren(this.props.children)}
-      </React.Fragment>
+    return (
+      this.props.view && (
+        <React.Fragment>
+          {this.renderWrappedChildren(this.props.children)}
+        </React.Fragment>
+      )
     );
   }
 }

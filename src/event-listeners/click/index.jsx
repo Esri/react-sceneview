@@ -23,7 +23,7 @@ import { handleSelectionQuery } from '../../helpers/handle-selection-query';
 
 let listener;
 
-const getSelectionGeometry = async (center) => {
+const getSelectionGeometry = async center => {
   const [Circle] = await esriLoader.loadModules(['esri/geometry/Circle']);
   return new Circle({
     center,
@@ -33,22 +33,28 @@ const getSelectionGeometry = async (center) => {
 
 class ClickEventListener extends Component {
   async componentDidMount() {
-    listener = this.props.view.on('click', async (event) => {
-      const { results, screenPoint } = await this.props.view.hitTest({ x: event.x, y: event.y });
+    listener = this.props.view.on('click', async event => {
+      const { results, screenPoint } = await this.props.view.hitTest({
+        x: event.x,
+        y: event.y,
+      });
 
-      const graphics = results && results[0] ? results
-        .map(result => result.graphic)
-        .filter(graphic => graphic.layer && graphic.layer.selectable)
-        .map(graphic => ({
-          attributes: {
-            ...graphic.attributes,
-            esriObjectId: graphic.attributes[graphic.layer.objectIdField],
-          },
-          geometry: graphic.geometry,
-          GlobalID: graphic.attributes.GlobalID,
-          objectId: graphic.attributes[graphic.layer.objectIdField],
-          layerId: graphic.layer && graphic.layer.id,
-        })) : [];
+      const graphics =
+        results && results[0]
+          ? results
+              .map(result => result.graphic)
+              .filter(graphic => graphic.layer && graphic.layer.selectable)
+              .map(graphic => ({
+                attributes: {
+                  ...graphic.attributes,
+                  esriObjectId: graphic.attributes[graphic.layer.objectIdField],
+                },
+                geometry: graphic.geometry,
+                GlobalID: graphic.attributes.GlobalID,
+                objectId: graphic.attributes[graphic.layer.objectIdField],
+                layerId: graphic.layer && graphic.layer.id,
+              }))
+          : [];
 
       const mapPoint = this.props.view.toMap(screenPoint);
 

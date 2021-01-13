@@ -51,10 +51,14 @@ class Webscene extends Component {
     if (prevProps.layerSettings !== this.props.layerSettings) {
       Object.keys(this.props.layerSettings).forEach(layerId => {
         const settings = this.props.layerSettings[layerId];
-        const layer = this.state.groupLayer.layers.items.find(l => l.id === layerId);
+        const layer = this.state.groupLayer.layers.items.find(
+          l => l.id === layerId,
+        );
         if (!layer) return;
 
-        Object.keys(settings).forEach(field => layer[field] = settings[field]);
+        Object.keys(settings).forEach(
+          field => (layer[field] = settings[field]),
+        );
       });
     }
   }
@@ -62,7 +66,11 @@ class Webscene extends Component {
   async loadWebscene() {
     if (!this.props.view || !this.props.view.map) return;
 
-    const [EsriWebScene, EsriGroupLayer, EsriLayer] = await esriLoader.loadModules([
+    const [
+      EsriWebScene,
+      EsriGroupLayer,
+      EsriLayer,
+    ] = await esriLoader.loadModules([
       'esri/WebScene',
       'esri/layers/GroupLayer',
       'esri/layers/Layer',
@@ -79,7 +87,9 @@ class Webscene extends Component {
     } catch (err) {
       // if portal item turns out to be a layer instead of a webscene, don't care and add it anyway.
       try {
-        const layer = await EsriLayer.fromPortalItem({ portalItem: this.props.portalItem });
+        const layer = await EsriLayer.fromPortalItem({
+          portalItem: this.props.portalItem,
+        });
         layers.push(layer);
       } catch (e) {
         // give up
@@ -98,7 +108,10 @@ class Webscene extends Component {
     this.update();
 
     if (this.props.onLoad) {
-      this.props.onLoad(this.state.groupLayer.layers.items, this.state.groupLayer.id);
+      this.props.onLoad(
+        this.state.groupLayer.layers.items,
+        this.state.groupLayer.id,
+      );
     }
   }
 

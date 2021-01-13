@@ -43,12 +43,25 @@ describe('components', () => {
       await loadEsriSceneView(componentRef, id, sceneviewSettings);
       expect(componentRef.appendChild).toHaveBeenCalled();
       const container = componentRef.appendChild.mock.calls[0][0];
-      expect(esriLoader.loadModules).toHaveBeenCalledWith(['esri/views/SceneView']);
-      expect(esriLoader.SceneView).toHaveBeenCalledWith({ container, ...sceneviewSettings });
-      expect(esriLoader.SceneView.prototype.ui.empty).toHaveBeenCalledWith('top-left');
-      expect(esriLoader.SceneView.prototype.ui.empty).toHaveBeenCalledWith('top-right');
-      expect(esriLoader.SceneView.prototype.ui.empty).toHaveBeenCalledWith('bottom-left');
-      expect(esriLoader.SceneView.prototype.ui.empty).toHaveBeenCalledWith('bottom-right');
+      expect(esriLoader.loadModules).toHaveBeenCalledWith([
+        'esri/views/SceneView',
+      ]);
+      expect(esriLoader.SceneView).toHaveBeenCalledWith({
+        container,
+        ...sceneviewSettings,
+      });
+      expect(esriLoader.SceneView.prototype.ui.empty).toHaveBeenCalledWith(
+        'top-left',
+      );
+      expect(esriLoader.SceneView.prototype.ui.empty).toHaveBeenCalledWith(
+        'top-right',
+      );
+      expect(esriLoader.SceneView.prototype.ui.empty).toHaveBeenCalledWith(
+        'bottom-left',
+      );
+      expect(esriLoader.SceneView.prototype.ui.empty).toHaveBeenCalledWith(
+        'bottom-right',
+      );
     });
   });
 });
