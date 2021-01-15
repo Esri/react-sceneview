@@ -21,11 +21,14 @@ let listener;
 
 class MouseMoveEventListener extends Component {
   async componentDidMount() {
-    listener = this.props.view.on('pointer-move', async (event) => {
+    listener = this.props.view.on('pointer-move', async event => {
       // don't trigger while navigating the scene
       if (this.props.view.interacting) return;
 
-      const { results } = await this.props.view.hitTest({ x: event.x, y: event.y });
+      const { results } = await this.props.view.hitTest({
+        x: event.x,
+        y: event.y,
+      });
 
       const graphic = results && results[0] && results[0].graphic;
       const mapPoint = this.props.view.toMap({ x: event.x, y: event.y });

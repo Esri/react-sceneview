@@ -22,12 +22,16 @@ import selectionLayerSettings from './selection-layer-settings';
 
 class SelectionLayer extends Component {
   async componentDidMount() {
-    const [GraphicsLayer] = await esriLoader.loadModules(['esri/layers/GraphicsLayer']);
+    const [GraphicsLayer] = await esriLoader.loadModules([
+      'esri/layers/GraphicsLayer',
+    ]);
 
-    this.props.view.map.add(new GraphicsLayer({
-      id: this.props.id,
-      ...selectionLayerSettings,
-    }));
+    this.props.view.map.add(
+      new GraphicsLayer({
+        id: this.props.id,
+        ...selectionLayerSettings,
+      }),
+    );
   }
 
   render() {

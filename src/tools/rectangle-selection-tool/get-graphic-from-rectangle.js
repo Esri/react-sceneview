@@ -15,7 +15,11 @@
  */
 import esriLoader from 'esri-loader';
 
-export const getGraphicFromRectangle = async (startPoint, endPoint, heading) => {
+export const getGraphicFromRectangle = async (
+  startPoint,
+  endPoint,
+  heading,
+) => {
   const [Polygon, Polyline, geometryEngine] = await esriLoader.loadModules([
     'esri/geometry/Polygon',
     'esri/geometry/Polyline',
@@ -25,7 +29,8 @@ export const getGraphicFromRectangle = async (startPoint, endPoint, heading) => 
   const startX = startPoint.screenPoint.x;
   const endX = endPoint.screenPoint.x;
 
-  const spatialRelationship = (startX > endX ? 'esriSpatialRelIntersects' : 'esriSpatialRelContains');
+  const spatialRelationship =
+    startX > endX ? 'esriSpatialRelIntersects' : 'esriSpatialRelContains';
 
   const line = new Polyline({
     paths: [
@@ -35,7 +40,11 @@ export const getGraphicFromRectangle = async (startPoint, endPoint, heading) => 
     spatialReference: { wkid: 3857 },
   });
 
-  const normalizedLine = geometryEngine.rotate(line, heading, startPoint.mapPoint);
+  const normalizedLine = geometryEngine.rotate(
+    line,
+    heading,
+    startPoint.mapPoint,
+  );
 
   const x1 = normalizedLine.paths[0][0][0];
   const y1 = normalizedLine.paths[0][0][1];
@@ -58,7 +67,11 @@ export const getGraphicFromRectangle = async (startPoint, endPoint, heading) => 
     spatialReference: { wkid: 3857 },
   });
 
-  const rectangle = geometryEngine.rotate(normalizedRectangle, -heading, startPoint.mapPoint);
+  const rectangle = geometryEngine.rotate(
+    normalizedRectangle,
+    -heading,
+    startPoint.mapPoint,
+  );
 
   return {
     attributes: {
@@ -68,10 +81,16 @@ export const getGraphicFromRectangle = async (startPoint, endPoint, heading) => 
     spatialRelationship,
     symbol: {
       type: 'simple-fill',
-      color: spatialRelationship === 'esriSpatialRelContains' ? [0, 255, 255, 0.5] : [255, 192, 0, 0.5],
+      color:
+        spatialRelationship === 'esriSpatialRelContains'
+          ? [0, 255, 255, 0.5]
+          : [255, 192, 0, 0.5],
       outline: {
         type: 'simple-line',
-        color: spatialRelationship === 'esriSpatialRelContains' ? [0, 255, 255, 1] : [255, 192, 0, 1],
+        color:
+          spatialRelationship === 'esriSpatialRelContains'
+            ? [0, 255, 255, 1]
+            : [255, 192, 0, 1],
         width: '3px',
       },
     },

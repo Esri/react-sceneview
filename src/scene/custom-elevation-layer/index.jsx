@@ -29,7 +29,9 @@ class CustomElevationLayer extends Component {
   }
 
   async loadBasemap() {
-    const [ElevationLayer] = await esriLoader.loadModules(['esri/layers/ElevationLayer']);
+    const [ElevationLayer] = await esriLoader.loadModules([
+      'esri/layers/ElevationLayer',
+    ]);
 
     if (this.props.url) {
       this.setState({

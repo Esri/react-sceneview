@@ -18,7 +18,6 @@ import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-import esriLoader from 'esri-loader';
 import { loadLayer } from '../load';
 
 import Layer from '../index';
@@ -51,10 +50,12 @@ jest.mock('esri-loader', () => {
 const mockWhen = jest.fn(() => Promise.resolve());
 
 jest.mock('../load', () => ({
-  loadLayer: jest.fn(layerSettings => Promise.resolve({
-    ...layerSettings,
-    when: mockWhen,
-  })),
+  loadLayer: jest.fn(layerSettings =>
+    Promise.resolve({
+      ...layerSettings,
+      when: mockWhen,
+    }),
+  ),
 }));
 
 describe('components', () => {

@@ -18,7 +18,11 @@ import esriLoader from 'esri-loader';
 
 const uiPositions = ['top-left', 'top-right', 'bottom-right', 'bottom-left'];
 
-export const loadEsriSceneView = async (componentRef, id, sceneviewSettings) => {
+export const loadEsriSceneView = async (
+  componentRef,
+  id,
+  sceneviewSettings,
+) => {
   if (!window.sceneViews) {
     window.sceneViews = {};
   }

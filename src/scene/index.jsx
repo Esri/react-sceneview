@@ -36,13 +36,7 @@ class Scene extends Component {
   }
 
   async loadMap() {
-    const {
-      basemap,
-      ground,
-      initialViewProperties,
-      view,
-      onLoad,
-    } = this.props;
+    const { basemap, ground, initialViewProperties, view, onLoad } = this.props;
 
     const [WebScene] = await esriLoader.loadModules(['esri/WebScene']);
     const newMap = new WebScene({ basemap, ground, initialViewProperties });
@@ -59,7 +53,7 @@ class Scene extends Component {
   renderWrappedChildren(children) {
     if (!children) return null;
 
-    return React.Children.map(children, (child) => {
+    return React.Children.map(children, child => {
       // This is support for non-node elements (eg. pure text), they have no props
       if (!child || !child.props) {
         return child;
@@ -77,16 +71,16 @@ class Scene extends Component {
   }
 
   render() {
-    const {
-      children,
-      view,
-    } = this.props;
+    const { children, view } = this.props;
 
-    return view && this.state.mapLoaded && (
-      <div id="scene">
-        {this.renderWrappedChildren(children)}
-        <SelectionLayer id="selection-shape" view={view} />
-      </div>
+    return (
+      view &&
+      this.state.mapLoaded && (
+        <div id="scene">
+          {this.renderWrappedChildren(children)}
+          <SelectionLayer id="selection-shape" view={view} />
+        </div>
+      )
     );
   }
 }
@@ -114,6 +108,14 @@ Scene.Webscene = Webscene;
 Scene.CustomBasemap = CustomBasemap;
 Scene.CustomElevationLayer = CustomElevationLayer;
 
-export { Scene, Layer, Webscene, Ground, Graphic, CustomBasemap, CustomElevationLayer };
+export {
+  Scene,
+  Layer,
+  Webscene,
+  Ground,
+  Graphic,
+  CustomBasemap,
+  CustomElevationLayer,
+};
 
 export default Scene;

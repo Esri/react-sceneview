@@ -1,4 +1,4 @@
-/* Copyright 2019 Esri
+/* Copyright 2020 Esri
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import { handleSelectionQuery } from '../../helpers/handle-selection-query';
 
 let listener;
 
-const getSelectionGeometry = async (center) => {
+const getSelectionGeometry = async center => {
   const [Circle] = await esriLoader.loadModules(['esri/geometry/Circle']);
   return new Circle({
     center,
@@ -33,10 +33,29 @@ const getSelectionGeometry = async (center) => {
 
 class ClickEventListener extends Component {
   async componentDidMount() {
-    listener = this.props.view.on('click', async (event) => {
-      const { results, screenPoint } = await this.props.view.hitTest({ x: event.x, y: event.y });
+    listener = this.props.view.on('click', async event => {
+      const { results, screenPoint } = await this.props.view.hitTest({
+        x: event.x,
+        y: event.y,
+      });
 
-      const graphic = results && results[0] && results[0].graphic;
+      const graphics =
+        results && results[0]
+          ? results
+              .map(result => result.graphic)
+              .filter(graphic => graphic.layer && graphic.layer.selectable)
+              .map(graphic => ({
+                attributes: {
+                  ...graphic.attributes,
+                  esriObjectId: graphic.attributes[graphic.layer.objectIdField],
+                },
+                geometry: graphic.geometry,
+                GlobalID: graphic.attributes.GlobalID,
+                objectId: graphic.attributes[graphic.layer.objectIdField],
+                layerId: graphic.layer && graphic.layer.id,
+              }))
+          : [];
+
       const mapPoint = this.props.view.toMap(screenPoint);
 
       let features = [];
@@ -56,17 +75,8 @@ class ClickEventListener extends Component {
 
       this.props.onClick({
         mapPoint,
-        graphic: graphic && graphic.layer && graphic.layer.selectable ? {
-          attributes: {
-            ...graphic.attributes,
-            esriObjectId: graphic.attributes[graphic.layer.objectIdField],
-          },
-          geometry: graphic.geometry,
-          GlobalID: graphic.attributes.GlobalID,
-          objectId: graphic.attributes[graphic.layer.objectIdField],
-          layerId: graphic.layer && graphic.layer.id,
-        } : null,
-        features: features.slice(0, 1),
+        graphics,
+        features,
         event,
       });
     });

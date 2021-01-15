@@ -38,17 +38,17 @@ jest.mock('esri-loader', () => {
   };
 });
 
-jest.mock('../layer', () => (view) => {
+jest.mock('../layer', () => view => {
   if (!view) return null;
   return <div id="layer" />;
 });
 
-jest.mock('../custom-basemap', () => (view) => {
+jest.mock('../custom-basemap', () => view => {
   if (!view) return null;
   return <div id="basemap" />;
 });
 
-jest.mock('../custom-elevation-layer', () => (view) => {
+jest.mock('../custom-elevation-layer', () => view => {
   if (!view) return null;
   return <div id="elevation-layer" />;
 });

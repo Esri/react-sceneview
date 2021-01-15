@@ -22,9 +22,7 @@ class SliceTool extends Component {
   async componentDidMount() {
     this.componentIsMounted = true;
 
-    const [Slice] = await esriLoader.loadModules([
-      'esri/widgets/Slice',
-    ]);
+    const [Slice] = await esriLoader.loadModules(['esri/widgets/Slice']);
     if (!this.componentIsMounted) return;
 
     this.sliceTool = new Slice({
