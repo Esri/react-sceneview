@@ -44,10 +44,17 @@ class Webscene extends Component {
   }
 
   update(prevProps = {}) {
-    if (!this.props.view || !this.state.groupLayer) return;
+    if (!this.props.view) return;
 
     if (prevProps.visible !== this.props.visible) {
-      this.state.groupLayer.visible = this.props.visible;
+      if (this.state.groupLayer) {
+        this.state.groupLayer.visible = this.props.visible;
+      }
+      if (this.state.groundLayers) {
+        this.state.groundLayers.forEach(
+          layer => (layer.visible = this.props.visible),
+        );
+      }
     }
 
     if (prevProps.layerSettings !== this.props.layerSettings) {
@@ -118,7 +125,7 @@ class Webscene extends Component {
       this.props.onLoad(
         this.state.groupLayer.layers.items,
         this.state.groupLayer.id,
-        this.state.groundLayers.layers.items,
+        this.state.groundLayers,
       );
     }
   }
