@@ -118,6 +118,7 @@ class Webscene extends Component {
       this.props.onLoad(
         this.state.groupLayer.layers.items,
         this.state.groupLayer.id,
+        this.state.groundLayers.layers.items,
       );
     }
   }
