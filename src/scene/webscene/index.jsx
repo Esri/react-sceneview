@@ -23,6 +23,7 @@ class Webscene extends Component {
     super(props);
     this.state = {
       groupLayer: null,
+      groundLayers: null,
     };
   }
 
@@ -39,6 +40,7 @@ class Webscene extends Component {
     if (!this.props.view || !this.props.view.map) return;
     this.componentIsMounted = false;
     this.props.view.map.remove(this.state.groupLayer);
+    this.props.view.map.ground.layers.removeMany(this.state.groundLayers);
   }
 
   update(prevProps = {}) {
@@ -106,6 +108,7 @@ class Webscene extends Component {
     this.state.groupLayer.addMany(layers);
     this.props.view.map.layers.add(groupLayer);
 
+    this.setState({ groundLayers });
     this.props.view.map.ground.layers.addMany(groundLayers);
 
     await this.props.view.whenLayerView(groupLayer);
