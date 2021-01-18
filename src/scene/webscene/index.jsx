@@ -23,7 +23,7 @@ class Webscene extends Component {
     super(props);
     this.state = {
       groupLayer: null,
-      groundLayers: null,
+      groundLayer: null,
     };
   }
 
@@ -40,7 +40,7 @@ class Webscene extends Component {
     if (!this.props.view || !this.props.view.map) return;
     this.componentIsMounted = false;
     this.props.view.map.remove(this.state.groupLayer);
-    this.props.view.map.ground.layers.removeMany(this.state.groundLayers);
+    this.props.view.map.ground.layers.remove(this.state.groundLayer);
   }
 
   update(prevProps = {}) {
@@ -50,10 +50,8 @@ class Webscene extends Component {
       if (this.state.groupLayer) {
         this.state.groupLayer.visible = this.props.visible;
       }
-      if (this.state.groundLayers) {
-        this.state.groundLayers.forEach(
-          layer => (layer.visible = this.props.visible),
-        );
+      if (this.state.groundLayer) {
+        this.state.groundLayer.visible = this.props.visible;
       }
     }
 
@@ -62,7 +60,9 @@ class Webscene extends Component {
         const settings = this.props.layerSettings[layerId];
         const layer =
           this.state.groupLayer.layers.items.find(l => l.id === layerId) ||
-          this.state.groundLayers.find(l => l.id === layerId);
+          (this.state.groundLayer.id === layerId
+            ? this.state.groundLayer
+            : undefined);
         if (!layer) return;
 
         Object.keys(settings).forEach(
@@ -87,7 +87,7 @@ class Webscene extends Component {
     if (!this.componentIsMounted) return;
 
     const layers = [];
-    const groundLayers = [];
+    let groundLayer;
 
     try {
       const webscene = new EsriWebScene({ portalItem: this.props.portalItem });
@@ -96,11 +96,12 @@ class Webscene extends Component {
       layers.push(...webscene.layers.items);
 
       if (this.props.ground) {
-        // filter out the default 3D terrain
+        // filter out the default 3D terrain and ground layers that are not visible
         const filteredGroundLayers = webscene.ground.layers.items.filter(
-          l => l.title !== 'Terrain 3D',
+          l => l.title !== 'Terrain 3D' && l.visible,
         );
-        groundLayers.push(...filteredGroundLayers);
+        // assign the first ground layer
+        groundLayer = filteredGroundLayers[0];
       }
     } catch (err) {
       // if portal item turns out to be a layer instead of a webscene, don't care and add it anyway.
@@ -122,8 +123,8 @@ class Webscene extends Component {
     this.state.groupLayer.addMany(layers);
     this.props.view.map.layers.add(groupLayer);
 
-    this.setState({ groundLayers });
-    this.props.view.map.ground.layers.addMany(groundLayers);
+    this.setState({ groundLayer });
+    this.props.view.map.ground.layers.add(groundLayer);
 
     await this.props.view.whenLayerView(groupLayer);
     this.update();
@@ -132,7 +133,7 @@ class Webscene extends Component {
       this.props.onLoad(
         this.state.groupLayer.layers.items,
         this.state.groupLayer.id,
-        this.state.groundLayers,
+        this.state.groundLayer,
       );
     }
   }
