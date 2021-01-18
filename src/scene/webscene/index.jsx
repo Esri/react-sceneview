@@ -94,7 +94,14 @@ class Webscene extends Component {
       await webscene.load();
 
       layers.push(...webscene.layers.items);
-      groundLayers.push(...webscene.ground.layers.items);
+
+      if (this.props.ground) {
+        // filter out the defailt 3D terrain
+        const filteredGroundLayers = webscene.ground.layers.items.filter(
+          l => l.title !== 'Terrain 3D',
+        );
+        groundLayers.push(...filteredGroundLayers);
+      }
     } catch (err) {
       // if portal item turns out to be a layer instead of a webscene, don't care and add it anyway.
       try {
@@ -141,6 +148,7 @@ Webscene.propTypes = {
   visible: PropTypes.bool,
   onLoad: PropTypes.func,
   layerSettings: PropTypes.object,
+  ground: PropTypes.bool,
 };
 
 Webscene.defaultProps = {
@@ -148,6 +156,7 @@ Webscene.defaultProps = {
   visible: true,
   onLoad: null,
   layerSettings: {},
+  ground: true,
 };
 
 export default Webscene;
