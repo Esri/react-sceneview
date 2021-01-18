@@ -96,7 +96,7 @@ class Webscene extends Component {
       layers.push(...webscene.layers.items);
 
       if (this.props.ground) {
-        // filter out the defailt 3D terrain
+        // filter out the default 3D terrain
         const filteredGroundLayers = webscene.ground.layers.items.filter(
           l => l.title !== 'Terrain 3D',
         );
