@@ -60,9 +60,9 @@ class Webscene extends Component {
     if (prevProps.layerSettings !== this.props.layerSettings) {
       Object.keys(this.props.layerSettings).forEach(layerId => {
         const settings = this.props.layerSettings[layerId];
-        const layer = this.state.groupLayer.layers.items.find(
-          l => l.id === layerId,
-        );
+        const layer =
+          this.state.groupLayer.layers.items.find(l => l.id === layerId) ||
+          this.state.groundLayers.find(l => l.id === layerId);
         if (!layer) return;
 
         Object.keys(settings).forEach(
