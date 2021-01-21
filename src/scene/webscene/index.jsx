@@ -59,10 +59,9 @@ class Webscene extends Component {
       Object.keys(this.props.layerSettings).forEach(layerId => {
         const settings = this.props.layerSettings[layerId];
         const layer =
-          this.state.groupLayer.layers.items.find(l => l.id === layerId) ||
-          (this.state.groundLayer.id === layerId
+          this.state.groundLayer.id === layerId
             ? this.state.groundLayer
-            : undefined);
+            : this.state.groupLayer.layers.items.find(l => l.id === layerId);
         if (!layer) return;
 
         Object.keys(settings).forEach(
@@ -100,7 +99,7 @@ class Webscene extends Component {
         const filteredGroundLayers = webscene.ground.layers.items.filter(
           l => l.title !== 'Terrain 3D' && l.visible,
         );
-        // assign the first ground layer
+        // assign only fist ground layer to avoid out-of-sync layer settings, e.g. visibility
         groundLayer = filteredGroundLayers[0];
       }
     } catch (err) {
