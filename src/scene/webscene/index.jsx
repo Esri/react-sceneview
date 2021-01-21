@@ -100,6 +100,7 @@ class Webscene extends Component {
           l => l.title !== 'Terrain 3D' && l.visible,
         );
         // assign only fist ground layer to avoid out-of-sync layer settings, e.g. visibility
+        // as there is no way (yet) to add a group layer to the ground of a SceneView
         groundLayer = filteredGroundLayers[0];
       }
     } catch (err) {
