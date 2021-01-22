@@ -23,6 +23,7 @@ class Webscene extends Component {
     super(props);
     this.state = {
       groupLayer: null,
+      groundLayer: null,
     };
   }
 
@@ -39,21 +40,28 @@ class Webscene extends Component {
     if (!this.props.view || !this.props.view.map) return;
     this.componentIsMounted = false;
     this.props.view.map.remove(this.state.groupLayer);
+    this.props.view.map.ground.layers.remove(this.state.groundLayer);
   }
 
   update(prevProps = {}) {
-    if (!this.props.view || !this.state.groupLayer) return;
+    if (!this.props.view) return;
 
     if (prevProps.visible !== this.props.visible) {
-      this.state.groupLayer.visible = this.props.visible;
+      if (this.state.groupLayer) {
+        this.state.groupLayer.visible = this.props.visible;
+      }
+      if (this.state.groundLayer) {
+        this.state.groundLayer.visible = this.props.visible;
+      }
     }
 
     if (prevProps.layerSettings !== this.props.layerSettings) {
       Object.keys(this.props.layerSettings).forEach(layerId => {
         const settings = this.props.layerSettings[layerId];
-        const layer = this.state.groupLayer.layers.items.find(
-          l => l.id === layerId,
-        );
+        const layer = [
+          ...this.state.groupLayer.layers.items,
+          this.state.groundLayer,
+        ].find(l => l.id === layerId);
         if (!layer) return;
 
         Object.keys(settings).forEach(
@@ -78,12 +86,23 @@ class Webscene extends Component {
     if (!this.componentIsMounted) return;
 
     const layers = [];
+    let groundLayer;
 
     try {
       const webscene = new EsriWebScene({ portalItem: this.props.portalItem });
       await webscene.load();
 
       layers.push(...webscene.layers.items);
+
+      if (this.props.ground) {
+        // filter out the default 3D terrain and ground layers that are not visible
+        const filteredGroundLayers = webscene.ground.layers.items.filter(
+          l => l.title !== 'Terrain 3D' && l.visible,
+        );
+        // assign only fist ground layer to avoid out-of-sync layer settings, e.g. visibility
+        // as there is no way (yet) to add a group layer to the ground of a SceneView
+        groundLayer = filteredGroundLayers[0];
+      }
     } catch (err) {
       // if portal item turns out to be a layer instead of a webscene, don't care and add it anyway.
       try {
@@ -104,6 +123,9 @@ class Webscene extends Component {
     this.state.groupLayer.addMany(layers);
     this.props.view.map.layers.add(groupLayer);
 
+    this.setState({ groundLayer });
+    this.props.view.map.ground.layers.add(groundLayer);
+
     await this.props.view.whenLayerView(groupLayer);
     this.update();
 
@@ -111,6 +133,7 @@ class Webscene extends Component {
       this.props.onLoad(
         this.state.groupLayer.layers.items,
         this.state.groupLayer.id,
+        this.state.groundLayer,
       );
     }
   }
@@ -126,6 +149,7 @@ Webscene.propTypes = {
   visible: PropTypes.bool,
   onLoad: PropTypes.func,
   layerSettings: PropTypes.object,
+  ground: PropTypes.bool,
 };
 
 Webscene.defaultProps = {
@@ -133,6 +157,7 @@ Webscene.defaultProps = {
   visible: true,
   onLoad: null,
   layerSettings: {},
+  ground: true,
 };
 
 export default Webscene;
