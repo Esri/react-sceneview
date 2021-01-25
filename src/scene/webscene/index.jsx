@@ -100,7 +100,7 @@ class Webscene extends Component {
       if (this.props.ground) {
         // filter out the default 3D terrain and ground layers that are not visible
         const filteredGroundLayers = webscene.ground.layers.items.filter(
-          l => l.title !== 'Terrain 3D' && l.visible,
+          l => l.id !== 'globalElevation' && l.visible,
         );
         // assign only fist ground layer to avoid out-of-sync layer settings, e.g. visibility
         // as there is no way (yet) to add a group layer to the ground of a SceneView
