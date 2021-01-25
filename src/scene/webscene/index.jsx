@@ -102,9 +102,10 @@ class Webscene extends Component {
         const filteredGroundLayers = webscene.ground.layers.items.filter(
           l => l.id !== 'globalElevation' && l.visible,
         );
-        // assign only fist ground layer to avoid out-of-sync layer settings, e.g. visibility
-        // as there is no way (yet) to add a group layer to the ground of a SceneView
-        groundLayer = filteredGroundLayers[0];
+        // assign only first ground layer from layer list (reverse order) in SceneViewer
+        // to avoid out-of-sync layer settings, e.g. visibility as there is no way (yet)
+        // to add a group layer to the ground of a SceneView
+        groundLayer = filteredGroundLayers.reverse()[0];
       }
     } catch (err) {
       // if portal item turns out to be a layer instead of a webscene, don't care and add it anyway.
