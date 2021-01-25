@@ -40,7 +40,10 @@ class Webscene extends Component {
     if (!this.props.view || !this.props.view.map) return;
     this.componentIsMounted = false;
     this.props.view.map.remove(this.state.groupLayer);
-    this.props.view.map.ground.layers.remove(this.state.groundLayer);
+
+    if (this.state.groundLayer) {
+      this.props.view.map.ground.layers.remove(this.state.groundLayer);
+    }
   }
 
   update(prevProps = {}) {
@@ -61,7 +64,7 @@ class Webscene extends Component {
         const layer = [
           ...this.state.groupLayer.layers.items,
           this.state.groundLayer,
-        ].find(l => l.id === layerId);
+        ].find(l => l && l.id === layerId);
         if (!layer) return;
 
         Object.keys(settings).forEach(
@@ -97,11 +100,12 @@ class Webscene extends Component {
       if (this.props.ground) {
         // filter out the default 3D terrain and ground layers that are not visible
         const filteredGroundLayers = webscene.ground.layers.items.filter(
-          l => l.title !== 'Terrain 3D' && l.visible,
+          l => l.id !== 'globalElevation' && l.visible,
         );
-        // assign only fist ground layer to avoid out-of-sync layer settings, e.g. visibility
-        // as there is no way (yet) to add a group layer to the ground of a SceneView
-        groundLayer = filteredGroundLayers[0];
+        // assign only first ground layer from layer list (reverse order) in SceneViewer
+        // to avoid out-of-sync layer settings, e.g. visibility as there is no way (yet)
+        // to add a group layer to the ground of a SceneView
+        groundLayer = filteredGroundLayers.slice(-1)[0];
       }
     } catch (err) {
       // if portal item turns out to be a layer instead of a webscene, don't care and add it anyway.
@@ -123,8 +127,10 @@ class Webscene extends Component {
     this.state.groupLayer.addMany(layers);
     this.props.view.map.layers.add(groupLayer);
 
-    this.setState({ groundLayer });
-    this.props.view.map.ground.layers.add(groundLayer);
+    if (groundLayer) {
+      this.setState({ groundLayer });
+      this.props.view.map.ground.layers.add(groundLayer);
+    }
 
     await this.props.view.whenLayerView(groupLayer);
     this.update();
