@@ -29,7 +29,7 @@ class SliceTool extends Component {
       view: this.props.view,
     });
 
-    this.sliceTool.viewModel.newSlice();
+    await this.sliceTool.viewModel.start();
 
     this.sliceTool.viewModel.excludeGroundSurface = this.props.excludeGround;
   }

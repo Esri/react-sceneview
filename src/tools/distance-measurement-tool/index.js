@@ -33,7 +33,7 @@ class DistanceMeasurementTool extends Component {
       unit: this.props.unit,
     });
 
-    this.measurementTool.viewModel.newMeasurement();
+    await this.measurementTool.viewModel.start();
 
     this.watcher = this.measurementTool.view.on('pointer-move', () => {
       if (
