@@ -25,7 +25,7 @@ const isValidGeometry = geometry =>
 
 class DrawingTool extends Component {
   async componentDidMount() {
-    const { view, geometry } = this.props;
+    const { view, geometry, snappingLayerIds } = this.props;
 
     const [SketchViewModel, GraphicsLayer] = await esriLoader.loadModules([
       'esri/widgets/Sketch/SketchViewModel',
@@ -44,6 +44,15 @@ class DrawingTool extends Component {
     });
 
     this.model.snappingOptions.enabled = true;
+
+    if (snappingLayerIds) {
+      this.model.snappingOptions.featureEnabled = true;
+      this.model.snappingOptions.featureSources = snappingLayerIds.map(
+        layerId => ({
+          layer: view.map.layers.find(layer => layer.id === layerId),
+        }),
+      );
+    }
 
     if (isValidGeometry(geometry)) {
       this.setGraphic(geometry);
@@ -171,6 +180,7 @@ DrawingTool.propTypes = {
   mode: PropTypes.oneOf(['hybrid', 'freehand', 'click']),
   view: PropTypes.object,
   geometry: PropTypes.object,
+  snappingLayerIds: PropTypes.array,
 };
 
 DrawingTool.defaultProps = {
@@ -179,6 +189,7 @@ DrawingTool.defaultProps = {
   view: null,
   geometry: null,
   onDraw: () => null,
+  snappingLayerIds: null,
 };
 
 export default DrawingTool;
