@@ -33,6 +33,7 @@ import DistanceMeasurementTool from './tools/distance-measurement-tool';
 import AreaMeasurementTool from './tools/area-measurement-tool';
 import SliceTool from './tools/slice-tool';
 import LineOfSightTool from './tools/line-of-sight-tool';
+import ElevationProfileTool from './tools/elevation-profile-tool';
 
 import { loadEsriSceneView } from './load';
 
@@ -352,6 +353,7 @@ SceneView.DistanceMeasurementTool = DistanceMeasurementTool;
 SceneView.AreaMeasurementTool = AreaMeasurementTool;
 SceneView.SliceTool = SliceTool;
 SceneView.LineOfSightTool = LineOfSightTool;
+SceneView.ElevationProfileTool = ElevationProfileTool;
 
 export {
   SceneView,
@@ -370,6 +372,7 @@ export {
   AreaMeasurementTool,
   SliceTool,
   LineOfSightTool,
+  ElevationProfileTool,
 };
 
 export default SceneView;

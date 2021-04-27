@@ -23,30 +23,35 @@ class ElevationProfileTool extends Component {
   async componentDidMount() {
     this.componentIsMounted = true;
 
-    const [ElevationProfileTool] = await esriLoader.loadModules([
-      'esri/widget/ElevationProfile',
+    const [ElevationProfile] = await esriLoader.loadModules([
+      'esri/widgets/ElevationProfile',
     ]);
     if (!this.componentIsMounted) return;
 
-    this.elevationProfileTool = new ElevationProfileTool({
+    this.elevationProfileTool = new ElevationProfile({
       view: this.props.view,
       unit: this.props.unit,
-      profiles: [{
-        type: 'ground',
-        color: '#61d4a4',
-        title: 'Ground elevation'
-      }, {
-        type: 'input',
-        color: '#f57e42',
-        title: 'Line elevation'
-      }],
+      profiles: [
+        {
+          type: 'ground',
+          color: '#61d4a4',
+          title: 'Ground elevation',
+        },
+      ],
     });
 
+    this.props.view.ui.add(this.elevationProfileTool, {
+      position: 'bottom-right',
+    });
   }
 
   componentWillUnmount() {
     this.componentIsMounted = false;
     if (this.elevationProfileTool) this.elevationProfileTool.destroy();
+  }
+
+  render() {
+    return null;
   }
 }
 
