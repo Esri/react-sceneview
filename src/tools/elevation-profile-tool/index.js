@@ -35,14 +35,17 @@ class ElevationProfileTool extends Component {
         {
           type: 'ground',
           color: '#61d4a4',
-          title: 'Ground elevation',
+          title: 'Ground Elevation',
+        },
+        {
+          type: 'view',
+          color: '#8f61d4',
+          title: 'View Elevation',
         },
       ],
     });
 
-    this.props.view.ui.add(this.elevationProfileTool, {
-      position: 'bottom-right',
-    });
+    if (this.props.onDidMount) this.props.onDidMount();
   }
 
   componentWillUnmount() {
@@ -58,11 +61,13 @@ class ElevationProfileTool extends Component {
 ElevationProfileTool.propTypes = {
   unit: PropTypes.oneOf(unitOptions),
   view: PropTypes.object,
+  onDidMount: PropTypes.func,
 };
 
 ElevationProfileTool.defaultProps = {
   unit: 'metric',
   view: null,
+  onDidMount: null,
 };
 
 export default ElevationProfileTool;
