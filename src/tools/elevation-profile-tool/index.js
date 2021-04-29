@@ -45,7 +45,7 @@ class ElevationProfileTool extends Component {
       ],
     });
 
-    if (this.props.onDidMount) this.props.onDidMount();
+    if (this.props.onLoad) this.props.onLoad();
   }
 
   componentWillUnmount() {
@@ -61,13 +61,13 @@ class ElevationProfileTool extends Component {
 ElevationProfileTool.propTypes = {
   unit: PropTypes.oneOf(unitOptions),
   view: PropTypes.object,
-  onDidMount: PropTypes.func,
+  onLoad: PropTypes.func,
 };
 
 ElevationProfileTool.defaultProps = {
   unit: 'metric',
   view: null,
-  onDidMount: null,
+  onLoad: null,
 };
 
 export default ElevationProfileTool;
