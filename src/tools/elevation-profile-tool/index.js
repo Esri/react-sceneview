@@ -31,18 +31,7 @@ class ElevationProfileTool extends Component {
     this.elevationProfileTool = new ElevationProfile({
       view: this.props.view,
       unit: this.props.unit,
-      profiles: [
-        {
-          type: 'ground',
-          color: '#61d4a4',
-          title: 'Ground Elevation',
-        },
-        {
-          type: 'view',
-          color: '#8f61d4',
-          title: 'View Elevation',
-        },
-      ],
+      profiles: this.props.profiles,
     });
 
     if (this.props.onLoad) this.props.onLoad();
@@ -62,12 +51,20 @@ ElevationProfileTool.propTypes = {
   unit: PropTypes.oneOf(unitOptions),
   view: PropTypes.object,
   onLoad: PropTypes.func,
+  profiles: PropTypes.array,
 };
 
 ElevationProfileTool.defaultProps = {
   unit: 'metric',
   view: null,
   onLoad: null,
+  profiles: [
+    {
+      type: 'ground',
+      color: '#61d4a4',
+      title: 'Ground Elevation',
+    },
+  ],
 };
 
 export default ElevationProfileTool;
