@@ -32,6 +32,10 @@ class ElevationProfileTool extends Component {
       view: this.props.view,
       unit: this.props.unit,
       profiles: this.props.profiles,
+      visibleElements: {
+        selectButton: this.props.displaySelectButton,
+        settingsButton: this.props.displaySettingsButton,
+      },
     });
 
     if (this.props.onLoad) this.props.onLoad();
@@ -52,6 +56,8 @@ ElevationProfileTool.propTypes = {
   view: PropTypes.object,
   onLoad: PropTypes.func,
   profiles: PropTypes.array,
+  displaySelectButton: PropTypes.bool,
+  displaySettingsButton: PropTypes.bool,
 };
 
 ElevationProfileTool.defaultProps = {
@@ -65,6 +71,8 @@ ElevationProfileTool.defaultProps = {
       title: 'Ground Elevation',
     },
   ],
+  displaySelectButton: true,
+  displaySettingsButton: true,
 };
 
 export default ElevationProfileTool;
