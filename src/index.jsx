@@ -34,6 +34,7 @@ import AreaMeasurementTool from './tools/area-measurement-tool';
 import SliceTool from './tools/slice-tool';
 import LineOfSightTool from './tools/line-of-sight-tool';
 import ElevationProfileTool from './tools/elevation-profile-tool';
+import DaylightAnalysisTool from './tools/daylight-analysis-tool';
 
 import { loadEsriSceneView } from './load';
 
@@ -354,6 +355,7 @@ SceneView.AreaMeasurementTool = AreaMeasurementTool;
 SceneView.SliceTool = SliceTool;
 SceneView.LineOfSightTool = LineOfSightTool;
 SceneView.ElevationProfileTool = ElevationProfileTool;
+SceneView.DaylightAnalysisTool = DaylightAnalysisTool;
 
 export {
   SceneView,
@@ -373,6 +375,7 @@ export {
   SliceTool,
   LineOfSightTool,
   ElevationProfileTool,
+  DaylightAnalysisTool,
 };
 
 export default SceneView;
