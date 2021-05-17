@@ -13,7 +13,6 @@
  * limitations under the License.
  *
  */
-
 import { Component } from 'react';
 import esriLoader from 'esri-loader';
 import PropTypes from 'prop-types';
@@ -26,6 +25,7 @@ class DaylightAnalysisTool extends Component {
     if (!this.componentIsMounted) return;
 
     this.daylightTool = new Daylight({
+      container: this.props.container,
       view: this.props.view,
       dateOrSeason: 'date',
       visibleElements: {
@@ -49,6 +49,7 @@ class DaylightAnalysisTool extends Component {
 }
 
 DaylightAnalysisTool.propTypes = {
+  container: PropTypes.string,
   view: PropTypes.object,
   onLoad: PropTypes.func,
   showPlayButtons: PropTypes.bool,
@@ -57,6 +58,7 @@ DaylightAnalysisTool.propTypes = {
 };
 
 DaylightAnalysisTool.defaultProps = {
+  container: '',
   view: null,
   onLoad: null,
   showPlayButtons: true,
