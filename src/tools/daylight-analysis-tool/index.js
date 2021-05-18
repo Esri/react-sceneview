@@ -34,8 +34,6 @@ class DaylightAnalysisTool extends Component {
         timezone: this.props.showTimezone,
       },
     });
-
-    if (this.props.onLoad) this.props.onLoad();
   }
 
   componentWillUnmount() {
@@ -51,7 +49,6 @@ class DaylightAnalysisTool extends Component {
 DaylightAnalysisTool.propTypes = {
   container: PropTypes.string,
   view: PropTypes.object,
-  onLoad: PropTypes.func,
   showPlayButtons: PropTypes.bool,
   showDatePicker: PropTypes.bool,
   showTimezone: PropTypes.bool,
@@ -60,7 +57,6 @@ DaylightAnalysisTool.propTypes = {
 DaylightAnalysisTool.defaultProps = {
   container: '',
   view: null,
-  onLoad: null,
   showPlayButtons: true,
   showDatePicker: true,
   showTimezone: false,
