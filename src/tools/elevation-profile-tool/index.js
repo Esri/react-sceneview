@@ -35,6 +35,8 @@ class ElevationProfileTool extends Component {
       visibleElements: {
         selectButton: this.props.displaySelectButton,
         settingsButton: this.props.displaySettingsButton,
+        unitSelector: this.props.displayUnitSelector,
+        uniformChartScalingToggle: this.props.displayUniformChartScalingToggle,
       },
     });
 
@@ -58,6 +60,8 @@ ElevationProfileTool.propTypes = {
   profiles: PropTypes.array,
   displaySelectButton: PropTypes.bool,
   displaySettingsButton: PropTypes.bool,
+  displayUnitSelector: PropTypes.bool,
+  displayUniformChartScalingToggle: PropTypes.bool,
 };
 
 ElevationProfileTool.defaultProps = {
@@ -73,6 +77,8 @@ ElevationProfileTool.defaultProps = {
   ],
   displaySelectButton: true,
   displaySettingsButton: true,
+  displayUnitSelector: true,
+  displayUniformChartScalingToggle: true,
 };
 
 export default ElevationProfileTool;
