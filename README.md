@@ -1,3 +1,9 @@
+# **DEPRECATED**
+
+This project is no longer actively maintained.
+
+---
+
 # react-sceneview
 
 A simple Esri [SceneView](https://developers.arcgis.com/javascript/latest/api-reference/esri-views-SceneView.html) react component that builds on the [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/index.html).
